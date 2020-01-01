@@ -1,25 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+import routes from "./appRoutes";
+import AuthorizedRoute from "./components/AuthorizedRoute";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        {Object.values(routes).map(route => {
+          if (route.isLocked) return <AuthorizedRoute {...route} />;
+          else
+            return (
+              <Route
+                exact={console.log(route.exact) || route.exact}
+                path={route.path}
+              >
+                <route.Component />
+              </Route>
+            );
+        })}
+      </Switch>
+    </Router>
   );
 }
 

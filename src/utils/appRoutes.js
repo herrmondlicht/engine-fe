@@ -1,5 +1,5 @@
-import Login from "./components/Login/Login";
-import HomePage from "./components/HomePage/HomePage";
+import Login from "../components/Login/Login";
+import HomePage from "../components/HomePage/HomePage";
 
 const routes = {
   login: {
