@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-import routes from "../appRoutes";
+import routes from "../utils/appRoutes";
 
 function AuthorizedRoute(props) {
   //will do check here
