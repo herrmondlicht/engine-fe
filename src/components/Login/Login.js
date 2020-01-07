@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import { TextField, Grid, makeStyles, Paper } from "@material-ui/core";
 import EngineImage from "./engine_original.PNG";
+import apiRoutes from "../../utils/apiRoutes";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,6 +33,18 @@ const useStyles = makeStyles(theme => ({
 
 function Login() {
   const classes = useStyles();
+  const [userInput, changeInput] = useState({});
+
+  async function sendForm() {
+    try {
+      const response = await apiRoutes.login.post({ data: userInput }).data;
+      console.log(response);
+      changeInput({});
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   return (
     <Grid
       container
@@ -41,13 +54,17 @@ function Login() {
     >
       <Paper className={classes.loginContainer}>
         <img src={EngineImage} className={classes.engineImage}></img>
-        <LoginForm />
+        <LoginForm
+          changeInput={changeInput}
+          userInput={userInput}
+          sendForm={sendForm}
+        />
       </Paper>
     </Grid>
   );
 }
 
-function LoginForm() {
+function LoginForm({ userInput, changeInput, sendForm }) {
   const classes = useStyles();
   return (
     <Grid
@@ -64,6 +81,10 @@ function LoginForm() {
           className={classes.field}
           size="small"
           variant="outlined"
+          // value={userInput.email}
+          onChange={e =>
+            changeInput({ ...userInput, username: e.target.value })
+          }
         ></TextField>
       </Grid>
       <Grid item>
@@ -73,6 +94,10 @@ function LoginForm() {
           className={classes.field}
           size="small"
           variant="outlined"
+          // value={userInput.password}
+          onChange={e =>
+            changeInput({ ...userInput, password: e.target.value })
+          }
         ></TextField>
       </Grid>
       <Grid item>
@@ -80,6 +105,7 @@ function LoginForm() {
           className={`${classes.loginButton} ${classes.field}`}
           variant="contained"
           color="primary"
+          onClick={sendForm}
         >
           Entrar
         </Button>
