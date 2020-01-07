@@ -9,7 +9,7 @@ export const requestMaker = (
   return axios({
     headers,
     method,
-    url,
+    url: `${process.env.REACT_APP_API_SERVICE}/api${url}`,
     data,
     params
   });
@@ -17,30 +17,28 @@ export const requestMaker = (
 
 const routes = {
   login: {
-    url: "/login",
+    url: "/session/login",
     isLocked: false
   }
 };
 
 const routesWithRequests = Object.keys(routes).reduce(
-  (routesReduced, routeKey) => (
-    {
-      ...routesReduced,
-      [routeKey]: {
-        get: requestMaker({
-          method: "get",
-          isLocked: routes[routeKey].isLocked,
-          url: routes[routeKey]
-        }),
-        post: requestMaker({
-          method: "post",
-          isLocked: routes[routeKey].isLocked,
-          url: routes[routeKey]
-        })
-      }
-    },
-    {}
-  )
+  (routesReduced, routeKey) => ({
+    ...routesReduced,
+    [routeKey]: {
+      get: requestMaker({
+        method: "get",
+        isLocked: routes[routeKey].isLocked,
+        url: routes[routeKey].url
+      }),
+      post: requestMaker({
+        method: "post",
+        isLocked: routes[routeKey].isLocked,
+        url: routes[routeKey].url
+      })
+    }
+  }),
+  {}
 );
 
 export default routesWithRequests;
