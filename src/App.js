@@ -13,10 +13,11 @@ function App() {
       <Router>
         <Switch>
           {Object.values(routes).map(route => {
-            if (route.isLocked) return <AuthorizedRoute {...route} />;
+            if (route.isLocked)
+              return <AuthorizedRoute key={route.name} {...route} />;
             else
               return (
-                <Route exact={route.exact} path={route.path}>
+                <Route exact={route.exact} key={route.name} path={route.path}>
                   <route.Component />
                 </Route>
               );
