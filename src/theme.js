@@ -8,8 +8,7 @@ const theme = createMuiTheme({
     },
     secondary: {
       main: red[500]
-    },
-    contrastThreshold: 0.2
+    }
   }
 });
 
