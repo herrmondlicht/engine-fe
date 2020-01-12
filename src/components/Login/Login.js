@@ -1,117 +1,89 @@
 import React, { useState } from "react";
-import Button from "@material-ui/core/Button";
-import { TextField, Grid, makeStyles, Paper } from "@material-ui/core";
-import EngineImage from "./engine_original.PNG";
-import apiRoutes from "../../utils/apiRoutes";
+import { Grid, makeStyles, Paper } from "@material-ui/core";
+import EngineImage from "./engine_logo.png";
+import apiRoutes from "../../utils/apiRoutes/apiRoutes";
+import storageAPI, { STORAGE_KEYS } from "../../utils/storage/storageAPI";
+import { useLocation, useHistory, Redirect } from "react-router-dom";
+import LoginForm from "./LoginForm";
 
 const useStyles = makeStyles(theme => ({
   root: {
     height: "100%",
     width: "100%",
-    position: "absolute",
-    background:
-      "linear-gradient(22deg, rgba(131,58,180,1) 0%, rgba(252,176,69,1) 100%)"
-    // background: "#E5E5E5"
+    position: "absolute"
   },
   loginContainer: {
     width: 350,
     padding: theme.spacing(3),
     boxSizing: "border-box"
   },
-  field: {
-    width: "100%"
-  },
   engineImage: {
     width: "100%",
     padding: theme.spacing(2),
     boxSizing: "border-box"
-  },
-  loginButton: {
-    marginTop: theme.spacing(2)
   }
 }));
 
-function Login() {
-  const classes = useStyles();
-  const [userInput, changeInput] = useState({});
+const formErrors = () => ({
+  401: "Email ou senha incorretos"
+});
 
-  async function sendForm() {
-    try {
-      const response = await apiRoutes.login.post({ data: userInput }).data;
-      console.log(response);
-      changeInput({});
-    } catch (e) {
-      console.error(e);
+const getErrorMessage = code => {
+  const errorCodes = formErrors();
+  const errorMessage = errorCodes[code] || "Não foi possível acessar o sistema";
+  return errorMessage;
+};
+
+export const createLogin = (apiRoutes, storageAPI, useLocation, useHistory) =>
+  function Login() {
+    const classes = useStyles();
+    const [userInput, changeInput] = useState({});
+    const [errorMessage, setErrorMessage] = useState(null);
+    const location = useLocation();
+    const history = useHistory();
+    const token = storageAPI.get(STORAGE_KEYS.TOKEN);
+    const { from } = location.state || { from: { pathname: "/" } };
+
+    async function sendForm() {
+      try {
+        const response = await apiRoutes.login.post({ data: userInput });
+        loginUser(response.data.token);
+      } catch (e) {
+        setErrorMessage(getErrorMessage(e.response.status));
+      }
     }
-  }
 
-  return (
-    <Grid
-      container
-      justify="center"
-      alignItems="center"
-      className={classes.root}
-    >
-      <Paper className={classes.loginContainer}>
-        <img src={EngineImage} className={classes.engineImage}></img>
-        <LoginForm
-          changeInput={changeInput}
-          userInput={userInput}
-          sendForm={sendForm}
-        />
-      </Paper>
-    </Grid>
-  );
-}
+    function loginUser(token) {
+      storageAPI.set(STORAGE_KEYS.TOKEN, token);
+      history.replace(from);
+    }
 
-function LoginForm({ userInput, changeInput, sendForm }) {
-  const classes = useStyles();
-  return (
-    <Grid
-      container
-      item
-      direction="column"
-      spacing={2}
-      alignItems="stretch"
-      justify="center"
-    >
-      <Grid item>
-        <TextField
-          label="E-mail"
-          className={classes.field}
-          size="small"
-          variant="outlined"
-          // value={userInput.email}
-          onChange={e =>
-            changeInput({ ...userInput, username: e.target.value })
-          }
-        ></TextField>
+    if (token) {
+      return <Redirect to={{ pathname: from.pathname }} />;
+    }
+    return (
+      <Grid
+        container
+        justify="center"
+        alignItems="center"
+        className={classes.root}
+      >
+        <Paper className={classes.loginContainer}>
+          <img
+            src={EngineImage}
+            alt="logo"
+            className={classes.engineImage}
+          ></img>
+          <LoginForm
+            data-test-id="LoginForm"
+            errorMessage={errorMessage}
+            changeInput={changeInput}
+            userInput={userInput}
+            sendForm={sendForm}
+          />
+        </Paper>
       </Grid>
-      <Grid item>
-        <TextField
-          label="Senha"
-          type="password"
-          className={classes.field}
-          size="small"
-          variant="outlined"
-          // value={userInput.password}
-          onChange={e =>
-            changeInput({ ...userInput, password: e.target.value })
-          }
-        ></TextField>
-      </Grid>
-      <Grid item>
-        <Button
-          className={`${classes.loginButton} ${classes.field}`}
-          variant="contained"
-          color="primary"
-          onClick={sendForm}
-        >
-          Entrar
-        </Button>
-      </Grid>
-    </Grid>
-  );
-}
+    );
+  };
 
-export default Login;
+export default createLogin(apiRoutes, storageAPI, useLocation, useHistory);

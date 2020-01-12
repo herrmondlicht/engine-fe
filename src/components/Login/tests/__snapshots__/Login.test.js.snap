@@ -1,0 +1,123 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login return of render when token has already been provided 1`] = `<DocumentFragment />`;
+
+exports[`Login should render 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiGrid-root makeStyles-root-1 MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-center"
+  >
+    <div
+      class="MuiPaper-root makeStyles-loginContainer-2 MuiPaper-elevation1 MuiPaper-rounded"
+    >
+      <img
+        alt="logo"
+        class="makeStyles-engineImage-3"
+        src="engine_logo.png"
+      />
+      <form
+        data-testid="LoginForm"
+      >
+        <div
+          class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 MuiGrid-item MuiGrid-direction-xs-column MuiGrid-justify-xs-center"
+        >
+          <div
+            class="MuiGrid-root MuiGrid-item"
+          >
+            <div
+              class="MuiFormControl-root MuiTextField-root makeStyles-field-136"
+            >
+              <label
+                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-marginDense MuiInputLabel-outlined"
+                data-shrink="false"
+              >
+                E-mail
+              </label>
+              <div
+                class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-formControl MuiInputBase-marginDense MuiOutlinedInput-marginDense"
+              >
+                <input
+                  aria-invalid="false"
+                  class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMarginDense MuiOutlinedInput-inputMarginDense"
+                  type="text"
+                  value=""
+                />
+                <fieldset
+                  aria-hidden="true"
+                  class="PrivateNotchedOutline-root-199 MuiOutlinedInput-notchedOutline"
+                  style="padding-left: 8px;"
+                >
+                  <legend
+                    class="PrivateNotchedOutline-legend-200"
+                    style="width: 0.01px;"
+                  >
+                    <span>
+                      ​
+                    </span>
+                  </legend>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item"
+          >
+            <div
+              class="MuiFormControl-root MuiTextField-root makeStyles-field-136"
+            >
+              <label
+                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-marginDense MuiInputLabel-outlined"
+                data-shrink="false"
+              >
+                Senha
+              </label>
+              <div
+                class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-formControl MuiInputBase-marginDense MuiOutlinedInput-marginDense"
+              >
+                <input
+                  aria-invalid="false"
+                  class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMarginDense MuiOutlinedInput-inputMarginDense"
+                  type="password"
+                  value=""
+                />
+                <fieldset
+                  aria-hidden="true"
+                  class="PrivateNotchedOutline-root-199 MuiOutlinedInput-notchedOutline"
+                  style="padding-left: 8px;"
+                >
+                  <legend
+                    class="PrivateNotchedOutline-legend-200"
+                    style="width: 0.01px;"
+                  >
+                    <span>
+                      ​
+                    </span>
+                  </legend>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item"
+          >
+            <button
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained makeStyles-loginButton-137 makeStyles-field-136 MuiButton-containedPrimary"
+              tabindex="0"
+              type="submit"
+            >
+              <span
+                class="MuiButton-label"
+              >
+                Entrar
+              </span>
+              <span
+                class="MuiTouchRipple-root"
+              />
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</DocumentFragment>
+`;
