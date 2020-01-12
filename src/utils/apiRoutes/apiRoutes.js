@@ -3,16 +3,17 @@ import * as axios from "axios";
 export const requestMaker = (
   { method, url, isLocked },
   { storage = window.localStorage } = {}
-) => ({ data, params }) => {
+) => async ({ data, params }) => {
   const headers = {};
   if (isLocked) headers.Authorization = storage.getItem("token");
-  return axios({
+  const response = await axios({
     headers,
     method,
     url: `${process.env.REACT_APP_API_SERVICE}/api${url}`,
     data,
     params
   });
+  return response;
 };
 
 const routes = {
