@@ -1,13 +1,13 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import routes from "../utils/appRoutes";
+import storageAPI, { STORAGE_KEYS } from "../utils/storage/storageAPI";
 
 function AuthorizedRoute(props) {
-  //will do check here
-
+  const token = storageAPI.get(STORAGE_KEYS.TOKEN);
   return (
     <Route path={props.path} exact={props.exact}>
-      {false ? (
+      {token ? (
         <props.Component />
       ) : (
         <Redirect to={{ pathname: routes.login.path }} />
