@@ -34,10 +34,10 @@ const getErrorMessage = code => {
   return errorMessage;
 };
 
-export const createLogin = (apiRoutes, storageAPI, useLocation, useHistory) =>
+export const createLogin = (apiRoutes, storageAPI) =>
   function Login() {
     const classes = useStyles();
-    const [userInput, changeInput] = useState({});
+    const [userInput, changeInput] = useState({ username: "", password: "" });
     const [errorMessage, setErrorMessage] = useState(null);
     const location = useLocation();
     const history = useHistory();
@@ -55,12 +55,14 @@ export const createLogin = (apiRoutes, storageAPI, useLocation, useHistory) =>
 
     function loginUser(token) {
       storageAPI.set(STORAGE_KEYS.TOKEN, token);
+      changeInput({ username: "", password: "" });
       history.replace(from);
     }
 
     if (token) {
       return <Redirect to={{ pathname: from.pathname }} />;
     }
+
     return (
       <Grid
         container
@@ -75,7 +77,6 @@ export const createLogin = (apiRoutes, storageAPI, useLocation, useHistory) =>
             className={classes.engineImage}
           ></img>
           <LoginForm
-            data-test-id="LoginForm"
             errorMessage={errorMessage}
             changeInput={changeInput}
             userInput={userInput}
@@ -86,4 +87,4 @@ export const createLogin = (apiRoutes, storageAPI, useLocation, useHistory) =>
     );
   };
 
-export default createLogin(apiRoutes, storageAPI, useLocation, useHistory);
+export default createLogin(apiRoutes, storageAPI);

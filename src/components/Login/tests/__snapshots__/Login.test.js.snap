@@ -1,8 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Login return of render when token has already been provided 1`] = `<DocumentFragment />`;
-
-exports[`Login should render 1`] = `
+exports[`Login return of render 1`] = `
 <DocumentFragment>
   <div
     class="MuiGrid-root makeStyles-root-1 MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-center"
@@ -16,7 +14,7 @@ exports[`Login should render 1`] = `
         src="engine_logo.png"
       />
       <form
-        data-testid="LoginForm"
+        data-testid="LoginFormContainer"
       >
         <div
           class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 MuiGrid-item MuiGrid-direction-xs-column MuiGrid-justify-xs-center"
@@ -25,7 +23,8 @@ exports[`Login should render 1`] = `
             class="MuiGrid-root MuiGrid-item"
           >
             <div
-              class="MuiFormControl-root MuiTextField-root makeStyles-field-136"
+              class="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"
+              data-testid="LoginFormContainer_Email"
             >
               <label
                 class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-marginDense MuiInputLabel-outlined"
@@ -34,7 +33,7 @@ exports[`Login should render 1`] = `
                 E-mail
               </label>
               <div
-                class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-formControl MuiInputBase-marginDense MuiOutlinedInput-marginDense"
+                class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-marginDense MuiOutlinedInput-marginDense"
               >
                 <input
                   aria-invalid="false"
@@ -44,11 +43,11 @@ exports[`Login should render 1`] = `
                 />
                 <fieldset
                   aria-hidden="true"
-                  class="PrivateNotchedOutline-root-199 MuiOutlinedInput-notchedOutline"
+                  class="PrivateNotchedOutline-root-198 MuiOutlinedInput-notchedOutline"
                   style="padding-left: 8px;"
                 >
                   <legend
-                    class="PrivateNotchedOutline-legend-200"
+                    class="PrivateNotchedOutline-legend-199"
                     style="width: 0.01px;"
                   >
                     <span>
@@ -63,7 +62,8 @@ exports[`Login should render 1`] = `
             class="MuiGrid-root MuiGrid-item"
           >
             <div
-              class="MuiFormControl-root MuiTextField-root makeStyles-field-136"
+              class="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"
+              data-testid="LoginFormContainer_Password"
             >
               <label
                 class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-marginDense MuiInputLabel-outlined"
@@ -72,7 +72,7 @@ exports[`Login should render 1`] = `
                 Senha
               </label>
               <div
-                class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-formControl MuiInputBase-marginDense MuiOutlinedInput-marginDense"
+                class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-marginDense MuiOutlinedInput-marginDense"
               >
                 <input
                   aria-invalid="false"
@@ -82,11 +82,11 @@ exports[`Login should render 1`] = `
                 />
                 <fieldset
                   aria-hidden="true"
-                  class="PrivateNotchedOutline-root-199 MuiOutlinedInput-notchedOutline"
+                  class="PrivateNotchedOutline-root-198 MuiOutlinedInput-notchedOutline"
                   style="padding-left: 8px;"
                 >
                   <legend
-                    class="PrivateNotchedOutline-legend-200"
+                    class="PrivateNotchedOutline-legend-199"
                     style="width: 0.01px;"
                   >
                     <span>
@@ -101,7 +101,8 @@ exports[`Login should render 1`] = `
             class="MuiGrid-root MuiGrid-item"
           >
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained makeStyles-loginButton-137 makeStyles-field-136 MuiButton-containedPrimary"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained makeStyles-loginButton-136 MuiButton-containedPrimary MuiButton-fullWidth"
+              data-testid="LoginForm_button"
               tabindex="0"
               type="submit"
             >
@@ -121,3 +122,5 @@ exports[`Login should render 1`] = `
   </div>
 </DocumentFragment>
 `;
+
+exports[`Login return of render when token has already been provided 1`] = `<DocumentFragment />`;

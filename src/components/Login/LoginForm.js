@@ -9,9 +9,6 @@ const useStyles = makeStyles(theme => ({
     position: "absolute",
     background: "rgba(0,0,0,0)"
   },
-  field: {
-    width: "100%"
-  },
   loginButton: {
     marginTop: theme.spacing(2)
   },
@@ -31,7 +28,7 @@ function LoginForm({ userInput, changeInput, sendForm, errorMessage }) {
   }
 
   return (
-    <form onSubmit={onFormSubmit} data-testid="LoginForm">
+    <form onSubmit={onFormSubmit} data-testid="LoginFormContainer">
       <Grid
         container
         item
@@ -43,9 +40,11 @@ function LoginForm({ userInput, changeInput, sendForm, errorMessage }) {
         <Grid item>
           <TextField
             label="E-mail"
-            className={classes.field}
+            data-testid="LoginFormContainer_Email"
+            fullWidth
             size="small"
             variant="outlined"
+            value={userInput.username}
             onChange={e =>
               changeInput({ ...userInput, username: e.target.value })
             }
@@ -54,9 +53,11 @@ function LoginForm({ userInput, changeInput, sendForm, errorMessage }) {
         <Grid item>
           <TextField
             label="Senha"
+            data-testid="LoginFormContainer_Password"
             type="password"
-            className={classes.field}
+            fullWidth
             size="small"
+            value={userInput.password}
             variant="outlined"
             onChange={e =>
               changeInput({ ...userInput, password: e.target.value })
@@ -65,10 +66,12 @@ function LoginForm({ userInput, changeInput, sendForm, errorMessage }) {
         </Grid>
         <Grid item>
           <Button
-            className={`${classes.loginButton} ${classes.field}`}
+            className={classes.loginButton}
             variant="contained"
             color="primary"
             type="submit"
+            fullWidth
+            data-testid="LoginForm_button"
           >
             Entrar
           </Button>
