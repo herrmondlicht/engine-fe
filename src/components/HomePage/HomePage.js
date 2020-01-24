@@ -1,5 +1,6 @@
 import React from "react";
 import { Grid, makeStyles } from "@material-ui/core";
+import SideMenu from "../SideMenu/SideMenu";
 
 const useStyles = makeStyles(theme => ({
   homePageContainer: {
@@ -16,13 +17,15 @@ const useStyles = makeStyles(theme => ({
   },
   leftMenu: {
     [theme.breakpoints.between("md", "xl")]: {
-      width: 50,
-      flexBasis: 50,
+      width: theme.spacing(10),
+      flexBasis: theme.spacing(10),
+      padding: theme.spacing(1),
       height: "100vh"
     },
     [theme.breakpoints.between("xs", "md")]: {
       width: "100vw",
-      height: 50
+      padding: theme.spacing(1),
+      height: theme.mixins.toolbar.minHeight
     }
   },
   container: {
@@ -33,26 +36,34 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const HomePage = () => {
-  const classes = useStyles();
-  return (
-    <div data-testid="HomePageContainer" className={classes.homePageContainer}>
-      <Grid className={classes.mainPage} container wrap>
-        <Grid
-          className={classes.leftMenu}
-          item
-          style={{ background: "#FFF000" }}
-        ></Grid>
-        <Grid
-          className={classes.container}
-          item
-          style={{ background: "#F5f5f5" }}
-        >
-          testing
+export const createHomePage = () => {
+  const HomePage = () => {
+    const classes = useStyles();
+    return (
+      <div
+        data-testid="HomePageContainer"
+        className={classes.homePageContainer}
+      >
+        <Grid className={classes.mainPage} container>
+          <Grid
+            className={classes.leftMenu}
+            item
+            style={{ background: "#FFF000" }}
+          >
+            <SideMenu />
+          </Grid>
+          <Grid
+            className={classes.container}
+            item
+            style={{ background: "#F5f5f5" }}
+          >
+            testing
+          </Grid>
         </Grid>
-      </Grid>
-    </div>
-  );
+      </div>
+    );
+  };
+  return HomePage;
 };
 
-export default HomePage;
+export default createHomePage();
