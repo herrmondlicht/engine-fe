@@ -9,6 +9,9 @@ const theme = createMuiTheme({
     secondary: {
       main: red[500]
     }
+  },
+  shape: {
+    borderRadius: 10
   }
 });
 
