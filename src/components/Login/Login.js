@@ -49,7 +49,7 @@ export const createLogin = (apiRoutes, storageAPI) =>
         const response = await apiRoutes.login.post({ data: userInput });
         loginUser(response.data.token);
       } catch (e) {
-        setErrorMessage(getErrorMessage(e.response.status));
+        setErrorMessage(getErrorMessage(e?.response?.status));
       }
     }
 
