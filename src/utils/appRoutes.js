@@ -1,18 +1,10 @@
-import Login from "../components/Login/Login";
-import HomePage from "../components/HomePage/HomePage";
+import AddNewCar from "../components/CarAndCustomerForm/AddCarAndCustomer";
 
 const routes = {
-  login: {
-    name: "Login",
-    path: "/login",
-    Component: Login,
-    isLocked: false,
-    exact: true
-  },
-  home: {
-    name: "Home",
-    path: "/",
-    Component: HomePage,
+  addnewcar: {
+    name: "Add new car",
+    path: "addnewcar",
+    Component: AddNewCar,
     isLocked: true,
     exact: true
   }
