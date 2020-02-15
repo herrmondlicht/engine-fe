@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React from "react";
 import { makeStyles, Grid, Paper, IconButton } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/PhotoCamera";
+import { NoteAdd } from "@material-ui/icons";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   sideMenuContainer: {
@@ -12,7 +12,6 @@ const useStyles = makeStyles(theme => ({
   sideMenu: {
     minHeight: theme.spacing(10),
     width: `100%`,
-    padding: theme.spacing(1),
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
@@ -33,8 +32,13 @@ export const createSideMenu = () => {
       >
         <Paper className={classes.sideMenu}>
           <Grid item container justify="center">
-            <IconButton aria-label="delete" width={50}>
-              <DeleteIcon />
+            <IconButton
+              aria-label="delete"
+              width={50}
+              component={Link}
+              to="/addnewcar"
+            >
+              <NoteAdd />
             </IconButton>
           </Grid>
         </Paper>
