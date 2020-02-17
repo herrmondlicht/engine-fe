@@ -1,11 +1,24 @@
 import * as axios from "axios";
 
+
+const routes = {
+  login: {
+    url: "/session/login",
+    isLocked: false
+  },
+  cars: {
+    url: "/cars",
+    isLocked: true,
+  }
+};
+
+
 export const requestMaker = (
   { method, url, isLocked },
   { storage = window.localStorage } = {}
-) => async ({ data, params }) => {
+) => async ({ data, params } = {}) => {
   const headers = {};
-  if (isLocked) headers.Authorization = storage.getItem("token");
+  if (isLocked) headers.Authorization = `Bearer ${storage.getItem("token")}`;
   const response = await axios({
     headers,
     method,
@@ -14,13 +27,6 @@ export const requestMaker = (
     params
   });
   return response;
-};
-
-const routes = {
-  login: {
-    url: "/session/login",
-    isLocked: false
-  }
 };
 
 const routesWithRequests = Object.keys(routes).reduce(
