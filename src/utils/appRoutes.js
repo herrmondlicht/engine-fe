@@ -7,6 +7,13 @@ const routes = {
     Component: AddNewCar,
     isLocked: true,
     exact: true
+  },
+  home: {
+    name: "Add new car",
+    path: "/",
+    Component: AddNewCar,
+    isLocked: true,
+    exact: true
   }
 };
 
