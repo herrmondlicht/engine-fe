@@ -7,7 +7,7 @@ import { stub, assert, match } from "sinon";
 import { STORAGE_KEYS } from "../../../utils/storage/storageAPI";
 
 let apiRoutes = { login: { post: stub() } };
-let storageAPI = { get: stub(), set: stub() };
+let storageAPI = { getItem: stub(), setItem: stub() };
 
 const createTestComponent = props => {
   const Component = createLogin(apiRoutes, storageAPI);
@@ -17,7 +17,7 @@ const createTestComponent = props => {
 describe("Login", () => {
   afterEach(() => {
     apiRoutes = { login: { post: stub() } };
-    storageAPI = { get: stub(), set: stub() };
+    storageAPI = { getItem: stub(), setItem: stub() };
   });
 
   it("return of render", () => {
@@ -26,7 +26,7 @@ describe("Login", () => {
   });
 
   it("return of render when token has already been provided", () => {
-    storageAPI.get.withArgs(STORAGE_KEYS.TOKEN).returns("nonemptyValue");
+    storageAPI.getItem.withArgs(STORAGE_KEYS.TOKEN).returns("nonemptyValue");
     const { asFragment } = createTestComponent();
     expect(asFragment()).toMatchSnapshot();
   });
@@ -55,7 +55,7 @@ describe("Login", () => {
         match({ data: { password, username } })
       );
 
-      assert.calledWith(storageAPI.set, STORAGE_KEYS.TOKEN, token);
+      assert.calledWith(storageAPI.setItem, STORAGE_KEYS.TOKEN, token);
     });
   });
 });

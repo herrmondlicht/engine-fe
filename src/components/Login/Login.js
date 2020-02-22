@@ -41,7 +41,7 @@ export const createLogin = (apiRoutes, storageAPI) =>
     const [errorMessage, setErrorMessage] = useState(null);
     const location = useLocation();
     const history = useHistory();
-    const token = storageAPI.get(STORAGE_KEYS.TOKEN);
+    const token = storageAPI.getItem(STORAGE_KEYS.TOKEN);
     const { from } = location.state || { from: { pathname: "/" } };
 
     async function sendForm() {
@@ -54,7 +54,7 @@ export const createLogin = (apiRoutes, storageAPI) =>
     }
 
     function loginUser(token) {
-      storageAPI.set(STORAGE_KEYS.TOKEN, token);
+      storageAPI.setItem(STORAGE_KEYS.TOKEN, token);
       changeInput({ username: "", password: "" });
       history.replace(from);
     }

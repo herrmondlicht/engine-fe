@@ -3,7 +3,7 @@ import { Route, Redirect } from "react-router-dom";
 import storageAPI, { STORAGE_KEYS } from "../utils/storage/storageAPI";
 
 function AuthorizedRoute(props) {
-  const token = storageAPI.get(STORAGE_KEYS.TOKEN);
+  const token = storageAPI.getItem(STORAGE_KEYS.TOKEN);
   return (
     <Route path={props.path} exact={props.exact}>
       {token ? (

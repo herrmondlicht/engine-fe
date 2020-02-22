@@ -34,7 +34,7 @@ export default () => {
   })
 
   if(carList.length === 0){
-    return "loading...";
+    return "carregando...";
   }
 
   return (

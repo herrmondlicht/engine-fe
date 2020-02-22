@@ -12,7 +12,7 @@ describe("Storage API test", () => {
       };
 
       const storageAPInstance = storageAPI(storage);
-      const actualValue = storageAPInstance.get(tokenKey);
+      const actualValue = storageAPInstance.getItem(tokenKey);
 
       expect(actualValue).toBe(tokenValue);
     });
@@ -24,14 +24,31 @@ describe("Storage API test", () => {
       const tokenKey = "token";
       const storage = {
         setItem: stub()
-          .withArgs(tokenKey, tokenValue)
-          .returns(tokenValue)
       };
+      storage.setItem
+        .withArgs(tokenKey, tokenValue)
+        .returns(tokenValue)
 
       const storageAPInstance = storageAPI(storage);
-      const actualValue = storageAPInstance.set(tokenKey);
-
+      const actualValue = storageAPInstance.setItem(tokenKey, tokenValue);
       expect(actualValue).toBe(tokenValue);
+    });
+  });
+
+  describe("remove method", () => {
+    it("return of method remove when correct type is passed", () => {
+      const tokenKey = "token";
+      const storage = {
+        removeItem: stub()
+      };
+      storage.removeItem
+        .withArgs(tokenKey)
+        .returns(undefined)
+
+      const storageAPInstance = storageAPI(storage);
+      const actualValue = storageAPInstance.removeItem(tokenKey);
+
+      expect(actualValue).toBe(undefined);
     });
   });
 });

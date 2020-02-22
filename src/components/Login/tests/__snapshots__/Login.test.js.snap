@@ -43,15 +43,13 @@ exports[`Login return of render 1`] = `
                 />
                 <fieldset
                   aria-hidden="true"
-                  class="PrivateNotchedOutline-root-198 MuiOutlinedInput-notchedOutline"
-                  style="padding-left: 8px;"
+                  class="PrivateNotchedOutline-root-196 MuiOutlinedInput-notchedOutline"
                 >
                   <legend
-                    class="PrivateNotchedOutline-legend-199"
-                    style="width: 0.01px;"
+                    class="PrivateNotchedOutline-legendLabelled-198"
                   >
                     <span>
-                      ​
+                      E-mail
                     </span>
                   </legend>
                 </fieldset>
@@ -82,15 +80,13 @@ exports[`Login return of render 1`] = `
                 />
                 <fieldset
                   aria-hidden="true"
-                  class="PrivateNotchedOutline-root-198 MuiOutlinedInput-notchedOutline"
-                  style="padding-left: 8px;"
+                  class="PrivateNotchedOutline-root-196 MuiOutlinedInput-notchedOutline"
                 >
                   <legend
-                    class="PrivateNotchedOutline-legend-199"
-                    style="width: 0.01px;"
+                    class="PrivateNotchedOutline-legendLabelled-198"
                   >
                     <span>
-                      ​
+                      Senha
                     </span>
                   </legend>
                 </fieldset>
