@@ -26,11 +26,6 @@ const useStyles = makeStyles(theme => ({
       padding: theme.spacing(1),
       height: "100vh"
     },
-    [theme.breakpoints.down("sm")]: {
-      width: "100vw",
-      padding: theme.spacing(1),
-      height: theme.mixins.toolbar.minHeight
-    }
   },
   container: {
     flex: 1,
