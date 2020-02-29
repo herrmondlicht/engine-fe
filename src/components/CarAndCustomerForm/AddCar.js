@@ -4,12 +4,11 @@ import {
   Grid,
   Typography,
   makeStyles,
-  TextField
+  Button
 } from "@material-ui/core";
 
 import requests from "../../utils/apiRoutes/apiRoutes";
-
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import AutocompleteField from "../Autocomplete/Autocomplete";
 
 const useStyles = makeStyles(theme => ({
   formWrapper: {
@@ -20,83 +19,146 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default () => {
+export const createAddCarFormContainer = () =>
+  function AddCarFormContainer() {
+    const [modelsList, changeModelsList] = useState([]);
+    const [form, setForm] = useState({
+      carModel: "",
+      carMake: "",
+      carYear: "",
+    })
+    const [error, setError] = useState("")
+    const [success, setSuccess] = useState("")
+
+    async function fetchModelsFromMaker(maker) {
+      const modelsList = await requests.cars.get()
+      changeModelsList(modelsList.data.data);
+    }
+
+    async function addNewCar() {
+      const car = {
+        model: form.carModel,
+        make: form.carMake,
+        manufacture_year: form.carYear
+      }
+
+      if (Object.values(car).indexOf("") !== -1) {
+        setError("Todos os campos são obrigatórios!");
+        return;
+      }
+      try {
+        await requests.cars.post({ data: car })
+        setSuccess("Adicionado com sucesso")
+        setForm({})
+      } catch (error) {
+        console.log(error)
+        setError("Não foi possível adicionar o carro. Tente novamente")
+      }
+    }
+
+    useEffect(() => {
+      fetchModelsFromMaker();
+    }, [])
+
+    if (success) {
+      return <Button onClick={() => { setSuccess(null) }}>Ok!</Button>
+    }
+
+    if (modelsList.length === 0) {
+      return "carregando...";
+    }
+
+
+
+    return (
+      <Paper variant="outlined">
+        <AddCarFormView
+          modelsList={modelsList}
+          setForm={setForm}
+          addNewCar={addNewCar}
+          form={form} />
+        {error && <span>{error}</span>}
+      </Paper>
+    );
+  };
+
+
+
+function AddCarFormView({ modelsList, setForm, form, addNewCar }) {
   const classes = useStyles();
-  const [carList, changeList] = useState([]);
 
-  async function fetchData(){
-    const carList = await requests.cars.get()
-    changeList(carList.data.data);
+  const changeFormForId = (id) => (e, value) => {
+    setForm(prev => ({ ...prev, [id]: value }))
   }
 
-  useEffect(() => {
-    fetchData();
-  })
+  const getUniqueEntries = ((obj, index, arr) => arr.indexOf(obj) === index)
 
-  if(carList.length === 0){
-    return "carregando...";
-  }
+  const makesOptions = modelsList
+    .map(car => car.make)
+    .filter(getUniqueEntries)
+
+  const modelsFilteredBySelectedMake = modelsList
+    .filter(car => car.make === form.carMake)
+
+  const modelsOptions = modelsFilteredBySelectedMake
+    .map(car => car.model)
+    .filter(getUniqueEntries)
+
+  const manufactureYearsOption = modelsFilteredBySelectedMake.map(car => String(car.manufacture_year))
 
   return (
-    <Paper variant="outlined">
-      <Grid container alignContent="center">
-        <Grid
-          container
-          item
-          sm={12}
-          justify="center"
-          className={classes.formWrapper}
-        >
-          <Typography variant="h4">Adicionar novo veículo</Typography>
+    <Grid container alignContent="center">
+      <Grid
+        container
+        item
+        sm={12}
+        justify="center"
+        className={classes.formWrapper}
+      >
+        <Typography variant="h4">Adicionar novo veículo</Typography>
+      </Grid>
+      <Grid
+        container
+        item
+        sm={12}
+        direction="column"
+        className={classes.formWrapper}
+      >
+        {/* form */}
+        <Grid item className={classes.formItem}>
+          <AutocompleteField
+            id="carMake"
+            label="Marca"
+            onChange={changeFormForId("carMake")}
+            options={makesOptions} />
         </Grid>
-        <Grid
-          container
-          item
-          sm={12}
-          direction="column"
-          className={classes.formWrapper}
-        >
-          {/* form */}
-          <Grid item className={classes.formItem}>
-            <Autocomplete
-              id="car-make"
-              options={carList}
-              getOptionLabel={option => option.make}
-              renderInput={params => (
-                <TextField {...params} size="small" label="Combo box" variant="outlined" fullWidth />
-              )}
-            />
-          </Grid>
-          <Grid item className={classes.formItem}>
-            <Autocomplete
-              id="car-model"
-              options={carList}
-              getOptionLabel={option => option.model}
-              renderInput={params => (
-                <TextField {...params} size="small" label="Combo box" variant="outlined" fullWidth />
-              )}
-            />
-          </Grid>
-          <Grid item className={classes.formItem}>
-            <TextField
-              label="E-mail"
-              data-testid="LoginFormContainer_Email"
-              fullWidth
-              size="small"
-              variant="outlined"
-            ></TextField>
-          </Grid>
-          <Grid item className={classes.formItem}>
-            <TextField
-              label="E-mail"
-              data-testid="LoginFormContainer_Email"
-              fullWidth
-              size="small"
-              variant="outlined"
-            ></TextField>
-          </Grid>
+        <Grid item className={classes.formItem}>
+          <AutocompleteField
+            id="carModel"
+            label="Modelo"
+            onChange={changeFormForId("carModel")}
+            options={modelsOptions} />
+        </Grid>
+        <Grid item className={classes.formItem}>
+          <AutocompleteField
+            id="carYear"
+            label="Ano"
+            onChange={changeFormForId("carYear")}
+            options={manufactureYearsOption}
+          />
+        </Grid>
+        <Grid item className={classes.formItem}>
+          <Button
+            onClick={addNewCar}
+            variant="contained"
+            color="primary"
+            type="submit"
+          >Próximo</Button>
         </Grid>
       </Grid>
-    </Paper>
-  );
-};
+    </Grid>
+  )
+}
+
+
+export default createAddCarFormContainer()
