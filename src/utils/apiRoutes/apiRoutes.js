@@ -9,6 +9,10 @@ const routes = {
   cars: {
     url: "/cars",
     isLocked: true,
+  },
+  carsAutocomplete: {
+    url: "/cars/autocomplete",
+    isLocked: true
   }
 };
 
@@ -16,7 +20,11 @@ const routes = {
 export const requestMaker = (
   { method, url, isLocked },
   { storage = window.localStorage } = {}
-) => async ({ data, params } = {}) => {
+) => async ({ data, params = {} } = {}) => {
+  const {query} = params;
+  if(query){
+    params.query = JSON.stringify(query);
+  }
   const headers = {};
   if (isLocked) headers.Authorization = `Bearer ${storage.getItem(STORAGE_KEYS.TOKEN)}`;
   try {
@@ -31,7 +39,7 @@ export const requestMaker = (
     return response;
   }
   catch (err) {
-    if (err.response.status === 401 && isLocked) {
+    if (err?.response?.status === 401 && isLocked) {
       storage.removeItem(STORAGE_KEYS.TOKEN)
       window.location.assign('/login')
     }
@@ -50,12 +58,12 @@ const routesWithRequests = Object.keys(routes).reduce(
         method: "get",
         isLocked: routes[routeKey].isLocked,
         url: routes[routeKey].url,
-      },{storage: _storage}),
+      }, { storage: _storage }),
       post: requestMaker({
         method: "post",
         isLocked: routes[routeKey].isLocked,
         url: routes[routeKey].url,
-      }, {storage: _storage})
+      }, { storage: _storage })
     }
   }),
   {}

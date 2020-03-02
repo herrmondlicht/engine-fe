@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
   homePageContainer: {
     width: "100%",
     height: "100%",
-    position: "absolute"
+    position: "absolute",
   },
   mainPage: {
     height: "100%",
@@ -34,7 +34,8 @@ const useStyles = makeStyles(theme => ({
     )}px ${theme.spacing(7)}px`,
     [theme.breakpoints.down("sm")]: {
       margin: 0
-    }
+    },
+    overflow: "auto"
   }
 }));
 

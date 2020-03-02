@@ -1,4 +1,4 @@
-import AddNewCar from "../components/CarAndCustomerForm/AddCarAndCustomer";
+import AddNewCar from "../components/CarAndCustomerForm/AddCarContainer";
 
 const routes = {
   addnewcar: {

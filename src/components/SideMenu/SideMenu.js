@@ -45,7 +45,7 @@ function SideMenu({ setSelectedItem, selectedItem }) {
               component={Link}
               to="/addnewcar"
               onClick={changeSelectedItem("addnewcar")}
-              color={selectedItem === "addnewcar" ? "secondary" : ""}
+              color={selectedItem === "addnewcar" ? "secondary" : "default"}
             >
               <NoteAdd />
             </IconButton>
@@ -57,7 +57,7 @@ function SideMenu({ setSelectedItem, selectedItem }) {
               component={Link}
               to="/addnewcar"
               onClick={changeSelectedItem("addnewcar2")}
-              color={selectedItem === "addnewcar2" ? "secondary" : ""}
+              color={selectedItem === "addnewcar2" ? "secondary" : "default"}
             >
               <NoteAdd />
             </IconButton>
@@ -69,7 +69,7 @@ function SideMenu({ setSelectedItem, selectedItem }) {
               component={Link}
               to="/addnewcar"
               onClick={changeSelectedItem("addnewcar3")}
-              color={selectedItem === "addnewcar3" ? "secondary" : ""}
+              color={selectedItem === "addnewcar3" ? "secondary" : "default"}
             >
               <NoteAdd />
             </IconButton>
@@ -97,7 +97,7 @@ export const createMenu = () => {
             <BottomNavigationAction label="Nova OS" icon={<NoteAdd />} />
           </BottomNavigation>
         }
-        {isWidthUp("sm", width) &&
+        {isWidthUp("md", width) &&
           <SideMenu
             selectedItem={selectedItem}
             setSelectedItem={setSelectedItem} />
