@@ -8,11 +8,11 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 
 
 const createAutocompleteField = () =>
-  function AutocompleteField({ id, label, options, onChange, ...props }) {
+  function AutocompleteField({ id, label, options, onChange, isNumeric, ...props }) {
 
     function setOnChange(event, newValue) {
       if (newValue && newValue.inputValue) {
-        onchange(null, newValue.inputValue);
+        onChange(null, newValue.inputValue);
 
         return;
       }
@@ -22,7 +22,7 @@ const createAutocompleteField = () =>
 
     function filterOptions(options, params) {
       const filtered = options.filter(option => option.toLowerCase().includes(params.inputValue.toLowerCase()))
-      if (params.inputValue !== '') {
+      if (params.inputValue !== '' && filtered.length === 0) {
         filtered.push(params.inputValue);
       }
 
