@@ -1,13 +1,14 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 import { TextField, Grid, makeStyles } from "@material-ui/core";
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 const useStyles = makeStyles(theme => ({
   root: {
     height: "100%",
     width: "100%",
-    position: "absolute",
-    background: "rgba(0,0,0,0)"
+    position: "absolute"
   },
   loginButton: {
     marginTop: theme.spacing(2)
@@ -19,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function LoginForm({ userInput, changeInput, sendForm, errorMessage }) {
+function LoginForm({ userInput, changeInput, sendForm, errorMessage, isLoading }) {
   const classes = useStyles();
 
   function onFormSubmit(e) {
@@ -72,8 +73,9 @@ function LoginForm({ userInput, changeInput, sendForm, errorMessage }) {
             type="submit"
             fullWidth
             data-testid="LoginForm_button"
+            disabled={isLoading}
           >
-            Entrar
+            {isLoading ? <CircularProgress size={24} /> : "Entrar"}
           </Button>
         </Grid>
         {errorMessage && (

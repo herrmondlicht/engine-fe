@@ -39,6 +39,7 @@ export const createLogin = (apiRoutes, storageAPI) =>
     const classes = useStyles();
     const [userInput, changeInput] = useState({ username: "", password: "" });
     const [errorMessage, setErrorMessage] = useState(null);
+    const [isLoading, setIsLoading] = useState(false)
     const location = useLocation();
     const history = useHistory();
     const token = storageAPI.getItem(STORAGE_KEYS.TOKEN);
@@ -46,11 +47,14 @@ export const createLogin = (apiRoutes, storageAPI) =>
 
     async function sendForm() {
       try {
+        setIsLoading(true)
         const response = await apiRoutes.login.post({ data: userInput });
         loginUser(response.data.token);
       } catch (e) {
         setErrorMessage(getErrorMessage(e?.response?.status));
       }
+
+      setIsLoading(false)
     }
 
     function loginUser(token) {
@@ -81,6 +85,7 @@ export const createLogin = (apiRoutes, storageAPI) =>
             changeInput={changeInput}
             userInput={userInput}
             sendForm={sendForm}
+            isLoading={isLoading}
           />
         </Paper>
       </Grid>
