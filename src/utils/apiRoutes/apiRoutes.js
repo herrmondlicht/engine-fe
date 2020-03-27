@@ -10,19 +10,19 @@ const routes = {
     url: "/cars",
     isLocked: true,
   },
-  carsAutocomplete: {
-    url: "/cars/autocomplete",
-    isLocked: true
-  }
+  customers: {
+    url: "/customers",
+    isLocked: true,
+  },
 };
 
 
 export const requestMaker = (
   { method, url, isLocked },
   { storage = window.localStorage } = {}
-) => async ({ data, params = {} } = {}) => {
-  const {query} = params;
-  if(query){
+) => async ({ data, params = {}, urlExtension } = {}) => {
+  const { query } = params;
+  if (query) {
     params.query = JSON.stringify(query);
   }
   const headers = {};
@@ -31,11 +31,11 @@ export const requestMaker = (
     const response = await axios({
       headers,
       method,
-      url: `${process.env.REACT_APP_API_SERVICE}/api${url}`,
+      baseURL: process.env.REACT_APP_API_SERVICE,
+      url: `${url}${urlExtension ? "/" + urlExtension : ""}`,
       data,
       params
     });
-
     return response;
   }
   catch (err) {
@@ -50,20 +50,24 @@ export const requestMaker = (
 
 };
 
+const createMethodsForURL = (routeObj) => ({
+  get: requestMaker({
+    method: "get",
+    isLocked: routeObj.isLocked,
+    url: routeObj.url,
+  }, { storage: _storage }),
+  post: requestMaker({
+    method: "post",
+    isLocked: routeObj.isLocked,
+    url: routeObj.url,
+  }, { storage: _storage }),
+})
+
 const routesWithRequests = Object.keys(routes).reduce(
   (routesReduced, routeKey) => ({
     ...routesReduced,
     [routeKey]: {
-      get: requestMaker({
-        method: "get",
-        isLocked: routes[routeKey].isLocked,
-        url: routes[routeKey].url,
-      }, { storage: _storage }),
-      post: requestMaker({
-        method: "post",
-        isLocked: routes[routeKey].isLocked,
-        url: routes[routeKey].url,
-      }, { storage: _storage })
+      ...createMethodsForURL(routes[routeKey]),
     }
   }),
   {}
