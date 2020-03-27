@@ -5,27 +5,20 @@ import {
   TextField,
 } from "@material-ui/core";
 
-import useStyles from "./styles/FormStyleHook"
+import useStyles from "../../hooks/FormStyleHook"
 
-export const createAddCustomerCarView = () =>
-  function AddCustomerCarView({ changeFormForId, form, setForm }) {
+export const createCustomerFormView = () =>
+  function CustomerFormView({ changeFormForKey, form }) {
     const classes = useStyles();
-
-    /*
-      documentNumber: "",
-      fullName: "",
-      address: ""
-
-    */
 
     function handleDocumentNumberChange(e) {
       e.persist()
-      setForm({ ...form, documentNumber: e?.target?.value.replace(/\D/g, "") })
+      changeFormForKey("documentNumber")({ target: { value: e?.target?.value.replace(/\D/g, "") } })
     }
 
     return (
       <>
-        <Grid sm={6} item className={classes.formItem} direction="row">
+        <Grid sm={6} item className={classes.formItem}>
           <TextField
             onChange={handleDocumentNumberChange}
             value={form.documentNumber}
@@ -40,7 +33,7 @@ export const createAddCustomerCarView = () =>
         </Grid>
         <Grid sm={6} item className={classes.formItem}>
           <TextField
-            onChange={changeFormForId("fullName")}
+            onChange={changeFormForKey("fullName")}
             size="small"
             label={"Nome"}
             variant="outlined"
@@ -48,7 +41,7 @@ export const createAddCustomerCarView = () =>
         </Grid>
         <Grid sm={12} item>
           <TextField
-            onChange={changeFormForId("address")}
+            onChange={changeFormForKey("address")}
             size="small"
             label={"Endereço"}
             variant="outlined"
@@ -59,4 +52,4 @@ export const createAddCustomerCarView = () =>
   }
 
 
-export default createAddCustomerCarView()
+export default createCustomerFormView()
