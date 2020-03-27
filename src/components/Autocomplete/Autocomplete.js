@@ -12,12 +12,12 @@ const createAutocompleteField = () =>
 
     function setOnChange(event, newValue) {
       if (newValue && newValue.inputValue) {
-        onChange(null, newValue.inputValue);
+        onChange({ target: { value: newValue.inputValue } });
 
         return;
       }
 
-      onChange(null, newValue);
+      onChange({ target: { value: newValue } });
     }
 
     function filterOptions(options, params) {
