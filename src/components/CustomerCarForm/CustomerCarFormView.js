@@ -5,10 +5,10 @@ import {
   TextField,
 } from "@material-ui/core";
 
-import useStyles from "./styles/FormStyleHook"
+import useStyles from "../../hooks/FormStyleHook"
 
 export const createAddCustomerCarView = () =>
-  function AddCustomerCarView({ changeFormForId, form, setForm }) {
+  function AddCustomerCarView({ changeFormForKey, form }) {
     const classes = useStyles();
 
     function licenseKeyDown(e) {
@@ -16,13 +16,7 @@ export const createAddCustomerCarView = () =>
       const isBackspace = e.keyCode === 8;
 
       !isBackspace &&
-        setForm(prev => {
-          const licensePlate = applyLicensePlateMask(prev.licensePlate)
-          return {
-            ...prev,
-            licensePlate
-          }
-        });
+        changeFormForKey("licensePlate", true)(applyLicensePlateMask(form.licensePlate));
     }
 
     function applyLicensePlateMask(value) {
@@ -33,7 +27,7 @@ export const createAddCustomerCarView = () =>
 
     function licenseOnChange(e) {
       e.persist()
-      setForm(prev => ({ ...prev, licensePlate: e?.target?.value.toUpperCase() }))
+      changeFormForKey("licensePlate", true)(e?.target?.value.toUpperCase())
     }
 
     return (
@@ -54,7 +48,7 @@ export const createAddCustomerCarView = () =>
         </Grid>
         <Grid item className={classes.formItem}>
           <TextField
-            onChange={changeFormForId("color")}
+            onChange={changeFormForKey("color")}
             size="small"
             label={"Cor"}
             variant="outlined"
@@ -62,9 +56,12 @@ export const createAddCustomerCarView = () =>
         </Grid>
         <Grid item className={classes.formItem}>
           <TextField
-            onChange={changeFormForId("displacement")}
+            onChange={changeFormForKey("displacement")}
             size="small"
             label={"Cilindradas"}
+            inputProps={
+              { maxLength: "3" }
+            }
             variant="outlined"
             fullWidth />
         </Grid>
