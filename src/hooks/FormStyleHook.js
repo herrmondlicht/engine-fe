@@ -8,8 +8,14 @@ const useStyles = makeStyles(theme => ({
     minHeight: 200,
     margin: theme.spacing(2),
   },
-  formItem:{
+  paperContainerTop: {
+    marginTop: 0,
+  },
+  formItem: {
     marginTop: theme.spacing(2)
+  },
+  buttonSubmit: {
+    margin: theme.spacing(2)
   }
 }));
 
