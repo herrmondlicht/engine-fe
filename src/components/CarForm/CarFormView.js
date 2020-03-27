@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Grid,
   TextField,
@@ -6,30 +6,30 @@ import {
 
 import AutocompleteField from "../Autocomplete/Autocomplete";
 
-import useStyles from "./styles/FormStyleHook"
+import useStyles from "../../hooks/FormStyleHook"
 
 export const createAddCarFormView = () =>
-  function AddCarFormView({ modelsList, changeFormForId, form }) {
+  function AddCarFormView({ modelsList, changeFormForKey, form }) {
     const classes = useStyles();
 
     const getUniqueEntries = ((obj, index, arr) => arr.indexOf(obj) === index)
 
     const onChangeYear = (e) => {
-      const currValue = e.target.value
-      if (currValue?.length <= 4)
-        changeFormForId("year")(e, currValue)
+      e.persist();
+      if (e.target.value?.length <= 4)
+        changeFormForKey("year")(e)
     }
 
-    const makesOptions = modelsList
+    const makesOptions = useMemo(() => modelsList
       .map(car => car.make)
-      .filter(getUniqueEntries)
+      .filter(getUniqueEntries), [modelsList])
 
-    const modelsFilteredBySelectedMake = modelsList
-      .filter(car => car.make === form.make)
+    const modelsFilteredBySelectedMake = useMemo(() => modelsList
+      .filter(car => car.make === form.make), [modelsList, form.make])
 
-    const modelsOptions = modelsFilteredBySelectedMake
+    const modelsOptions = useMemo(() => modelsFilteredBySelectedMake
       .map(car => car.model)
-      .filter(getUniqueEntries)
+      .filter(getUniqueEntries), [modelsFilteredBySelectedMake])
 
     return (
       <>
@@ -38,14 +38,14 @@ export const createAddCarFormView = () =>
           <AutocompleteField
             id="make"
             label="Marca"
-            onChange={changeFormForId("make")}
+            onChange={changeFormForKey("make")}
             options={makesOptions} />
         </Grid>
         <Grid item className={classes.formItem}>
           <AutocompleteField
             id="model"
             label="Modelo"
-            onChange={changeFormForId("model")}
+            onChange={changeFormForKey("model")}
             options={modelsOptions} />
         </Grid>
         <Grid item className={classes.formItem}>
