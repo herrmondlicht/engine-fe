@@ -32,7 +32,7 @@ export const createAddCustomerCarView = () =>
 
     return (
       <>
-        <Grid item className={classes.formItem}>
+        <Grid item xs={12} sm={4} className={classes.formItem}>
           <TextField
             onChange={licenseOnChange}
             onKeyDown={licenseKeyDown}
@@ -46,7 +46,7 @@ export const createAddCustomerCarView = () =>
             fullWidth />
 
         </Grid>
-        <Grid item className={classes.formItem}>
+        <Grid item xs={12} sm={4} className={classes.formItem}>
           <TextField
             onChange={changeFormForKey("color")}
             size="small"
@@ -54,7 +54,7 @@ export const createAddCustomerCarView = () =>
             variant="outlined"
             fullWidth />
         </Grid>
-        <Grid item className={classes.formItem}>
+        <Grid item xs={12} sm={4} className={classes.formItem}>
           <TextField
             onChange={changeFormForKey("displacement")}
             size="small"

@@ -34,21 +34,21 @@ export const createAddCarFormView = () =>
     return (
       <>
         {/* form */}
-        <Grid item className={classes.formItem}>
+        <Grid item xs={12} sm={4} className={classes.formItem}>
           <AutocompleteField
             id="make"
             label="Marca"
             onChange={changeFormForKey("make")}
             options={makesOptions} />
         </Grid>
-        <Grid item className={classes.formItem}>
+        <Grid item xs={12} sm={4} className={classes.formItem}>
           <AutocompleteField
             id="model"
             label="Modelo"
             onChange={changeFormForKey("model")}
             options={modelsOptions} />
         </Grid>
-        <Grid item className={classes.formItem}>
+        <Grid item xs={12} sm={4} className={classes.formItem}>
           <TextField
             label="Ano"
             id="year"

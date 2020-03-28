@@ -11,16 +11,16 @@ export const createCustomerFormView = () =>
   function CustomerFormView({ changeFormForKey, form }) {
     const classes = useStyles();
 
-    function handleDocumentNumberChange(e) {
+    const handleDocumentNumberChangeForKey = (key) => function (e) {
       e.persist()
-      changeFormForKey("documentNumber")({ target: { value: e?.target?.value.replace(/\D/g, "") } })
+      changeFormForKey(key)({ target: { value: e?.target?.value.replace(/\D/g, "") } })
     }
 
     return (
       <>
-        <Grid sm={6} item className={classes.formItem}>
+        <Grid xs={12} sm={3} item className={classes.formItem}>
           <TextField
-            onChange={handleDocumentNumberChange}
+            onChange={handleDocumentNumberChangeForKey("documentNumber")}
             value={form.documentNumber}
             size="small"
             label={"CPF (Número)"}
@@ -29,9 +29,17 @@ export const createCustomerFormView = () =>
               { maxLength: "11" }
             }
             fullWidth />
-
         </Grid>
-        <Grid sm={6} item className={classes.formItem}>
+        <Grid xs={12} sm={3} item className={classes.formItem}>
+          <TextField
+            onChange={handleDocumentNumberChangeForKey("phone")}
+            value={form.phone}
+            size="small"
+            label={"Telefone (Número)"}
+            variant="outlined"
+            fullWidth />
+        </Grid>
+        <Grid xs={12} sm={6} item className={classes.formItem}>
           <TextField
             onChange={changeFormForKey("fullName")}
             size="small"
@@ -39,7 +47,16 @@ export const createCustomerFormView = () =>
             variant="outlined"
             fullWidth />
         </Grid>
-        <Grid sm={12} item>
+        <Grid xs={12} sm={4} item className={classes.formItem}>
+          <TextField
+            onChange={changeFormForKey("email")}
+            size="small"
+            label={"E-mail"}
+            type="email"
+            variant="outlined"
+            fullWidth />
+        </Grid>
+        <Grid xs={12} sm={8} item className={classes.formItem}>
           <TextField
             onChange={changeFormForKey("address")}
             size="small"
