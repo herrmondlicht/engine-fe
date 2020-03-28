@@ -29,9 +29,10 @@ const useStyles = makeStyles(theme => ({
   },
   container: {
     flex: 1,
-    margin: `${theme.spacing(7)}px ${theme.spacing(7)}px ${theme.spacing(
-      1
-    )}px ${theme.spacing(7)}px`,
+    marginTop: theme.spacing(7),
+    marginRight: theme.spacing(7),
+    marginBottom: theme.spacing(1),
+    marginLeft: theme.spacing(7),
     [theme.breakpoints.down("sm")]: {
       margin: 0
     },
