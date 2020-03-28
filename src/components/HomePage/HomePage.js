@@ -28,13 +28,14 @@ const useStyles = makeStyles(theme => ({
     },
   },
   container: {
+    height:"100%",
     flex: 1,
-    marginTop: theme.spacing(7),
-    marginRight: theme.spacing(7),
-    marginBottom: theme.spacing(1),
-    marginLeft: theme.spacing(7),
+    paddingTop: theme.spacing(7),
+    paddingRight: theme.spacing(7),
+    paddingBottom: theme.spacing(1),
+    paddingLeft: theme.spacing(7),
     [theme.breakpoints.down("sm")]: {
-      margin: 0
+      padding: 0
     },
     overflow: "auto"
   }
