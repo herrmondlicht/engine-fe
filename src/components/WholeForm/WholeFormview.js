@@ -17,19 +17,24 @@ import useStyles from "../../hooks/FormStyleHook"
 
 const createWholeFormView = () =>
   function WholeFormView(props) {
-    const { changeCarFormForKey, changeCustomerFormForKey, changeCustomerCarFormForKey, formsData, error, sendForm, isLoading } = props;
+    const { changeCarFormForKey, changeCustomerFormForKey, changeCustomerCarFormForKey, formsData, sendForm, isLoading } = props;
     const classes = useStyles()
     return (
       <>
         <Paper variant="outlined" className={`${classes.paperContainer} ${classes.paperContainerTop}`}>
           <Grid
-            alignItems="center"
             container
             item
             sm={12}
             direction="column"
             className={classes.formWrapper}
           >
+            <Grid item sm={12} className={classes.formTitle}>
+              <Typography variant="h5" >Cadastrar Nova OS</Typography>
+            </Grid>
+            <Grid container item xs={12} className={classes.formItem}>
+              <Divider variant="fullWidth" className={classes.divider} />
+            </Grid>
             <Grid
               container
               item
@@ -38,10 +43,6 @@ const createWholeFormView = () =>
               justify="center"
               direction="row"
             >
-              <Grid item sm={12}>
-                <Typography variant="h5" >Cadastrar Nova OS</Typography>
-              </Grid>
-              <FormDivider />
               <Grid item sm={3} className={classes.formItem}>
                 <Typography variant="title">Dados do Cliente</Typography>
               </Grid>
@@ -52,7 +53,9 @@ const createWholeFormView = () =>
                 />
               </Grid>
             </Grid>
-            <FormDivider />
+            <Grid container item xs={12} className={classes.formItem}>
+              <Divider variant="fullWidth" className={classes.divider} />
+            </Grid>
             {formsData.modelsList.length === 0
               ? "carregando..."
               :
@@ -81,14 +84,6 @@ const createWholeFormView = () =>
                   </Grid>
                 </Grid>
                 <Grid
-                  container
-                  justify="center"
-                  alignItems="center"
-                  className={classes.formWrapper}
-                >
-                  {error && <span style={{ margin: 10, color: "red" }}>{error}</span>}
-                </Grid>
-                <Grid
                   item
                   container
                   xs={12}
@@ -112,14 +107,5 @@ const createWholeFormView = () =>
       </>
     )
   }
-
-function FormDivider() {
-  const classes = useStyles()
-  return (
-    <Grid container item xs={12} className={classes.formItem}>
-      <Divider variant="fullWidth" className={classes.divider} />
-    </Grid>
-  )
-}
 
 export default createWholeFormView()
