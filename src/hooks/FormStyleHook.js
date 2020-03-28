@@ -22,9 +22,7 @@ const useStyles = makeStyles(theme => ({
     flex: 1
   },
   formTitle: {
-    marginLeft: theme.spacing(2),
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
+    marginLeft: theme.spacing(1),
     [theme.breakpoints.down("sm")]: {
       marginLeft: 0,
     }
