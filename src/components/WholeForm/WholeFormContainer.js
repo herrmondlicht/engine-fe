@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
-import {
-  Button,
-} from "@material-ui/core";
 
 import engineAPI from "../../utils/apiRoutes/apiRoutes";
 
-import WholeFormView from './WholeFormview'
-import CustomerDataCardView from "../CustomerDataCard/CustomerDataCardView";
+import WholeFormView from './WholeFormView'
+import ServiceItems from "../ServiceForm/ServiceItems/ServiceItems";
 
 
 
-export const createWholeFormContainer = () =>
+export const createWholeFormContainer = ({ engineAPI }) =>
   function WholeFormContainer() {
     const [modelsList, changeModelsList] = useState([]);
     const [hasFilledForm, setHasFilledForm] = useState(false)
@@ -40,7 +37,6 @@ export const createWholeFormContainer = () =>
     })
 
     const [error, setError] = useState("")
-    const [success, setSuccess] = useState("")
 
     async function fetchModelsFromMaker() {
       const modelsList = await engineAPI.cars.get()
@@ -122,12 +118,8 @@ export const createWholeFormContainer = () =>
       fetchModelsFromMaker();
     }, [])
 
-    if (success) {
-      return <Button onClick={() => { setSuccess(null) }}>Ok!</Button>
-    }
-
     return (
-      <div>
+      <>
         {
           !hasFilledForm && <WholeFormView
             changeCarFormForKey={getChangeFormKeyToForm(setCarForm)}
@@ -138,12 +130,10 @@ export const createWholeFormContainer = () =>
             sendForm={sendForm}
           />
         }
-        {
-          hasFilledForm && <CustomerDataCardView formsData={{ modelsList, customerForm, customerCarForm, carForm }} />
-        }
-      </div>
+        <ServiceItems />
+      </>
     );
   };
 
 
-export default createWholeFormContainer()
+export default createWholeFormContainer({ engineAPI })
