@@ -8,13 +8,13 @@ import {
   LinearProgress,
 } from "@material-ui/core";
 
-import CarFormView from "../CarForm/CarFormView";
-import CustomerCarFormView from "../CustomerCarForm/CustomerCarFormView";
+import CarFormView from "./CarForm/CarFormView";
+import CustomerCarFormView from "./CustomerCarForm/CustomerCarFormView";
 
-import CustomerView from "../CustomerForm/CustomerFormView";
+import CustomerView from "./CustomerForm/CustomerFormView";
 
-import useStyles from "../../../hooks/FormStyleHook";
-import PaperWithTitle from "../../Common/PaperWithTitle";
+import useStyles from "../../hooks/FormStyleHook";
+import PaperWithTitle from "../Common/PaperWithTitle";
 
 const createWholeFormView = () =>
   function WholeFormView(props) {

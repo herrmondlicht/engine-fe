@@ -1,19 +1,12 @@
-import WholeFormContainer from "../components/CustomerForms/WholeForm/WholeFormContainer";
+import ServiceFormContainer from "../components/ServiceForm/ServiceFormContainer";
 
 const routes = {
-  addnewcar: {
-    name: "Add new car",
-    path: "addnewcar",
-    Component: WholeFormContainer,
+  newService: {
+    name: "New Service",
+    path: "new-service",
+    Component: ServiceFormContainer,
     isLocked: true,
-    exact: true
-  },
-  home: {
-    name: "Add new car",
-    path: "/",
-    Component: WholeFormContainer,
-    isLocked: true,
-    exact: true
+    exact: true,
   }
 };
 

@@ -43,9 +43,9 @@ function SideMenu({ setSelectedItem, selectedItem }) {
               aria-label="delete"
               width={50}
               component={Link}
-              to="/addnewcar"
-              onClick={changeSelectedItem("addnewcar")}
-              color={selectedItem === "addnewcar" ? "secondary" : "default"}
+              to="/new-service"
+              onClick={changeSelectedItem("new-service")}
+              color={selectedItem === "new-service" ? "secondary" : "default"}
             >
               <NoteAdd />
             </IconButton>
@@ -55,9 +55,9 @@ function SideMenu({ setSelectedItem, selectedItem }) {
               aria-label="delete"
               width={50}
               component={Link}
-              to="/addnewcar"
-              onClick={changeSelectedItem("addnewcar2")}
-              color={selectedItem === "addnewcar2" ? "secondary" : "default"}
+              to="/new-service"
+              onClick={changeSelectedItem("new-service2")}
+              color={selectedItem === "new-service2" ? "secondary" : "default"}
             >
               <NoteAdd />
             </IconButton>
@@ -67,9 +67,9 @@ function SideMenu({ setSelectedItem, selectedItem }) {
               aria-label="delete"
               width={50}
               component={Link}
-              to="/addnewcar"
-              onClick={changeSelectedItem("addnewcar3")}
-              color={selectedItem === "addnewcar3" ? "secondary" : "default"}
+              to="/new-service"
+              onClick={changeSelectedItem("new-service3")}
+              color={selectedItem === "new-service3" ? "secondary" : "default"}
             >
               <NoteAdd />
             </IconButton>

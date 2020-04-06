@@ -2,10 +2,10 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import engineAPI from "../../utils/apiRoutes/apiRoutes";
 
-import WholeFormView from "./WholeForm/WholeFormView";
+import CustomerFormsView from "./CustomerFormsView";
 
-export const createWholeFormContainer = ({ engineAPI }) =>
-  function WholeFormContainer() {
+export const createCustomerFormsContainer = ({ engineAPI }) =>
+  function CustomerFormsContainer() {
     const [modelsList, changeModelsList] = useState([]);
     const [hasFilledForm, setHasFilledForm] = useState(false);
     const [carForm, setCarForm] = useState({
@@ -135,7 +135,7 @@ export const createWholeFormContainer = ({ engineAPI }) =>
 
     return (
       <>
-        <WholeFormView
+        <CustomerFormsView
           changeCarFormForKey={changeCarFormForKey}
           changeCustomerFormForKey={changeCustomerFormForKey}
           changeCustomerCarFormForKey={changeCustomerCarFormForKey}
@@ -150,4 +150,4 @@ export const createWholeFormContainer = ({ engineAPI }) =>
     );
   };
 
-export default createWholeFormContainer({ engineAPI });
+export default createCustomerFormsContainer({ engineAPI });
