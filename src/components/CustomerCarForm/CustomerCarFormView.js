@@ -1,8 +1,6 @@
 import React from "react";
 import { Grid, TextField } from "@material-ui/core";
 
-import useStyles from "../../hooks/FormStyleHook";
-
 export const createAddCustomerCarView = () =>
   function AddCustomerCarView({ changeFormForKey, form }) {
     function licenseKeyDown(e) {
