@@ -5,11 +5,8 @@ import {
   TextField,
 } from "@material-ui/core";
 
-import useStyles from "../../hooks/FormStyleHook"
-
 export const createCustomerFormView = () =>
   function CustomerFormView({ changeFormForKey, form }) {
-    const classes = useStyles();
 
     const handleDocumentNumberChangeForKey = (key) => function (e) {
       e.persist()
@@ -18,7 +15,7 @@ export const createCustomerFormView = () =>
 
     return (
       <>
-        <Grid xs={12} sm={3} item className={classes.formItem}>
+        <Grid xs={12} sm={3} item>
           <TextField
             onChange={handleDocumentNumberChangeForKey("documentNumber")}
             value={form.documentNumber}
@@ -30,7 +27,7 @@ export const createCustomerFormView = () =>
             }
             fullWidth />
         </Grid>
-        <Grid xs={12} sm={3} item className={classes.formItem}>
+        <Grid xs={12} sm={3} item>
           <TextField
             onChange={handleDocumentNumberChangeForKey("phone")}
             value={form.phone}
@@ -39,7 +36,7 @@ export const createCustomerFormView = () =>
             variant="outlined"
             fullWidth />
         </Grid>
-        <Grid xs={12} sm={6} item className={classes.formItem}>
+        <Grid xs={12} sm={6} item>
           <TextField
             onChange={changeFormForKey("fullName")}
             size="small"
@@ -47,7 +44,7 @@ export const createCustomerFormView = () =>
             variant="outlined"
             fullWidth />
         </Grid>
-        <Grid xs={12} sm={4} item className={classes.formItem}>
+        <Grid xs={12} sm={4} item>
           <TextField
             onChange={changeFormForKey("email")}
             size="small"
@@ -56,7 +53,7 @@ export const createCustomerFormView = () =>
             variant="outlined"
             fullWidth />
         </Grid>
-        <Grid xs={12} sm={8} item className={classes.formItem}>
+        <Grid xs={12} sm={8} item>
           <TextField
             onChange={changeFormForKey("address")}
             size="small"

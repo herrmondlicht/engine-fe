@@ -4,13 +4,11 @@ import {
   TextField,
 } from "@material-ui/core";
 
-import AutocompleteField from "../Autocomplete/Autocomplete";
+import AutocompleteField from "../Common/Autocomplete";
 
-import useStyles from "../../hooks/FormStyleHook"
 
 export const createAddCarFormView = () =>
   function AddCarFormView({ modelsList, changeFormForKey, form }) {
-    const classes = useStyles();
 
     const getUniqueEntries = ((obj, index, arr) => arr.indexOf(obj) === index)
 
@@ -34,21 +32,21 @@ export const createAddCarFormView = () =>
     return (
       <>
         {/* form */}
-        <Grid item xs={12} sm={4} className={classes.formItem}>
+        <Grid item xs={12} sm={4}>
           <AutocompleteField
             id="make"
             label="Marca"
             onChange={changeFormForKey("make")}
             options={makesOptions} />
         </Grid>
-        <Grid item xs={12} sm={4} className={classes.formItem}>
+        <Grid item xs={12} sm={4}>
           <AutocompleteField
             id="model"
             label="Modelo"
             onChange={changeFormForKey("model")}
             options={modelsOptions} />
         </Grid>
-        <Grid item xs={12} sm={4} className={classes.formItem}>
+        <Grid item xs={12} sm={4}>
           <TextField
             label="Ano"
             id="year"
