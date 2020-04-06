@@ -1,4 +1,4 @@
-import WholeFormContainer from "../components/WholeForm/WholeFormContainer";
+import WholeFormContainer from "../components/CustomerForms/WholeForm/WholeFormContainer";
 
 const routes = {
   addnewcar: {
