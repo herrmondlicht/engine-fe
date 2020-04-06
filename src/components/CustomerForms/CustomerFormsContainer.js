@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 
-import engineAPI from "../../../utils/apiRoutes/apiRoutes";
+import engineAPI from "../../utils/apiRoutes/apiRoutes";
 
-import WholeFormView from "./WholeFormView";
+import WholeFormView from "./WholeForm/WholeFormView";
 
 export const createWholeFormContainer = ({ engineAPI }) =>
   function WholeFormContainer() {
