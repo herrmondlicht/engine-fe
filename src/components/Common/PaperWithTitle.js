@@ -26,7 +26,7 @@ const createPaperWithTitle = () =>
             <Typography variant="h5" >{title}</Typography>
           </Grid>
           <Grid container item xs={12} className={classes.formItem}>
-            <Box mt={2} mb={2} width="100%">
+            <Box mt={2} mb={4} width="100%">
               <Divider variant="fullWidth" />
             </Box>
           </Grid>
