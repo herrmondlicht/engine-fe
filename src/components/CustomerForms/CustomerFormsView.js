@@ -14,7 +14,6 @@ import CustomerCarFormView from "./CustomerCarForm/CustomerCarFormView";
 import CustomerView from "./CustomerForm/CustomerFormView";
 
 import useStyles from "../../hooks/FormStyleHook";
-import PaperWithTitle from "../Common/PaperWithTitle";
 
 const createWholeFormView = () =>
   function WholeFormView(props) {
@@ -32,83 +31,74 @@ const createWholeFormView = () =>
     const classes = useStyles();
     return (
       <>
-        <PaperWithTitle
-          title="Cadastrar Nova OS"
-          paperClassNames={[classes.paperContainerTop]}
+        <Grid
+          container
+          item
+          sm={12}
+          spacing={2}
+          justify="center"
+          direction="row"
         >
-          <Grid
-            container
-            item
-            sm={12}
-            spacing={2}
-            justify="center"
-            direction="row"
-          >
-            <Grid item sm={3}>
-              <Typography>Dados do Cliente</Typography>
-            </Grid>
-            <Grid container item sm={9} spacing={2}>
-              <CustomerView
-                changeFormForKey={changeCustomerFormForKey}
-                form={customerForm}
-              />
-            </Grid>
+          <Grid item sm={3}>
+            <Typography>Dados do Cliente</Typography>
           </Grid>
-          <Grid container item xs={12}>
-            <Divider variant="fullWidth" className={classes.divider} />
+          <Grid container item sm={9} spacing={2}>
+            <CustomerView
+              changeFormForKey={changeCustomerFormForKey}
+              form={customerForm}
+            />
           </Grid>
-          {modelsList.length === 0 ? (
-            <LinearProgress />
-          ) : (
-            <>
-              <Grid
-                container
-                item
-                sm={12}
-                spacing={2}
-                justify="center"
-                direction="row"
-              >
-                <Grid item sm={3}>
-                  <Typography>Dados do Veículo</Typography>
-                </Grid>
-                <Grid container item sm={9} spacing={2}>
-                  <CarFormView
-                    modelsList={modelsList}
-                    form={carForm}
-                    changeFormForKey={changeCarFormForKey}
-                  />
-                  <CustomerCarFormView
-                    changeFormForKey={changeCustomerCarFormForKey}
-                    form={customerCarForm}
-                  />
-                </Grid>
+        </Grid>
+        <Grid container item xs={12}>
+          <Divider variant="fullWidth" className={classes.divider} />
+        </Grid>
+        {modelsList.length === 0 ? (
+          <LinearProgress />
+        ) : (
+          <>
+            <Grid
+              container
+              item
+              sm={12}
+              spacing={2}
+              justify="center"
+              direction="row"
+            >
+              <Grid item sm={3}>
+                <Typography>Dados do Veículo</Typography>
               </Grid>
-              <Grid
-                item
-                container
-                xs={12}
-                justify="flex-end"
-                className={classes.formWrapper}
-              >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  data-testid="LoginForm_button"
-                  disabled={isLoading}
-                  onClick={sendForm}
-                >
-                  {isLoading ? (
-                    <CircularProgress size={24} />
-                  ) : (
-                    "Confirmar dados"
-                  )}
-                </Button>
+              <Grid container item sm={9} spacing={2}>
+                <CarFormView
+                  modelsList={modelsList}
+                  form={carForm}
+                  changeFormForKey={changeCarFormForKey}
+                />
+                <CustomerCarFormView
+                  changeFormForKey={changeCustomerCarFormForKey}
+                  form={customerCarForm}
+                />
               </Grid>
-            </>
-          )}
-        </PaperWithTitle>
+            </Grid>
+            <Grid
+              item
+              container
+              xs={12}
+              justify="flex-end"
+              className={classes.formWrapper}
+            >
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                data-testid="LoginForm_button"
+                disabled={isLoading}
+                onClick={sendForm}
+              >
+                {isLoading ? <CircularProgress size={24} /> : "Confirmar dados"}
+              </Button>
+            </Grid>
+          </>
+        )}
       </>
     );
   };
