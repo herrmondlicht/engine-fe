@@ -6,6 +6,8 @@ import {
   CircularProgress,
   Divider,
   LinearProgress,
+  Box,
+  Icon,
 } from "@material-ui/core";
 
 import CarFormView from "./CarForm/CarFormView";
@@ -27,6 +29,7 @@ const createWholeFormView = () =>
       carForm,
       sendForm,
       isLoading,
+      isFormFilled,
     } = props;
     const classes = useStyles();
     return (
@@ -86,21 +89,42 @@ const createWholeFormView = () =>
               justify="flex-end"
               className={classes.formWrapper}
             >
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                data-testid="LoginForm_button"
-                disabled={isLoading}
-                onClick={sendForm}
-              >
-                {isLoading ? <CircularProgress size={24} /> : "Confirmar dados"}
-              </Button>
+              <Box width={250}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  disabled={isLoading || isFormFilled}
+                  onClick={sendForm}
+                  fullWidth
+                >
+                  {isLoading && <FormLoadingButtonText />}
+                  {isFormFilled && <FormFilledButtonText />}
+                  {!isLoading && !isFormFilled && "Confirmar Dados"}
+                </Button>
+              </Box>
             </Grid>
           </>
         )}
       </>
     );
   };
+
+function FormFilledButtonText() {
+  return (
+    <>
+      <Icon size={24}>done</Icon>
+      <Box ml={1}>Dados Confirmados</Box>
+    </>
+  );
+}
+function FormLoadingButtonText() {
+  return (
+    <>
+      <CircularProgress size={24} />
+      <Box ml={1}>Confirmando Dados</Box>
+    </>
+  );
+}
 
 export default createWholeFormView();

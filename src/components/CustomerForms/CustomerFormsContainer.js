@@ -1,22 +1,26 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 
 import engineAPI from "../../utils/apiRoutes/apiRoutes";
 
 import CustomerFormsView from "./CustomerFormsView";
 
+const noop = () => {};
+
 export const createCustomerFormsContainer = ({ engineAPI }) =>
-  function CustomerFormsContainer() {
+  function CustomerFormsContainer({
+    customerSubFormsIds = {},
+    setIdForCustomerSubForm = noop,
+  }) {
     const [modelsList, changeModelsList] = useState([]);
-    const [hasFilledForm, setHasFilledForm] = useState(false);
+    const [isFormFilled, setIsFormFilled] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
     const [carForm, setCarForm] = useState({
-      id: null,
       model: "",
       make: "",
       year: "",
     });
 
     const [customerForm, setCustomerForm] = useState({
-      id: null,
       documentNumber: "",
       fullName: "",
       address: "",
@@ -25,9 +29,7 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
     });
 
     const [customerCarForm, setCustomerCarForm] = useState({
-      id: null,
       licensePlate: "",
-      carId: null,
       customerId: null,
       displacement: "",
       color: "",
@@ -41,7 +43,7 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
     }
 
     async function insertNewCar() {
-      if (!carForm.id) {
+      if (!customerSubFormsIds.carFormId) {
         const response = await engineAPI.cars.post({
           data: {
             model: carForm.model,
@@ -49,66 +51,70 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
             manufacture_year: carForm.year,
           },
         });
-        setCarForm((prevState) => ({
-          ...prevState,
-          id: response.data.data.id,
-        }));
+        setIdForCustomerSubForm({ carFormId: response.data.data.id });
         return response.data.data;
       }
+
+      // todo: add logic to update car here
       return carForm;
     }
 
     async function insertNewCustomer() {
-      if (!customerForm.id) {
-        const response = await engineAPI.customers.post({
-          data: {
-            document_number: customerForm.documentNumber,
-            fullname: customerForm.fullName,
-            address: customerForm.address,
-            email: customerForm.email,
-            phone: customerForm.phone,
-          },
-        });
-        setCustomerForm((prevState) => ({
-          ...prevState,
-          id: response.data.data.id,
-        }));
-        return response.data.data;
+      try {
+        if (!customerSubFormsIds.customerFormId) {
+          const response = await engineAPI.customers.post({
+            data: {
+              document_number: customerForm.documentNumber,
+              fullname: customerForm.fullName,
+              address: customerForm.address,
+              email: customerForm.email,
+              phone: customerForm.phone,
+            },
+          });
+          setIdForCustomerSubForm({ customerFormId: response.data.data.id });
+          return response.data.data;
+        }
+        // todo: add logic to update car here
+        return customerForm;
+      } catch (error) {
+        setError(
+          "Não foi possível adicionar o carro. Verifique os dados e tente novamente"
+        );
       }
-      return customerForm;
     }
 
     async function insertNewCustomerCar(carId, customerId) {
-      if (!customerCarForm.id) {
-        const response = await engineAPI.customers.post({
-          urlExtension: `${customerId}/cars`,
-          data: {
-            license_plate: customerCarForm.licensePlate,
-            car_id: carId,
-            displacement: customerCarForm.displacement,
-            color: customerCarForm.color,
-          },
-        });
-        setCustomerCarForm((prevState) => ({
-          ...prevState,
-          id: response.data.data.id,
-        }));
-        return response.data.data;
+      try {
+        if (!customerSubFormsIds.customerCarFormId) {
+          const response = await engineAPI.customers.post({
+            urlExtension: `${customerId}/cars`,
+            data: {
+              license_plate: customerCarForm.licensePlate,
+              car_id: carId,
+              displacement: customerCarForm.displacement,
+              color: customerCarForm.color,
+            },
+          });
+          setIdForCustomerSubForm({ customerCarFormId: response.data.data.id });
+          setError("");
+          setIsFormFilled(true)
+          return response.data.data;
+        }
+        // todo: add logic to update car here
+        return customerCarForm;
+      } catch (error) {
+        setError(
+          "Não foi possível adicionar o carro do cliente. Verifique os dados e tente novamente"
+        );
       }
-      return customerCarForm;
     }
 
     async function sendForm() {
-      try {
-        const { id: carId } = await insertNewCar();
-        const { id: customerId } = await insertNewCustomer();
-        await insertNewCustomerCar(carId, customerId);
-        setError("");
-        setHasFilledForm(true);
-      } catch (e) {
-        console.error(e);
-        setError("Não foi possível adicionar os dados");
-      }
+      setIsLoading(true);
+      const { id: carId } = await insertNewCar();
+      const { id: customerId } = await insertNewCustomer();
+      await insertNewCustomerCar(carId, customerId);
+      setIsLoading(false)
     }
 
     const getChangeFormKeyToForm = (setForm) => (key) => (event) => {
@@ -120,31 +126,22 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
       fetchModelsFromMaker();
     }, []);
 
-    const changeCarFormForKey = useCallback(
-      getChangeFormKeyToForm(setCarForm),
-      [setCarForm]
-    );
-    const changeCustomerFormForKey = useCallback(
-      getChangeFormKeyToForm(setCustomerForm),
-      [setCustomerForm]
-    );
-    const changeCustomerCarFormForKey = useCallback(
-      getChangeFormKeyToForm(setCustomerCarForm),
-      [setCustomerCarForm]
-    );
-
     return (
       <>
         <CustomerFormsView
-          changeCarFormForKey={changeCarFormForKey}
-          changeCustomerFormForKey={changeCustomerFormForKey}
-          changeCustomerCarFormForKey={changeCustomerCarFormForKey}
+          changeCarFormForKey={getChangeFormKeyToForm(setCarForm)}
+          changeCustomerFormForKey={getChangeFormKeyToForm(setCustomerForm)}
+          changeCustomerCarFormForKey={getChangeFormKeyToForm(
+            setCustomerCarForm
+          )}
           modelsList={modelsList}
           customerForm={customerForm}
           customerCarForm={customerCarForm}
           carForm={carForm}
           error={error}
           sendForm={sendForm}
+          isFormFilled={isFormFilled}
+          isLoading={isLoading}
         />
       </>
     );
