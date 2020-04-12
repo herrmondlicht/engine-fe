@@ -6,17 +6,17 @@ import { MemoryRouter } from "react-router-dom";
 import { stub, assert, match } from "sinon";
 import { STORAGE_KEYS } from "../../../utils/storage/storageAPI";
 
-let apiRoutes = { login: { post: stub() } };
+let engineAPI = { login: { post: stub() } };
 let storageAPI = { getItem: stub(), setItem: stub() };
 
 const createTestComponent = props => {
-  const Component = createLogin(apiRoutes, storageAPI);
+  const Component = createLogin(engineAPI, storageAPI);
   return render(<Component {...props} />, { wrapper: MemoryRouter });
 };
 
 describe("Login", () => {
   afterEach(() => {
-    apiRoutes = { login: { post: stub() } };
+    engineAPI = { login: { post: stub() } };
     storageAPI = { getItem: stub(), setItem: stub() };
   });
 
@@ -36,7 +36,7 @@ describe("Login", () => {
     const username = "foolano";
     const password = "psw311";
 
-    apiRoutes.login.post.resolves({ data: { token } });
+    engineAPI.login.post.resolves({ data: { token } });
 
     const { getByTestId, debug } = createTestComponent();
 
@@ -51,7 +51,7 @@ describe("Login", () => {
     fireEvent.click(getByTestId("LoginForm_button"));
     await wait(() => {
       assert.calledWith(
-        apiRoutes.login.post,
+        engineAPI.login.post,
         match({ data: { password, username } })
       );
 
