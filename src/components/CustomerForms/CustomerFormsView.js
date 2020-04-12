@@ -12,10 +12,10 @@ import {
 
 import CarFormView from "./CarForm/CarFormView";
 import CustomerCarFormView from "./CustomerCarForm/CustomerCarFormView";
-
 import CustomerView from "./CustomerForm/CustomerFormView";
 
 import useStyles from "../../hooks/FormStyleHook";
+import { getErrorMessage } from "../../utils/errorMessages";
 
 const createWholeFormView = () =>
   function WholeFormView(props) {
@@ -30,6 +30,7 @@ const createWholeFormView = () =>
       sendForm,
       isLoading,
       isFormFilled,
+      errorType,
     } = props;
     const classes = useStyles();
     return (
@@ -55,7 +56,7 @@ const createWholeFormView = () =>
         <Grid container item xs={12}>
           <Divider variant="fullWidth" className={classes.divider} />
         </Grid>
-        {modelsList.length === 0 ? (
+        {!modelsList ? (
           <LinearProgress />
         ) : (
           <>
@@ -86,17 +87,20 @@ const createWholeFormView = () =>
               item
               container
               xs={12}
-              justify="flex-end"
+              alignItems="flex-end"
+              direction="column"
               className={classes.formWrapper}
             >
-              <Box width={250}>
+              <FormErrorMessage errorType={errorType} />
+              <Box width={250} mt={3}>
                 <Button
                   variant="contained"
                   color="primary"
                   type="submit"
-                  disabled={isLoading || isFormFilled}
+                  disabled={isLoading}
                   onClick={sendForm}
                   fullWidth
+                  data-testid="CustomerFormsView_button"
                 >
                   {isLoading && <FormLoadingButtonText />}
                   {isFormFilled && <FormFilledButtonText />}
@@ -114,7 +118,7 @@ function FormFilledButtonText() {
   return (
     <>
       <Icon size={24}>done</Icon>
-      <Box ml={1}>Dados Confirmados</Box>
+      <Box ml={1}>Reenviar Dados</Box>
     </>
   );
 }
@@ -124,6 +128,18 @@ function FormLoadingButtonText() {
       <CircularProgress size={24} />
       <Box ml={1}>Confirmando Dados</Box>
     </>
+  );
+}
+
+function FormErrorMessage({ errorType }) {
+  const classes = useStyles();
+  return (
+    <span
+      className={classes.formErrorMessage}
+      data-testid="FormErrorMessage_span"
+    >
+      {getErrorMessage(errorType)}
+    </span>
   );
 }
 
