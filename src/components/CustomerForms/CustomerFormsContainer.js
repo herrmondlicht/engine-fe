@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import engineAPI from "../../utils/apiRoutes/apiRoutes";
+import engineAPI from "../../utils/engineAPI/engineAPI";
 
 import CustomerFormsView from "./CustomerFormsView";
 
@@ -45,8 +45,17 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
       method,
       resource,
       subFormIdName,
-    }) => async (requestOptions) => {
-      const response = await engineAPI[resource][method](requestOptions);
+      id,
+    }) => async ({ data, urlExtension, ...requestOptions }) => {
+      const urlExtensions = [];
+      if (urlExtension) urlExtensions.push(urlExtension);
+      if (id) urlExtensions.push(`/${id}`);
+
+      const response = await engineAPI[resource][method]({
+        data,
+        ...(urlExtensions.length ? { urlExtension: urlExtensions.join("") } : {}),
+        ...requestOptions,
+      });
       setIdForCustomerSubForm({ [subFormIdName]: response.data.data.id });
       return response.data.data;
     };
@@ -63,14 +72,19 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
 
       return requestAPIForSubform({
         resource,
-        method: "put",
+        method: "patch",
         subFormIdName,
+        id,
       });
     };
 
     async function insertNewCar() {
       try {
-        const request = getResourcePostOrPutRequest("carFormId", "cars");
+        const request = requestAPIForSubform({
+          resource: "cars",
+          method: "post",
+          subFormIdName: "carFormId",
+        });
         const response = await request({
           data: {
             model: carForm.model,

@@ -103,7 +103,7 @@ const createWholeFormView = () =>
                   data-testid="CustomerFormsView_button"
                 >
                   {isLoading && <FormLoadingButtonText />}
-                  {isFormFilled && <FormFilledButtonText />}
+                  {isFormFilled && !isLoading && <FormFilledButtonText />}
                   {!isLoading && !isFormFilled && "Confirmar Dados"}
                 </Button>
               </Box>

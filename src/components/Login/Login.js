@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Grid, makeStyles, Paper } from "@material-ui/core";
 import EngineImage from "./engine_logo.png";
-import apiRoutes from "../../utils/apiRoutes/apiRoutes";
+import engineAPI from "../../utils/engineAPI/engineAPI";
 import storageAPI, { STORAGE_KEYS } from "../../utils/storage/storageAPI";
 import { useLocation, useHistory, Redirect } from "react-router-dom";
 import LoginForm from "./LoginForm";
@@ -34,7 +34,7 @@ const getErrorMessage = code => {
   return errorMessage;
 };
 
-export const createLogin = (apiRoutes, storageAPI) =>
+export const createLogin = (engineAPI, storageAPI) =>
   function Login() {
     const classes = useStyles();
     const [userInput, changeInput] = useState({ username: "", password: "" });
@@ -48,7 +48,7 @@ export const createLogin = (apiRoutes, storageAPI) =>
     async function sendForm() {
       try {
         setIsLoading(true)
-        const response = await apiRoutes.login.post({ data: userInput });
+        const response = await engineAPI.login.post({ data: userInput });
         loginUser(response.data.token);
       } catch (e) {
         setErrorMessage(getErrorMessage(e?.response?.status));
@@ -92,4 +92,4 @@ export const createLogin = (apiRoutes, storageAPI) =>
     );
   };
 
-export default createLogin(apiRoutes, storageAPI);
+export default createLogin(engineAPI, storageAPI);
