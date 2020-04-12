@@ -1,5 +1,4 @@
 import { render, fireEvent, wait } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { createCustomerFormsContainer } from "../CustomerFormsContainer";
 import { getErrorMessage } from "../../../utils/errorMessages";
 import React from "react";
