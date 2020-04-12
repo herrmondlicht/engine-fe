@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import CustomerFormsContainer from "../CustomerForms/CustomerFormsContainer";
 import ServiceItemsContainer from "./ServiceItems/ServiceItemsContainer";
 import PaperWithTitle from "../Common/PaperWithTitle";
@@ -8,16 +8,31 @@ import FinancialDetails from "./FinancialDetails/FinancialDetails";
 export const createServiceFormContainer = () =>
   function ServiceFormContainer() {
     const classes = useStyles();
+    const [customerSubFormsIds, setCustomerSubFormsIds] = useState({});
+    const [serviceOrderId, setServiceOrderId] = useState({});
+
+    const setIdForCustomerSubForm = (idChangeObject) =>
+      setCustomerSubFormsIds((prev) => ({
+        ...prev,
+        ...idChangeObject,
+      }));
+
     return (
       <>
         <PaperWithTitle
           title="Cadastrar Nova OS"
           paperClassNames={classes.paperContainerTop}
         >
-          <CustomerFormsContainer />
+          <CustomerFormsContainer
+            customerSubFormsIds={customerSubFormsIds}
+            setIdForCustomerSubForm={setIdForCustomerSubForm}
+          />
         </PaperWithTitle>
         <PaperWithTitle title="Itens do Serviço">
-          <ServiceItemsContainer />
+          <ServiceItemsContainer
+            serviceOrderId={serviceOrderId}
+            setServiceOrderId={setServiceOrderId}
+          />
         </PaperWithTitle>
         <PaperWithTitle title="Pagamento">
           <FinancialDetails />

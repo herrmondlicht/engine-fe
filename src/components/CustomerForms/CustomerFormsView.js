@@ -6,14 +6,16 @@ import {
   CircularProgress,
   Divider,
   LinearProgress,
+  Box,
+  Icon,
 } from "@material-ui/core";
 
 import CarFormView from "./CarForm/CarFormView";
 import CustomerCarFormView from "./CustomerCarForm/CustomerCarFormView";
-
 import CustomerView from "./CustomerForm/CustomerFormView";
 
 import useStyles from "../../hooks/FormStyleHook";
+import { getErrorMessage } from "../../utils/errorMessages";
 
 const createWholeFormView = () =>
   function WholeFormView(props) {
@@ -27,6 +29,8 @@ const createWholeFormView = () =>
       carForm,
       sendForm,
       isLoading,
+      isFormFilled,
+      errorType,
     } = props;
     const classes = useStyles();
     return (
@@ -52,7 +56,7 @@ const createWholeFormView = () =>
         <Grid container item xs={12}>
           <Divider variant="fullWidth" className={classes.divider} />
         </Grid>
-        {modelsList.length === 0 ? (
+        {!modelsList ? (
           <LinearProgress />
         ) : (
           <>
@@ -83,24 +87,60 @@ const createWholeFormView = () =>
               item
               container
               xs={12}
-              justify="flex-end"
+              alignItems="flex-end"
+              direction="column"
               className={classes.formWrapper}
             >
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                data-testid="LoginForm_button"
-                disabled={isLoading}
-                onClick={sendForm}
-              >
-                {isLoading ? <CircularProgress size={24} /> : "Confirmar dados"}
-              </Button>
+              <FormErrorMessage errorType={errorType} />
+              <Box width={250} mt={3}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  disabled={isLoading}
+                  onClick={sendForm}
+                  fullWidth
+                  data-testid="CustomerFormsView_button"
+                >
+                  {isLoading && <FormLoadingButtonText />}
+                  {isFormFilled && <FormFilledButtonText />}
+                  {!isLoading && !isFormFilled && "Confirmar Dados"}
+                </Button>
+              </Box>
             </Grid>
           </>
         )}
       </>
     );
   };
+
+function FormFilledButtonText() {
+  return (
+    <>
+      <Icon size={24}>done</Icon>
+      <Box ml={1}>Reenviar Dados</Box>
+    </>
+  );
+}
+function FormLoadingButtonText() {
+  return (
+    <>
+      <CircularProgress size={24} />
+      <Box ml={1}>Confirmando Dados</Box>
+    </>
+  );
+}
+
+function FormErrorMessage({ errorType }) {
+  const classes = useStyles();
+  return (
+    <span
+      className={classes.formErrorMessage}
+      data-testid="FormErrorMessage_span"
+    >
+      {getErrorMessage(errorType)}
+    </span>
+  );
+}
 
 export default createWholeFormView();
