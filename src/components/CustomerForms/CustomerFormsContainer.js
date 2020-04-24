@@ -49,11 +49,13 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
     }) => async ({ data, urlExtension, ...requestOptions }) => {
       const urlExtensions = [];
       if (urlExtension) urlExtensions.push(urlExtension);
-      if (id) urlExtensions.push(`/${id}`);
+      if (id) urlExtensions.push(`${id}`);
 
       const response = await engineAPI[resource][method]({
         data,
-        ...(urlExtensions.length ? { urlExtension: urlExtensions.join("") } : {}),
+        ...(urlExtensions.length
+          ? { urlExtension: urlExtensions.join("") }
+          : {}),
         ...requestOptions,
       });
       setIdForCustomerSubForm({ [subFormIdName]: response.data.data.id });
@@ -120,13 +122,13 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
       try {
         const request = getResourcePostOrPutRequest(
           "customerCarFormId",
-          "customers"
+          "customer_cars"
         );
         const response = await request({
-          urlExtension: `${customerId}/cars`,
           data: {
             license_plate: customerCarForm.licensePlate,
             car_id: carId,
+            customer_id: customerId,
             displacement: customerCarForm.displacement,
             color: customerCarForm.color,
           },
@@ -135,6 +137,7 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
         setIsFormFilled(true);
         return response;
       } catch (error) {
+        console.log(error)
         setErrorType("CUSTOMER_CAR_FORM");
       }
     }
