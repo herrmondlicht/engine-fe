@@ -18,6 +18,7 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
       model: "",
       make: "",
       year: "",
+      fuel: "",
     });
 
     const [customerForm, setCustomerForm] = useState({
@@ -92,6 +93,7 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
             model: carForm.model,
             make: carForm.make,
             manufacture_year: carForm.year,
+            fuel: carForm.fuel,
           },
         });
         return response;
@@ -137,7 +139,7 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
         setIsFormFilled(true);
         return response;
       } catch (error) {
-        console.log(error)
+        console.log(error);
         setErrorType("CUSTOMER_CAR_FORM");
       }
     }
