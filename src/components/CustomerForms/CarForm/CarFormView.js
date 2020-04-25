@@ -2,32 +2,58 @@ import React, { useMemo } from "react";
 import {
   Grid,
   TextField,
+  Select,
+  MenuItem,
+  makeStyles,
+  FormControl,
+  InputLabel,
 } from "@material-ui/core";
 
 import AutocompleteField from "../../Common/Autocomplete";
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    padding: 10,
+  },
+  selectLabel: {
+    top: "-14px",
+    left: "12px",
+    background: "white",
+    padding: "3px",
+    "&.MuiInputLabel-shrink": {
+      paddingTop: "6px",
+      zIndex: 1,
+    },
+  },
+}));
 
 export const createAddCarFormView = () =>
   function AddCarFormView({ modelsList, changeFormForKey, form }) {
-
-    const getUniqueEntries = ((obj, index, arr) => arr.indexOf(obj) === index)
+    const classes = useStyles();
+    const getUniqueEntries = (obj, index, arr) => arr.indexOf(obj) === index;
 
     const onChangeYear = (e) => {
       e.persist();
-      if (e.target.value?.length <= 4)
-        changeFormForKey("year")(e)
-    }
+      if (e.target.value?.length <= 4) changeFormForKey("year")(e);
+    };
 
-    const makesOptions = useMemo(() => modelsList
-      .map(car => car.make)
-      .filter(getUniqueEntries), [modelsList])
+    const makesOptions = useMemo(
+      () => modelsList.map((car) => car.make).filter(getUniqueEntries),
+      [modelsList]
+    );
 
-    const modelsFilteredBySelectedMake = useMemo(() => modelsList
-      .filter(car => car.make === form.make), [modelsList, form.make])
+    const modelsFilteredBySelectedMake = useMemo(
+      () => modelsList.filter((car) => car.make === form.make),
+      [modelsList, form.make]
+    );
 
-    const modelsOptions = useMemo(() => modelsFilteredBySelectedMake
-      .map(car => car.model)
-      .filter(getUniqueEntries), [modelsFilteredBySelectedMake])
+    const modelsOptions = useMemo(
+      () =>
+        modelsFilteredBySelectedMake
+          .map((car) => car.model)
+          .filter(getUniqueEntries),
+      [modelsFilteredBySelectedMake]
+    );
 
     return (
       <>
@@ -37,16 +63,40 @@ export const createAddCarFormView = () =>
             id="make"
             label="Marca"
             onChange={changeFormForKey("make")}
-            options={makesOptions} />
+            options={makesOptions}
+          />
         </Grid>
         <Grid item xs={12} sm={4}>
           <AutocompleteField
             id="model"
             label="Modelo"
             onChange={changeFormForKey("model")}
-            options={modelsOptions} />
+            options={modelsOptions}
+          />
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={3}>
+          <FormControl fullWidth>
+            <InputLabel id="fuel-select" className={classes.selectLabel}>
+              Combustível
+            </InputLabel>
+            <Select
+              labelId="fuel-select"
+              variant="outlined"
+              id="fuel"
+              classes={{
+                root: classes.root,
+              }}
+              onChange={changeFormForKey("fuel")}
+              displayEmpty
+            >
+              <MenuItem value={"gasoline"}>Gasolina</MenuItem>
+              <MenuItem value={"alcohool"}>Álcool</MenuItem>
+              <MenuItem value={"diesel"}>Diesel</MenuItem>
+              <MenuItem value={"electric"}>Elétrico</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={1}>
           <TextField
             label="Ano"
             id="year"
@@ -59,8 +109,7 @@ export const createAddCarFormView = () =>
           />
         </Grid>
       </>
-    )
-  }
+    );
+  };
 
-
-export default createAddCarFormView()
+export default createAddCarFormView();
