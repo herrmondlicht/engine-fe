@@ -81,7 +81,7 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
         setIdForCustomerSubForm({
           customerFormId: customers.id,
         });
-        setIsFormFilled(true)
+        setIsFormFilled(true);
       }
     }, [customerSubFormsIds, setIdForCustomerSubForm]);
 
@@ -214,8 +214,11 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
 
     useEffect(() => {
       fetchClientData();
+    }, [fetchClientData]);
+
+    useEffect(() => {
       fetchModelsFromMaker();
-    }, [fetchModelsFromMaker, fetchClientData]);
+    }, [fetchModelsFromMaker]);
 
     useEffect(() => {
       if (Object.values(customerSubFormsIds).length === 3)
