@@ -128,7 +128,7 @@ function FormFilledButtonText() {
 function FormLoadingButtonText() {
   return (
     <>
-      <CircularProgress size={24} />
+      <CircularProgress color="white" size={24} />
       <Box ml={1}>Confirmando Dados</Box>
     </>
   );
