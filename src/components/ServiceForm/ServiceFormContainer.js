@@ -34,7 +34,6 @@ export const createServiceFormContainer = ({ engineAPI }) =>
           paperClassNames={[classes.paperContainerTop]}
         >
           <CustomerFormsContainer
-            hideSendButton={true}
             customerSubFormsIds={customerSubFormsIds}
             setIdForCustomerSubForm={setIdForCustomerSubForm}
           />

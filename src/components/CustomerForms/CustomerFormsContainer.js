@@ -50,7 +50,10 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
     );
 
     const fetchClientData = useCallback(async () => {
-      if (customerSubFormsIds.customerCarFormId) {
+      if (
+        customerSubFormsIds.customerCarFormId &&
+        !customerSubFormsIds.customerFormId
+      ) {
         const {
           data: {
             data: { customer_cars, customers, cars },
@@ -74,8 +77,13 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
           documentNumber: customers.document_number,
           fullName: customers.fullname,
         });
+
+        setIdForCustomerSubForm({
+          customerFormId: customers.id,
+        });
+        setIsFormFilled(true)
       }
-    }, [customerSubFormsIds.customerCarFormId]);
+    }, [customerSubFormsIds, setIdForCustomerSubForm]);
 
     const requestAPIForSubform = ({
       method,
@@ -209,7 +217,10 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
       fetchModelsFromMaker();
     }, [fetchModelsFromMaker, fetchClientData]);
 
-    useEffect(() => {});
+    useEffect(() => {
+      if (Object.values(customerSubFormsIds).length === 3)
+        setIsFormFilled(true);
+    }, [customerSubFormsIds]);
 
     return (
       <CustomerFormsView
