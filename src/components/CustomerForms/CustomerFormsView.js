@@ -17,8 +17,8 @@ import CustomerView from "./CustomerForm/CustomerFormView";
 import useStyles from "../../hooks/FormStyleHook";
 import { getErrorMessage } from "../../utils/errorMessages";
 
-const createWholeFormView = () =>
-  function WholeFormView(props) {
+const createCustomerFormsView = () =>
+  function CustomerFormsView(props) {
     const {
       changeCarFormForKey,
       changeCustomerFormForKey,
@@ -31,6 +31,7 @@ const createWholeFormView = () =>
       isLoading,
       isFormFilled,
       errorType,
+      hideSendButton,
     } = props;
     const classes = useStyles();
     return (
@@ -92,21 +93,23 @@ const createWholeFormView = () =>
               className={classes.formWrapper}
             >
               <FormErrorMessage errorType={errorType} />
-              <Box width={250} mt={3}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  disabled={isLoading}
-                  onClick={sendForm}
-                  fullWidth
-                  data-testid="CustomerFormsView_button"
-                >
-                  {isLoading && <FormLoadingButtonText />}
-                  {isFormFilled && !isLoading && <FormFilledButtonText />}
-                  {!isLoading && !isFormFilled && "Confirmar Dados"}
-                </Button>
-              </Box>
+              {!hideSendButton && (
+                <Box width={250} mt={3}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    disabled={isLoading}
+                    onClick={sendForm}
+                    fullWidth
+                    data-testid="CustomerFormsView_button"
+                  >
+                    {isLoading && <FormLoadingButtonText />}
+                    {isFormFilled && !isLoading && <FormFilledButtonText />}
+                    {!isLoading && !isFormFilled && "Confirmar Dados"}
+                  </Button>
+                </Box>
+              )}
             </Grid>
           </>
         )}
@@ -143,4 +146,4 @@ function FormErrorMessage({ errorType }) {
   );
 }
 
-export default createWholeFormView();
+export default createCustomerFormsView();

@@ -1,17 +1,15 @@
-
 import React from "react";
-import {
-  Grid,
-  TextField,
-} from "@material-ui/core";
+import { Grid, TextField } from "@material-ui/core";
 
 export const createCustomerFormView = () =>
   function CustomerFormView({ changeFormForKey, form }) {
-
-    const handleDocumentNumberChangeForKey = (key) => function (e) {
-      e.persist()
-      changeFormForKey(key)({ target: { value: e?.target?.value.replace(/\D/g, "") } })
-    }
+    const handleDocumentNumberChangeForKey = (key) =>
+      function (e) {
+        e.persist();
+        changeFormForKey(key)({
+          target: { value: e?.target?.value.replace(/\D/g, "") },
+        });
+      };
 
     return (
       <>
@@ -22,10 +20,9 @@ export const createCustomerFormView = () =>
             size="small"
             label={"CPF (Número)"}
             variant="outlined"
-            inputProps={
-              { maxLength: "11" }
-            }
-            fullWidth />
+            inputProps={{ maxLength: "11" }}
+            fullWidth
+          />
         </Grid>
         <Grid xs={12} sm={3} item>
           <TextField
@@ -34,36 +31,42 @@ export const createCustomerFormView = () =>
             size="small"
             label={"Telefone (Número)"}
             variant="outlined"
-            fullWidth />
+            fullWidth
+          />
         </Grid>
         <Grid xs={12} sm={6} item>
           <TextField
+            value={form.fullName}
             onChange={changeFormForKey("fullName")}
             size="small"
             label={"Nome"}
             variant="outlined"
-            fullWidth />
+            fullWidth
+          />
         </Grid>
         <Grid xs={12} sm={4} item>
           <TextField
+            value={form.email}
             onChange={changeFormForKey("email")}
             size="small"
             label={"E-mail"}
             type="email"
             variant="outlined"
-            fullWidth />
+            fullWidth
+          />
         </Grid>
         <Grid xs={12} sm={8} item>
           <TextField
+            value={form.address}
             onChange={changeFormForKey("address")}
             size="small"
             label={"Endereço"}
             variant="outlined"
-            fullWidth />
+            fullWidth
+          />
         </Grid>
       </>
-    )
-  }
+    );
+  };
 
-
-export default createCustomerFormView()
+export default createCustomerFormView();

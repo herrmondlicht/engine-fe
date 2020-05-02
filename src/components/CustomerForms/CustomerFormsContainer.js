@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import engineAPI from "../../utils/engineAPI/engineAPI";
 
@@ -10,6 +10,8 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
   function CustomerFormsContainer({
     customerSubFormsIds = {},
     setIdForCustomerSubForm = noop,
+    afterSendAction = noop,
+    hideSendButton,
   }) {
     const [modelsList, changeModelsList] = useState(null);
     const [isFormFilled, setIsFormFilled] = useState(false);
@@ -37,10 +39,43 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
 
     const [errorType, setErrorType] = useState("");
 
-    async function fetchModelsFromMaker() {
-      const modelsList = await engineAPI.cars.get();
-      changeModelsList(modelsList.data.data);
-    }
+    const fetchModelsFromMaker = useCallback(
+      async function () {
+        if (!customerSubFormsIds.customerCarFormId) {
+          const modelsList = await engineAPI.cars.get();
+          changeModelsList(modelsList.data.data);
+        }
+      },
+      [customerSubFormsIds.customerCarFormId]
+    );
+
+    const fetchClientData = useCallback(async () => {
+      if (customerSubFormsIds.customerCarFormId) {
+        const {
+          data: {
+            data: { customer_cars, customers, cars },
+          },
+        } = await engineAPI.customer_cars.get({
+          urlExtension: customerSubFormsIds.customerCarFormId,
+          params: {
+            include: "cars,customers",
+          },
+        });
+        setCarForm({
+          ...cars,
+          year: cars.manufacture_year,
+        });
+        setCustomerCarForm({
+          ...customer_cars,
+          licensePlate: customer_cars.license_plate,
+        });
+        setCustomerForm({
+          ...customers,
+          documentNumber: customers.document_number,
+          fullName: customers.fullname,
+        });
+      }
+    }, [customerSubFormsIds.customerCarFormId]);
 
     const requestAPIForSubform = ({
       method,
@@ -104,7 +139,10 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
 
     async function insertNewCustomer() {
       try {
-        const request = getResourcePostOrPutRequest("carFormId", "customers");
+        const request = getResourcePostOrPutRequest(
+          "customerFormId",
+          "customers"
+        );
         const response = await request({
           data: {
             document_number: customerForm.documentNumber,
@@ -124,9 +162,10 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
       try {
         const request = getResourcePostOrPutRequest(
           "customerCarFormId",
-          "customer_cars"
+          "customers"
         );
         const response = await request({
+          urlExtension: `${customerId}/cars/`,
           data: {
             license_plate: customerCarForm.licensePlate,
             car_id: carId,
@@ -148,8 +187,15 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
       setIsLoading(true);
       const responseCar = await insertNewCar();
       const responseCustomer = await insertNewCustomer();
-      if (responseCar?.id && responseCustomer?.id)
-        await insertNewCustomerCar(responseCar.id, responseCustomer.id);
+      if (responseCar?.id && responseCustomer?.id) {
+        const response = await insertNewCustomerCar(
+          responseCar.id,
+          responseCustomer.id
+        );
+        if (response?.id) {
+          afterSendAction(response.id);
+        }
+      }
       setIsLoading(false);
     }
 
@@ -159,8 +205,11 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
     };
 
     useEffect(() => {
+      fetchClientData();
       fetchModelsFromMaker();
-    }, []);
+    }, [fetchModelsFromMaker, fetchClientData]);
+
+    useEffect(() => {});
 
     return (
       <CustomerFormsView
@@ -175,6 +224,7 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
         sendForm={sendForm}
         isFormFilled={isFormFilled}
         isLoading={isLoading}
+        hideSendButton={hideSendButton}
       />
     );
   };

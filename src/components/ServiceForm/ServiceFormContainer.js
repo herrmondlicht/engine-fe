@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+
 import CustomerFormsContainer from "../CustomerForms/CustomerFormsContainer";
 import ServiceItemsContainer from "./ServiceItems/ServiceItemsContainer";
 import PaperWithTitle from "../Common/PaperWithTitle";
 import useStyles from "../../hooks/FormStyleHook";
 import FinancialDetails from "./FinancialDetails/FinancialDetails";
+import engineAPI from "../../utils/engineAPI/engineAPI";
 
-export const createServiceFormContainer = () =>
+export const createServiceFormContainer = ({ engineAPI }) =>
   function ServiceFormContainer() {
+    const { customer_car: customerCar } = useParams();
     const classes = useStyles();
     const [customerSubFormsIds, setCustomerSubFormsIds] = useState({});
     const [serviceOrderId, setServiceOrderId] = useState({});
@@ -17,13 +21,20 @@ export const createServiceFormContainer = () =>
         ...idChangeObject,
       }));
 
+    useEffect(() => {
+      if (customerCar) {
+        setIdForCustomerSubForm({ customerCarFormId: customerCar });
+      }
+    }, [customerCar]);
+
     return (
       <>
         <PaperWithTitle
           title="Cadastrar Nova OS"
-          paperClassNames={classes.paperContainerTop}
+          paperClassNames={[classes.paperContainerTop]}
         >
           <CustomerFormsContainer
+            hideSendButton={true}
             customerSubFormsIds={customerSubFormsIds}
             setIdForCustomerSubForm={setIdForCustomerSubForm}
           />
@@ -41,4 +52,4 @@ export const createServiceFormContainer = () =>
     );
   };
 
-export default createServiceFormContainer();
+export default createServiceFormContainer({ engineAPI });
