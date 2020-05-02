@@ -1,15 +1,18 @@
-import React from 'react'
+import React from "react";
 
-import {
-  TextField
-} from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 
-import Autocomplete from '@material-ui/lab/Autocomplete';
-
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const createAutocompleteField = () =>
-  function AutocompleteField({ id, label, options, onChange, isNumeric, ...props }) {
-
+  function AutocompleteField({
+    id,
+    label,
+    options,
+    onChange,
+    isNumeric,
+    ...props
+  }) {
     function setOnChange(event, newValue) {
       if (newValue && newValue.inputValue) {
         onChange({ target: { value: newValue.inputValue } });
@@ -21,26 +24,39 @@ const createAutocompleteField = () =>
     }
 
     function filterOptions(options, params) {
-      const filtered = options.filter(option => option.toLowerCase().includes(params.inputValue.toLowerCase()))
-      if (params.inputValue !== '' && filtered.length === 0) {
+      const filtered = options.filter((option) =>
+        option.toLowerCase().includes(params.inputValue.toLowerCase())
+      );
+      if (params.inputValue !== "" && filtered.length === 0) {
         filtered.push(params.inputValue);
       }
 
       return filtered;
     }
 
-    return <Autocomplete
-      id={id}
-      options={options}
-      blurOnSelect={true}
-      includeInputInList
-      renderInput={params => (
-        <TextField {...params} onChange={onChange} size="small" label={label} variant="outlined" {...props} fullWidth />
-      )}
-      onChange={setOnChange}
-      filterOptions={filterOptions}
-    />
-  }
-
+    return (
+      <Autocomplete
+        id={id}
+        options={options}
+        blurOnSelect={true}
+        includeInputInList
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            onChange={onChange}
+            size="small"
+            label={label}
+            variant="outlined"
+            fullWidth
+            value={props.value}
+          />
+        )}
+        onChange={setOnChange}
+        filterOptions={filterOptions}
+        inputValue={props.value}
+        disableClearable={true}
+      />
+    );
+  };
 
 export default createAutocompleteField();
