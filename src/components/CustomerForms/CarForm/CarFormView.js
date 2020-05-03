@@ -64,6 +64,7 @@ export const createAddCarFormView = () =>
             label="Marca"
             onChange={changeFormForKey("make")}
             options={makesOptions}
+            value={form.make}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -72,6 +73,7 @@ export const createAddCarFormView = () =>
             label="Modelo"
             onChange={changeFormForKey("model")}
             options={modelsOptions}
+            value={form.model}
           />
         </Grid>
         <Grid item xs={12} sm={3}>
@@ -87,6 +89,7 @@ export const createAddCarFormView = () =>
                 root: classes.root,
               }}
               onChange={changeFormForKey("fuel")}
+              value={form.fuel.toLowerCase()}
               displayEmpty
             >
               <MenuItem value={"gasoline"}>Gasolina</MenuItem>

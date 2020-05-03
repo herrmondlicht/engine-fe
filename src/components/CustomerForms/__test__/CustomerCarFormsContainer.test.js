@@ -65,7 +65,7 @@ describe("CustomerCarForms", () => {
 
   it("call API to save the entire form", async () => {
     const expectedArgsCarStub = {
-      data: { make: "", model: "", manufacture_year: "" },
+      data: { make: "", model: "", manufacture_year: "", fuel: "" },
     };
     const expectedArgsCustomerForm = {
       data: {
@@ -78,8 +78,14 @@ describe("CustomerCarForms", () => {
     };
 
     const expectedArgsCustomerCarForm = {
-      urlExtension: "1/cars",
-      data: { license_plate: "", car_id: 1, displacement: "", color: "" },
+      urlExtension: "1/cars/",
+      data: {
+        license_plate: "",
+        car_id: 1,
+        displacement: "",
+        color: "",
+        customer_id: 1,
+      },
     };
 
     engineAPI.cars.post.resolves({

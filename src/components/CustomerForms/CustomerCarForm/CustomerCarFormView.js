@@ -13,7 +13,11 @@ export const createAddCustomerCarView = () =>
     }
 
     function applyLicensePlateMask(value) {
-      if (value) return value.replace(/^.{3}(?!-)/g, `${value.toUpperCase()}-`);
+      if (value)
+        return value.replace(
+          /^.{3}(?!-)/g,
+          `${value.toUpperCase().slice(0, 3)}-`
+        );
       return "";
     }
 
@@ -43,6 +47,7 @@ export const createAddCustomerCarView = () =>
             size="small"
             label={"Cor"}
             variant="outlined"
+            value={form.color}
             fullWidth
           />
         </Grid>
@@ -53,6 +58,7 @@ export const createAddCustomerCarView = () =>
             label={"Cilindradas"}
             inputProps={{ maxLength: "3" }}
             variant="outlined"
+            value={form.displacement}
             fullWidth
           />
         </Grid>
