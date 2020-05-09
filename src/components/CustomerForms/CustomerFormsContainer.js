@@ -98,7 +98,7 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
       const response = await engineAPI[resource][method]({
         data,
         ...(urlExtensions.length
-          ? { urlExtension: urlExtensions.join("") }
+          ? { urlExtension: urlExtensions.join("/") }
           : {}),
         ...requestOptions,
       });
@@ -173,7 +173,7 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
           "customers"
         );
         const response = await request({
-          urlExtension: `${customerId}/cars/`,
+          urlExtension: `${customerId}/cars`,
           data: {
             license_plate: customerCarForm.licensePlate,
             car_id: carId,

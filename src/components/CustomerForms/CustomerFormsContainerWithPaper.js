@@ -1,16 +1,25 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
+
 import PaperWithTitle from "../Common/PaperWithTitle";
 import CustomerFormsContainer from "./CustomerFormsContainer";
 import useStyles from "../../hooks/FormStyleHook";
-import { useHistory } from "react-router-dom";
+import engineAPI from "../../utils/engineAPI/engineAPI";
 
-export const createCustomerFormsContainerWithPaper = () =>
+export const createCustomerFormsContainerWithPaper = ({ engineAPI } = {}) =>
   function CustomerFormsContainerWithPaper(props) {
     const history = useHistory();
     const classes = useStyles();
 
-    const afterSendAction = (customerCarId) => {
-      history.push(`/services/${customerCarId}/new`);
+    const afterSendAction = async (customerCarId) => {
+      const { data } = await engineAPI.service_orders.post({
+        data: {
+          customer_car_id: customerCarId,
+          service_items_price: 0,
+          service_price: 0,
+        },
+      });
+      history.push(`/services/${customerCarId}/${data.data.id}`);
     };
 
     return (
@@ -23,4 +32,4 @@ export const createCustomerFormsContainerWithPaper = () =>
     );
   };
 
-export default createCustomerFormsContainerWithPaper();
+export default createCustomerFormsContainerWithPaper({ engineAPI });

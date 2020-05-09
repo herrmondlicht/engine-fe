@@ -15,6 +15,10 @@ const routes = {
     url: "/customer_cars",
     isLocked: true,
   },
+  service_orders: {
+    url: "/service_orders",
+    isLocked: true,
+  }
 };
 
 export default routes;

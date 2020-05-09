@@ -1,5 +1,5 @@
-import React from "react";
-import { Grid, TextField } from "@material-ui/core";
+import React, { useState } from "react";
+import { Grid, TextField, Button, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 
 import AutocompleteField from "../../Common/Autocomplete";
@@ -12,7 +12,7 @@ const useServiceItemsStyle = makeStyles((theme) => ({
 }));
 
 const createServiceItemsView = () =>
-  function ServiceItemsView() {
+  function ServiceItemsView({ serviceItems = [], updateKeyValue }) {
     const serviceItemsClasses = useServiceItemsStyle();
     return (
       <Grid
@@ -25,20 +25,46 @@ const createServiceItemsView = () =>
         direction="column"
         className={serviceItemsClasses.serviceItemsList}
       >
-        <ServiceItem />
-        <ServiceItem />
-        <ServiceItem />
-        <ServiceItem />
-        <ServiceItem />
-        <ServiceItem />
-        <ServiceItem />
-        <ServiceItem />
-        <ServiceItem />
+        {serviceItems.map((item) => {
+          return (
+            <ServiceItem
+              key={item.id}
+              {...item}
+              updateKeyValue={updateKeyValue}
+            />
+          );
+        })}
+        <Grid container item xs={12}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={() => updateKeyValue({ field: "quantity", value: "" })}
+            disableElevation
+            fullWidth
+          >
+            Adicionar Novo item
+          </Button>
+        </Grid>
       </Grid>
     );
   };
 
-function ServiceItem() {
+function ServiceItem({
+  id,
+  service_type_id = null,
+  quantity = "",
+  unit_price = "",
+  description = "",
+  updateKeyValue,
+}) {
+  const [price, setPrice] = useState(unit_price);
+  const handleOnBlur = (key) => (e) =>
+    updateKeyValue({ id, key, value: e.target.value });
+
+  const priceChange = (e) => {
+    setPrice(e.target.value);
+  };
+
   return (
     <Grid
       xs={12}
@@ -54,6 +80,8 @@ function ServiceItem() {
           label={"Qtd."}
           variant="outlined"
           type="number"
+          defaultValue={quantity}
+          onBlur={handleOnBlur("quantity")}
           fullWidth
         />
       </Grid>
@@ -62,21 +90,37 @@ function ServiceItem() {
           size="small"
           label={"Descrição"}
           variant="outlined"
+          defaultValue={description}
+          onBlur={handleOnBlur("description")}
           fullWidth
         />
       </Grid>
       <Grid container item xs={12} sm={3} spacing={2}>
         <Grid item xs={6}>
-          <CurrencyInput label={"Preço Un."} fullWidth />
+          <CurrencyInput
+            onChange={priceChange}
+            onBlur={(e) =>
+              handleOnBlur("unit_price")({ target: { value: price } })
+            }
+            label={"Preço Un."}
+            value={price}
+            fullWidth
+          />
         </Grid>
         <Grid item xs={6}>
-          <CurrencyInput defaultValue={95.0} label={"Preço Total"} disabled />
+          <CurrencyInput
+            defaultValue={0}
+            value={price * quantity}
+            label={"Preço Total"}
+            disabled
+          />
         </Grid>
       </Grid>
       <Grid item xs={12} sm={2}>
         <AutocompleteField
           id="serviceType"
           label="Tipo de Serviço"
+          value={service_type_id}
           onChange={() => {}}
           options={[]}
         />
