@@ -67,7 +67,7 @@ export const createAddCarFormView = () =>
             value={form.make}
           />
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={3}>
           <AutocompleteField
             id="model"
             label="Modelo"
@@ -92,14 +92,17 @@ export const createAddCarFormView = () =>
               value={form.fuel.toLowerCase()}
               displayEmpty
             >
-              <MenuItem value={"gasoline"}>Gasolina</MenuItem>
               <MenuItem value={"alcohool"}>Álcool</MenuItem>
+              <MenuItem value={"gasoline"}>Gasolina</MenuItem>
+              <MenuItem value={"flex"}>Flex</MenuItem>
+              <MenuItem value={"gas"}>GNV</MenuItem>
               <MenuItem value={"diesel"}>Diesel</MenuItem>
+              <MenuItem value={"hybrid"}>Híbrido</MenuItem>
               <MenuItem value={"electric"}>Elétrico</MenuItem>
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={1}>
+        <Grid item xs={12} sm={2}>
           <TextField
             label="Ano"
             id="year"
