@@ -6,7 +6,7 @@ import engineAPI from "../../../utils/engineAPI/engineAPI";
 import { Box } from "@material-ui/core";
 
 const createServiceItemsContainer = ({ engineAPI }) =>
-  function ServiceItemsContainer({ serviceOrderId }) {
+  function ServiceItemsContainer({ serviceOrderId, updateTotalItemsPrice }) {
     const [serviceItems, setServiceItems] = useState([]);
     const [isFetching, setIsFetching] = useState(true);
     const itemsURLExtension = useMemo(() => `${serviceOrderId}/items`, [
@@ -29,47 +29,56 @@ const createServiceItemsContainer = ({ engineAPI }) =>
       }
     }, [itemsURLExtension]);
 
+    const editItemInArray = ({ id, field, value }) => (item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          [field]: value,
+        };
+      }
+      return item;
+    };
+
     const updateServiceItem = useCallback(
       async ({ id, key: field, value }) => {
-        if (id) {
-          const updatedServiceItems = serviceItems.map((item) => {
-            if (item.id === id) {
-              return {
-                ...item,
-                [field]: value,
-              };
-            }
-            return item;
-          });
-          setServiceItems(updatedServiceItems);
-          engineAPI.service_orders.patch({
-            urlExtension: `${itemsURLExtension}/${id}`,
-            data: {
-              [field]: value,
-              hasFocus: false,
-            },
-          });
-        } else {
-          const {
-            data: { data },
-          } = await engineAPI.service_orders.post({
-            urlExtension: itemsURLExtension,
-            data: {
-              [field]: value,
-            },
-          });
-          setServiceItems((oldServiceItemsArray) => [
-            ...oldServiceItemsArray,
-            { id: data.id, [field]: value, hasFocus: true },
-          ]);
-        }
+        setServiceItems((oldServiceItemsArray) =>
+          oldServiceItemsArray.map(editItemInArray({ id, field, value }))
+        );
+        engineAPI.service_orders.patch({
+          urlExtension: `${itemsURLExtension}/${id}`,
+          data: {
+            [field]: value,
+            hasFocus: false,
+          },
+        });
       },
-      [itemsURLExtension, serviceItems]
+      [itemsURLExtension]
     );
+
+    const createNewServiceItem = useCallback(async () => {
+      const {
+        data: { data },
+      } = await engineAPI.service_orders.post({
+        urlExtension: itemsURLExtension,
+      });
+      setServiceItems((oldServiceItemsArray) => [
+        ...oldServiceItemsArray,
+        { id: data.id, hasFocus: true },
+      ]);
+    }, [itemsURLExtension]);
 
     useEffect(() => {
       fetchServiceItems();
     }, [fetchServiceItems]);
+
+    useEffect(() => {
+      const totalPrice = serviceItems.reduce(
+        (prev, { quantity = 0, unit_price = 0 }) =>
+          prev + quantity * unit_price,
+        0
+      );
+      updateTotalItemsPrice(totalPrice);
+    }, [updateTotalItemsPrice, serviceItems]);
 
     return (
       <>
@@ -79,6 +88,7 @@ const createServiceItemsContainer = ({ engineAPI }) =>
           <ServiceItemsView
             serviceItems={serviceItems}
             updateKeyValue={updateServiceItem}
+            createNewServiceItem={createNewServiceItem}
           />
         )}
       </>

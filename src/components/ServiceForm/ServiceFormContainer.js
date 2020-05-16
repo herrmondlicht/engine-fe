@@ -37,13 +37,53 @@ export const createServiceFormContainer = ({ engineAPI }) =>
       }
     }, [serviceId]);
 
+    const commitUpdateValuesToBackend = useCallback(
+      ({ service_price, discount_price }) => {
+        engineAPI.service_orders.patch({
+          urlExtension: serviceId,
+          data: {
+            service_price,
+            discount_price,
+          },
+        });
+      },
+      [serviceId]
+    );
+
+    const commitObservationToBackend = useCallback(
+      (observations) => {
+        engineAPI.service_orders.patch({
+          urlExtension: serviceId,
+          data: { observations },
+        });
+      },
+      [serviceId]
+    );
+
+    const updateValuesToState = useCallback(
+      (key) => (value) => {
+        setServiceData((prevServiceData) => ({
+          ...prevServiceData,
+          [key]: value,
+        }));
+      },
+      []
+    );
+
+    const updateTotalItemsPrice = useCallback(
+      (totalPrice) =>
+        setServiceData((prevServiceData) => ({
+          ...prevServiceData,
+          service_items_price: totalPrice,
+        })),
+      []
+    );
     useEffect(() => {
       if (customerCar) {
         setIdForCustomerSubForm({ customerCarFormId: customerCar });
         getSeviceById();
       }
     }, [customerCar, getSeviceById]);
-
 
     return (
       <>
@@ -57,10 +97,18 @@ export const createServiceFormContainer = ({ engineAPI }) =>
           />
         </PaperWithTitle>
         <PaperWithTitle title="Itens do Serviço">
-          <ServiceItemsContainer serviceOrderId={serviceData.id} />
+          <ServiceItemsContainer
+            serviceOrderId={serviceData.id}
+            updateTotalItemsPrice={updateTotalItemsPrice}
+          />
         </PaperWithTitle>
         <PaperWithTitle title="Pagamento">
-          <FinancialDetails />
+          <FinancialDetails
+            {...serviceData}
+            updateServiceValuesOnChange={updateValuesToState}
+            updateServicesValuesOnBlur={commitUpdateValuesToBackend}
+            updateObservationOnBlur={commitObservationToBackend}
+          />
         </PaperWithTitle>
         <Snackbar
           anchorOrigin={{

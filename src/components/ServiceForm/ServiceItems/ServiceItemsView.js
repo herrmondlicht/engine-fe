@@ -1,18 +1,25 @@
 import React, { useState } from "react";
-import { Grid, TextField, Button, Box } from "@material-ui/core";
+import { Grid, TextField, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 
-import AutocompleteField from "../../Common/Autocomplete";
 import CurrencyInput from "../../Common/CurrencyInput";
 
 const useServiceItemsStyle = makeStyles((theme) => ({
-  serviceItemsList: {
-    marginBottom: theme.spacing(2),
+  mb2: {
+    marginBottom: theme.spacing(1),
+  },
+  px2: {
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
   },
 }));
 
 const createServiceItemsView = () =>
-  function ServiceItemsView({ serviceItems = [], updateKeyValue }) {
+  function ServiceItemsView({
+    serviceItems = [],
+    updateKeyValue,
+    createNewServiceItem,
+  }) {
     const serviceItemsClasses = useServiceItemsStyle();
     return (
       <Grid
@@ -21,9 +28,8 @@ const createServiceItemsView = () =>
         container
         item
         xs={12}
-        spacing={2}
         direction="column"
-        className={serviceItemsClasses.serviceItemsList}
+        className={serviceItemsClasses.mb2}
       >
         {serviceItems.map((item) => {
           return (
@@ -34,11 +40,11 @@ const createServiceItemsView = () =>
             />
           );
         })}
-        <Grid container item xs={12}>
+        <Grid container item xs={12} className={serviceItemsClasses.px2}>
           <Button
             variant="outlined"
             color="secondary"
-            onClick={() => updateKeyValue({ field: "quantity", value: "" })}
+            onClick={createNewServiceItem}
             disableElevation
             fullWidth
           >
@@ -51,13 +57,14 @@ const createServiceItemsView = () =>
 
 function ServiceItem({
   id,
-  service_type_id = null,
   quantity = "",
   unit_price = "",
   description = "",
   updateKeyValue,
 }) {
   const [price, setPrice] = useState(unit_price);
+  const serviceItemsClasses = useServiceItemsStyle();
+
   const handleOnBlur = (key) => (e) =>
     updateKeyValue({ id, key, value: e.target.value });
 
@@ -73,6 +80,7 @@ function ServiceItem({
       item
       alignItems="center"
       justify="center"
+      className={serviceItemsClasses.mb2}
     >
       <Grid item xs={12} sm={1}>
         <TextField
@@ -85,7 +93,7 @@ function ServiceItem({
           fullWidth
         />
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={8}>
         <TextField
           size="small"
           label={"Descrição"}
@@ -112,11 +120,13 @@ function ServiceItem({
             defaultValue={0}
             value={price * quantity}
             label={"Preço Total"}
-            disabled
+            inputProps={{
+              disabled: true,
+            }}
           />
         </Grid>
       </Grid>
-      <Grid item xs={12} sm={2}>
+      {/* <Grid item xs={12} sm={2}>
         <AutocompleteField
           id="serviceType"
           label="Tipo de Serviço"
@@ -124,7 +134,7 @@ function ServiceItem({
           onChange={() => {}}
           options={[]}
         />
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 }
