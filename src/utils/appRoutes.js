@@ -6,7 +6,7 @@ import CustomerFormsContainerWithPaper from "../components/CustomerForms/Custome
 const routes = {
   newService: {
     name: "New Service",
-    path: "services/:customer_car/new",
+    path: "services/:customer_car/:service_id",
     Component: ServiceFormContainer,
     isLocked: true,
     exact: true,
