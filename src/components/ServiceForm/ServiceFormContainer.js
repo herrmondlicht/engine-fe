@@ -14,7 +14,9 @@ export const createServiceFormContainer = ({ engineAPI }) =>
   function ServiceFormContainer() {
     const { customer_car: customerCar, service_id: serviceId } = useParams();
     const classes = useStyles();
-    const [customerSubFormsIds, setCustomerSubFormsIds] = useState({});
+    const [customerSubFormsIds, setCustomerSubFormsIds] = useState({
+      customerCarFormId: customerCar,
+    });
     const [serviceData, setServiceData] = useState({});
     const [snackError, setSnackError] = useState(false);
 
@@ -25,15 +27,17 @@ export const createServiceFormContainer = ({ engineAPI }) =>
       }));
 
     const getSeviceById = useCallback(async () => {
-      try {
-        const {
-          data: { data },
-        } = await engineAPI.service_orders.get({
-          urlExtension: serviceId,
-        });
-        setServiceData(data);
-      } catch (e) {
-        setSnackError(true);
+      if (serviceId) {
+        try {
+          const {
+            data: { data },
+          } = await engineAPI.service_orders.get({
+            urlExtension: serviceId,
+          });
+          setServiceData(data);
+        } catch (e) {
+          setSnackError(true);
+        }
       }
     }, [serviceId]);
 
@@ -79,11 +83,8 @@ export const createServiceFormContainer = ({ engineAPI }) =>
       []
     );
     useEffect(() => {
-      if (customerCar) {
-        setIdForCustomerSubForm({ customerCarFormId: customerCar });
-        getSeviceById();
-      }
-    }, [customerCar, getSeviceById]);
+      getSeviceById();
+    }, [getSeviceById]);
 
     return (
       <>

@@ -12,7 +12,8 @@ export const createCustomerFormsContainerWithPaper = ({ engineAPI } = {}) =>
     const classes = useStyles();
 
     const afterSendAction = async (customerCarId) => {
-      const { data } = await engineAPI.service_orders.post({
+      const { data } = await engineAPI.customer_cars.post({
+        urlExtension: `${customerCarId}/services`,
         data: {
           customer_car_id: customerCarId,
           service_items_price: 0,

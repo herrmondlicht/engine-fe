@@ -14,20 +14,22 @@ const createServiceItemsContainer = ({ engineAPI }) =>
     ]);
 
     const fetchServiceItems = useCallback(async () => {
-      setIsFetching(true);
-      try {
-        const {
-          data: { data },
-        } = await engineAPI.service_orders.get({
-          urlExtension: itemsURLExtension,
-        });
-        setServiceItems(data);
-      } catch (e) {
-        console.log(e);
-      } finally {
-        setIsFetching(false);
+      if (serviceOrderId) {
+        try {
+          setIsFetching(true);
+          const {
+            data: { data },
+          } = await engineAPI.service_orders.get({
+            urlExtension: itemsURLExtension,
+          });
+          setServiceItems(data);
+        } catch (e) {
+          console.log(e);
+        } finally {
+          setIsFetching(false);
+        }
       }
-    }, [itemsURLExtension]);
+    }, [itemsURLExtension, serviceOrderId]);
 
     const editItemInArray = ({ id, field, value }) => (item) => {
       if (item.id === id) {
@@ -48,7 +50,6 @@ const createServiceItemsContainer = ({ engineAPI }) =>
           urlExtension: `${itemsURLExtension}/${id}`,
           data: {
             [field]: value,
-            hasFocus: false,
           },
         });
       },

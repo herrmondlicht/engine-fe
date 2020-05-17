@@ -16,6 +16,7 @@ const createFinancialDetails = () =>
     service_items_price = "",
     service_price = "",
     discount_price = "",
+    observations = "",
     updateServicesValuesOnBlur,
     updateServiceValuesOnChange,
     updateObservationOnBlur,
@@ -85,6 +86,7 @@ const createFinancialDetails = () =>
                 updateServiceValuesOnChange("observations")(e.target.value)
               }
               onBlur={(e) => updateObservationOnBlur(e.target.value)}
+              value={observations}
               label="Observações"
               size="small"
               rows="5"

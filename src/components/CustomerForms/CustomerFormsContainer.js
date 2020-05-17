@@ -39,15 +39,10 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
 
     const [errorType, setErrorType] = useState("");
 
-    const fetchModelsFromMaker = useCallback(
-      async function () {
-        if (!customerSubFormsIds.customerCarFormId) {
-          const modelsList = await engineAPI.cars.get();
-          changeModelsList(modelsList.data.data);
-        }
-      },
-      [customerSubFormsIds.customerCarFormId]
-    );
+    const fetchModelsFromMaker = useCallback(async function () {
+      const modelsList = await engineAPI.cars.get();
+      changeModelsList(modelsList.data.data);
+    }, []);
 
     const fetchClientData = useCallback(async () => {
       if (
@@ -83,7 +78,11 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
         });
         setIsFormFilled(true);
       }
-    }, [customerSubFormsIds, setIdForCustomerSubForm]);
+    }, [
+      customerSubFormsIds.customerCarFormId,
+      customerSubFormsIds.customerFormId,
+      setIdForCustomerSubForm,
+    ]);
 
     const requestAPIForSubform = ({
       method,
