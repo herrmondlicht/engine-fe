@@ -12,11 +12,9 @@ import engineAPI from "../../utils/engineAPI/engineAPI";
 
 export const createServiceFormContainer = ({ engineAPI }) =>
   function ServiceFormContainer() {
-    const { customer_car: customerCar, service_id: serviceId } = useParams();
+    const { service_id: serviceId } = useParams();
     const classes = useStyles();
-    const [customerSubFormsIds, setCustomerSubFormsIds] = useState({
-      customerCarFormId: customerCar,
-    });
+    const [customerSubFormsIds, setCustomerSubFormsIds] = useState({});
     const [serviceData, setServiceData] = useState({});
     const [snackError, setSnackError] = useState(false);
 
@@ -35,6 +33,7 @@ export const createServiceFormContainer = ({ engineAPI }) =>
             urlExtension: serviceId,
           });
           setServiceData(data);
+          setCustomerSubFormsIds({ customerCarFormId: data.customer_car_id });
         } catch (e) {
           setSnackError(true);
         }
