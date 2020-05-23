@@ -301,7 +301,7 @@ exports[`CustomerCarForms return of render 1`] = `
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-4"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-3"
       >
         <div
           aria-expanded="false"
@@ -438,7 +438,7 @@ exports[`CustomerCarForms return of render 1`] = `
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-1"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-2"
       >
         <div
           class="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"

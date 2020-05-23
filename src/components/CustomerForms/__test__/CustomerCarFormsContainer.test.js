@@ -78,7 +78,7 @@ describe("CustomerCarForms", () => {
     };
 
     const expectedArgsCustomerCarForm = {
-      urlExtension: "1/cars/",
+      urlExtension: "1/cars",
       data: {
         license_plate: "",
         car_id: 1,
