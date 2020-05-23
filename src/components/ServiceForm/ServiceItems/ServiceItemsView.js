@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Grid, TextField, Button } from "@material-ui/core";
+import { Grid, TextField, Button, IconButton } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { makeStyles } from "@material-ui/core";
 
 import CurrencyInput from "../../Common/CurrencyInput";
@@ -8,9 +9,9 @@ const useServiceItemsStyle = makeStyles((theme) => ({
   mb2: {
     marginBottom: theme.spacing(1),
   },
-  px2: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
+  px1: {
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
   },
 }));
 
@@ -19,6 +20,7 @@ const createServiceItemsView = () =>
     serviceItems = [],
     updateKeyValue,
     createNewServiceItem,
+    deleteServiceItem,
   }) {
     const serviceItemsClasses = useServiceItemsStyle();
     return (
@@ -37,10 +39,11 @@ const createServiceItemsView = () =>
               key={item.id}
               {...item}
               updateKeyValue={updateKeyValue}
+              deleteServiceItem={deleteServiceItem}
             />
           );
         })}
-        <Grid container item xs={12} className={serviceItemsClasses.px2}>
+        <Grid container item xs className={serviceItemsClasses.px1}>
           <Button
             variant="outlined"
             color="secondary"
@@ -61,6 +64,7 @@ function ServiceItem({
   unit_price = "",
   description = "",
   updateKeyValue,
+  deleteServiceItem,
 }) {
   const [price, setPrice] = useState(unit_price);
   const serviceItemsClasses = useServiceItemsStyle();
@@ -93,7 +97,7 @@ function ServiceItem({
           fullWidth
         />
       </Grid>
-      <Grid item xs={12} sm={8}>
+      <Grid item xs>
         <TextField
           size="small"
           label={"Descrição"}
@@ -107,9 +111,7 @@ function ServiceItem({
         <Grid item xs={6}>
           <CurrencyInput
             onChange={priceChange}
-            onBlur={(e) =>
-              handleOnBlur("unit_price")({ target: { value: price } })
-            }
+            onBlur={(e) => updateKeyValue({ id, unit_price: e.target.value })}
             label={"Preço Un."}
             value={price}
             fullWidth
@@ -125,6 +127,18 @@ function ServiceItem({
             }}
           />
         </Grid>
+      </Grid>
+      <Grid
+        style={{
+          flexBasis: 0,
+        }}
+        item
+        xs={12}
+        sm={1}
+      >
+        <IconButton onClick={() => deleteServiceItem({ id })}>
+          <DeleteIcon color="error" />
+        </IconButton>
       </Grid>
       {/* <Grid item xs={12} sm={2}>
         <AutocompleteField

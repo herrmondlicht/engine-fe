@@ -56,6 +56,18 @@ const createServiceItemsContainer = ({ engineAPI }) =>
       [itemsURLExtension]
     );
 
+    const deleteServiceItem = useCallback(
+      async ({ id }) => {
+        setServiceItems((oldServiceItems) =>
+          oldServiceItems.filter((serviceItem) => serviceItem.id !== id)
+        );
+        engineAPI.service_orders.delete({
+          urlExtension: `${itemsURLExtension}/${id}`,
+        });
+      },
+      [itemsURLExtension]
+    );
+
     const createNewServiceItem = useCallback(async () => {
       const {
         data: { data },
@@ -87,6 +99,7 @@ const createServiceItemsContainer = ({ engineAPI }) =>
           <Skeletons />
         ) : (
           <ServiceItemsView
+            deleteServiceItem={deleteServiceItem}
             serviceItems={serviceItems}
             updateKeyValue={updateServiceItem}
             createNewServiceItem={createNewServiceItem}
