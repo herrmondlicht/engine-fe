@@ -58,6 +58,14 @@ const createMethodsForURL = (routeObj) => ({
     },
     { storage: _storage }
   ),
+  delete: requestMaker(
+    {
+      method: "delete",
+      isLocked: routeObj.isLocked,
+      url: routeObj.url,
+    },
+    { storage: _storage }
+  ),
 });
 
 const createAllRequestsFromResources = (routes) => {
