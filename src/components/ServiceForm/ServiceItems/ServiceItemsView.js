@@ -111,7 +111,9 @@ function ServiceItem({
         <Grid item xs={6}>
           <CurrencyInput
             onChange={priceChange}
-            onBlur={(e) => updateKeyValue({ id, unit_price: e.target.value })}
+            onBlur={(e) =>
+              updateKeyValue({ id, key: "unit_price", value: price })
+            }
             label={"Preço Un."}
             value={price}
             fullWidth

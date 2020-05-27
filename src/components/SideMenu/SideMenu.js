@@ -33,7 +33,6 @@ function SideMenu() {
   const classes = useStyles();
   const location = useLocation();
 
-  console.log(location);
 
   return (
     <Grid container direction="column" className={classes.sideMenuContainer}>
