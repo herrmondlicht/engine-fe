@@ -2,12 +2,13 @@ import React from "react";
 //temporary /\/\/\/\/\/\
 import ServiceFormContainer from "../components/ServiceForm/ServiceFormContainer";
 import CustomerFormsContainerWithPaper from "../components/CustomerForms/CustomerFormsContainerWithPaper";
+import CustomerCarList from "../components/CustomerCarList/CustomerCarList";
 
 const routes = {
   customers: {
     name: "Clientes",
     path: "customers",
-    Component: () => <div>TODO: Customer List</div>,
+    Component: CustomerCarList,
     isLocked: true,
     exact: true,
   },

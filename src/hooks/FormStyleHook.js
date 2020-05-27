@@ -5,7 +5,6 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(3)
   },
   paperContainer: {
-    minHeight: 200,
     margin: theme.spacing(2),
   },
   paperContainerTop: {

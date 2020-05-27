@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   makeStyles,
   Grid,
@@ -10,8 +10,8 @@ import {
   withWidth,
   isWidthUp,
 } from "@material-ui/core";
-import { NoteAdd } from "@material-ui/icons";
-import { Link } from "react-router-dom";
+import { PersonAdd, List } from "@material-ui/icons";
+import { Link, useLocation } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   sideMenuContainer: {
@@ -29,10 +29,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SideMenu({ setSelectedItem, selectedItem }) {
+function SideMenu() {
   const classes = useStyles();
+  const location = useLocation();
 
-  const changeSelectedItem = (name) => () => setSelectedItem(name);
 
   return (
     <Grid container direction="column" className={classes.sideMenuContainer}>
@@ -40,50 +40,26 @@ function SideMenu({ setSelectedItem, selectedItem }) {
         <Grid container justify="center" alignItems="center" direction="column">
           <Grid item container justify="center">
             <IconButton
-              aria-label="delete"
               width={50}
               component={Link}
               to="/customers/new"
-              onClick={changeSelectedItem("newCustomer")}
-              color={selectedItem === "newCustomer" ? "secondary" : "default"}
+              color={
+                location.pathname === "/customers/new" ? "secondary" : "default"
+              }
             >
-              <NoteAdd />
+              <PersonAdd />
             </IconButton>
           </Grid>
           <Grid item container justify="center">
             <IconButton
-              aria-label="delete"
               width={50}
               component={Link}
               to="/customers"
-              onClick={changeSelectedItem("new-service2")}
-              color={selectedItem === "new-service2" ? "secondary" : "default"}
+              color={
+                location.pathname === "/customers" ? "secondary" : "default"
+              }
             >
-              <NoteAdd />
-            </IconButton>
-          </Grid>
-          <Grid item container justify="center">
-            <IconButton
-              aria-label="delete"
-              width={50}
-              component={Link}
-              to="/customers/1"
-              onClick={changeSelectedItem("new-service3")}
-              color={selectedItem === "new-service3" ? "secondary" : "default"}
-            >
-              <NoteAdd />
-            </IconButton>
-          </Grid>
-          <Grid item container justify="center">
-            <IconButton
-              aria-label="delete"
-              width={50}
-              component={Link}
-              to="/services/null/new"
-              onClick={changeSelectedItem("new-service3")}
-              color={selectedItem === "new-service3" ? "secondary" : "default"}
-            >
-              <NoteAdd />
+              <List />
             </IconButton>
           </Grid>
         </Grid>
@@ -94,27 +70,16 @@ function SideMenu({ setSelectedItem, selectedItem }) {
 
 export const createMenu = () => {
   const Menu = ({ width }) => {
-    const [selectedItem, setSelectedItem] = useState();
     return (
       <>
         {isWidthDown("sm", width) && (
-          <BottomNavigation
-            value={selectedItem}
-            onChange={(event, newValue) => {
-              setSelectedItem(newValue);
-            }}
-          >
-            <BottomNavigationAction label="Nova OS" icon={<NoteAdd />} />
-            <BottomNavigationAction label="Nova OS" icon={<NoteAdd />} />
-            <BottomNavigationAction label="Nova OS" icon={<NoteAdd />} />
+          <BottomNavigation>
+            <BottomNavigationAction label="Nova OS" icon={<PersonAdd />} />
+            <BottomNavigationAction label="Clientes" icon={<List />} />
+            <BottomNavigationAction label="Nova OS" icon={<PersonAdd />} />
           </BottomNavigation>
         )}
-        {isWidthUp("md", width) && (
-          <SideMenu
-            selectedItem={selectedItem}
-            setSelectedItem={setSelectedItem}
-          />
-        )}
+        {isWidthUp("md", width) && <SideMenu />}
       </>
     );
   };
