@@ -18,6 +18,7 @@ import { useHistory } from "react-router-dom";
 
 import engineAPI from "utils/engineAPI/engineAPI";
 import ConfirmDeleteModal from "../Modals/ConfirmDeleteModal";
+import SearchBar from "../Common/SearchBar";
 
 export const createCustomerCarList = ({ engineAPI }) =>
   function CustomerCarList() {
@@ -95,32 +96,8 @@ export const createCustomerCarList = ({ engineAPI }) =>
           >
             <Typography variant="h5">Lista de Clientes</Typography>
             <Divider variant="fullWidth" />
-            <div className="flex items-center mt-10">
-              <div className="w-1/2 sm:w-full flex items-center">
-                <TextField
-                  onChange={(e) => setResearch(e.target.value)}
-                  label="Pesquisar"
-                  variant="outlined"
-                  size="small"
-                  type="text"
-                  className="w-full"
-                />
-                <div className="w-10 ml-1">
-                  <IconButton variant="outlined" color="primary">
-                    <SearchIcon />
-                  </IconButton>
-                </div>
-              </div>
-              <div className="w-1/2 sm:w-full flex justify-end">
-                <Button
-                  onClick={addNewCustomer}
-                  color="primary"
-                  variant="contained"
-                  startIcon={<AddCircle />}
-                >
-                  Adicionar
-                </Button>
-              </div>
+            <div className="mt-10">
+              <SearchBar addAction={addNewCustomer} setResearch={setResearch} />
             </div>
             <div className="my-4 h-full overflow-auto">
               <ClientsTable

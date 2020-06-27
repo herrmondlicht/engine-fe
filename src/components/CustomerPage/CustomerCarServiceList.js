@@ -4,17 +4,16 @@ import {
   Typography,
   Paper,
   Divider,
-  TextField,
   IconButton,
-  Button,
 } from "@material-ui/core";
-import { Search as SearchIcon, Delete, AddCircle } from "@material-ui/icons";
+import { Delete } from "@material-ui/icons";
 import { useHistory, useParams } from "react-router-dom";
 import moment from "moment";
 
 import engineAPI from "utils/engineAPI/engineAPI";
 import Skeleton from "@material-ui/lab/Skeleton";
 import ConfirmDeleteModal from "../Modals/ConfirmDeleteModal";
+import SearchBar from "../Common/SearchBar";
 
 export const createCustomerCarServiceList = ({ engineAPI }) =>
   function CustomerCarServiceList() {
@@ -134,32 +133,8 @@ const ServiceSearch = ({ addNewService, setResearch, customerCar }) => {
           )}
       </Typography>
       <Divider variant="fullWidth" />
-      <div className="flex flex-col sm:flex-row items-center mt-10">
-        <div className="w-full sm:w-1/2 flex items-center">
-          <TextField
-            onChange={(e) => setResearch(e.target.value)}
-            label="Pesquisar"
-            variant="outlined"
-            size="small"
-            type="text"
-            className="w-full"
-          />
-          <div className="w-10 ml-1">
-            <IconButton variant="outlined" color="primary">
-              <SearchIcon />
-            </IconButton>
-          </div>
-        </div>
-        <div className="sm:w-1/2 w-full flex justify-center sm:justify-end">
-          <Button
-            onClick={addNewService}
-            color="primary"
-            variant="contained"
-            startIcon={<AddCircle />}
-          >
-            Adicionar
-          </Button>
-        </div>
+      <div className="mt-10">
+        <SearchBar addAction={addNewService} setResearch={setResearch} />
       </div>
     </Paper>
   );
