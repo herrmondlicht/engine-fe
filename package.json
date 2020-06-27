@@ -8,6 +8,7 @@
     "@material-ui/lab": "^4.0.0-alpha.49",
     "autoprefixer": "^9.7.6",
     "axios": "^0.19.2",
+    "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-number-format": "^4.4.1",
@@ -16,7 +17,8 @@
     "tailwindcss": "^1.4.6"
   },
   "scripts": {
-    "start": "yarn build-tailwind && react-scripts start",
+    "start": "react-scripts start",
+    "refresh-tailwind": "yarn build-tailwind",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

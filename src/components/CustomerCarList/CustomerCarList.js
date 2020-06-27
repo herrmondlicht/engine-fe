@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
   Paper,
-  TextField,
   IconButton,
   Typography,
   Divider,
@@ -11,20 +10,17 @@ import {
   Table,
   TableBody,
   TableContainer,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Button,
 } from "@material-ui/core";
-import { Search as SearchIcon, Delete } from "@material-ui/icons";
+import { Delete } from "@material-ui/icons";
+import { useHistory } from "react-router-dom";
 
 import engineAPI from "utils/engineAPI/engineAPI";
-import { useHistory } from "react-router-dom";
+import ConfirmDeleteModal from "../Modals/ConfirmDeleteModal";
+import SearchBar from "../Common/SearchBar";
 
 export const createCustomerCarList = ({ engineAPI }) =>
   function CustomerCarList() {
+    const history = useHistory();
     const [dataArray, setData] = useState([]);
     const [research, setResearch] = useState("");
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -38,7 +34,7 @@ export const createCustomerCarList = ({ engineAPI }) =>
         setData(response.data.data);
       } catch (e) {}
     }, []);
-    
+
     const handleModalClose = useCallback(() => {
       setIdPendingDelete(null);
       setIsDeleteModalOpen(false);
@@ -61,12 +57,25 @@ export const createCustomerCarList = ({ engineAPI }) =>
       setIsDeleteModalOpen(true);
     }, []);
 
+    const addNewCustomer = useCallback(
+      (e) => {
+        e.preventDefault();
+        history.push("/customers/new");
+      },
+      [history]
+    );
+
     const filteredData = useMemo(
       () =>
         dataArray.filter((data) => {
           return (
-            data.customer_cars.license_plate.toLowerCase().includes(research) ||
-            data.customers.fullname.toLowerCase().includes(research)
+            data.customer_cars.license_plate
+              .toLowerCase()
+              .includes(research.toLocaleLowerCase()) ||
+            data.customers.fullname
+              .toLowerCase()
+              .includes(research.toLocaleLowerCase()) ||
+            data.cars.model.toLowerCase().includes(research.toLocaleLowerCase())
           );
         }),
       [research, dataArray]
@@ -85,22 +94,8 @@ export const createCustomerCarList = ({ engineAPI }) =>
           >
             <Typography variant="h5">Lista de Clientes</Typography>
             <Divider variant="fullWidth" />
-            <div className="flex items-center mt-10">
-              <div className="w-1/2">
-                <TextField
-                  onChange={(e) => setResearch(e.target.value)}
-                  label="Pesquisar por Placa"
-                  variant="outlined"
-                  size="small"
-                  type="text"
-                  className="w-full"
-                />
-              </div>
-              <div className="w-10">
-                <IconButton variant="outlined" color="primary">
-                  <SearchIcon />
-                </IconButton>
-              </div>
+            <div className="mt-10">
+              <SearchBar addAction={addNewCustomer} setResearch={setResearch} />
             </div>
             <div className="my-4 h-full overflow-auto">
               <ClientsTable
@@ -110,7 +105,7 @@ export const createCustomerCarList = ({ engineAPI }) =>
             </div>
           </Paper>
         </div>
-        <ConfirmDeleteDialog
+        <ConfirmDeleteModal
           onConfirmationClick={deleteClient}
           handleClose={handleModalClose}
           isOpen={isDeleteModalOpen}
@@ -141,7 +136,11 @@ const ClientsTable = ({ data = [], onDelete }) => {
               customer_cars: customerCar,
             }) => (
               <TableRow
-                onClick={() => history.push(`/customers/${customerCar.id}`)}
+                onClick={() =>
+                  history.push(
+                    `/customers/${customer.id}/cars/${customerCar.id}`
+                  )
+                }
                 key={customerCar.id}
                 className="hover:bg-gray-300 cursor-pointer"
               >
@@ -170,32 +169,5 @@ const ClientsTable = ({ data = [], onDelete }) => {
     </TableContainer>
   );
 };
-
-function ConfirmDeleteDialog({ handleClose, isOpen, onConfirmationClick }) {
-  return (
-    <Dialog
-      open={isOpen}
-      onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">Excluir</DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          Tem certeza que quer excluir o cliente? Essa ação não poderá ser
-          revertida
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} color="primary">
-          Não
-        </Button>
-        <Button onClick={onConfirmationClick} color="primary" autoFocus>
-          Sim
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-}
 
 export default createCustomerCarList({ engineAPI });
