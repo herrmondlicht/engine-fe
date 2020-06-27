@@ -3,6 +3,7 @@ import React from "react";
 import ServiceFormContainer from "../components/ServiceForm/ServiceFormContainer";
 import CustomerFormsContainerWithPaper from "../components/CustomerForms/CustomerFormsContainerWithPaper";
 import CustomerCarList from "../components/CustomerCarList/CustomerCarList";
+import CustomerCarServiceList from "../components/CustomerPage/CustomerCarServiceList";
 
 const routes = {
   customers: {
@@ -26,10 +27,10 @@ const routes = {
     isLocked: true,
     exact: true,
   },
-  customerServices: {
-    name: "Customer Services",
-    path: "customers/:id/services",
-    Component: () => <div>TODO: Customer Services</div>,
+  customerCar: {
+    name: "Customer Cars",
+    path: "customers/:id/cars/:customer_car_id",
+    Component: CustomerCarServiceList,
     isLocked: true,
     exact: true,
   },
