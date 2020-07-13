@@ -10,8 +10,9 @@ import {
   withWidth,
   isWidthUp,
 } from "@material-ui/core";
-import { PersonAdd, List } from "@material-ui/icons";
-import { Link, useLocation } from "react-router-dom";
+import { PersonAdd, List, ExitToApp } from "@material-ui/icons";
+import { Link, useLocation, useHistory } from "react-router-dom";
+import storageAPI, { STORAGE_KEYS } from "../../utils/storage/storageAPI";
 
 const useStyles = makeStyles((theme) => ({
   sideMenuContainer: {
@@ -29,10 +30,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SideMenu() {
+function SideMenu({ storageAPI }) {
   const classes = useStyles();
   const location = useLocation();
-
+  const history = useHistory();
 
   return (
     <Grid container direction="column" className={classes.sideMenuContainer}>
@@ -44,7 +45,7 @@ function SideMenu() {
               component={Link}
               to="/customers/new"
               color={
-                location.pathname === "/customers/new" ? "secondary" : "default"
+                location.pathname === "/customers/new" ? "primary" : "default"
               }
             >
               <PersonAdd />
@@ -56,10 +57,23 @@ function SideMenu() {
               component={Link}
               to="/customers"
               color={
-                location.pathname === "/customers" ? "secondary" : "default"
+                location.pathname === "/customers" ? "primary" : "default"
               }
             >
               <List />
+            </IconButton>
+          </Grid>
+          <Grid item container justify="center">
+            <IconButton
+              color="secondary"
+              title={"Sair"}
+              width={50}
+              onClick={() => {
+                storageAPI.removeItem(STORAGE_KEYS.TOKEN);
+                history.replace("/login");
+              }}
+            >
+              <ExitToApp />
             </IconButton>
           </Grid>
         </Grid>
@@ -68,7 +82,7 @@ function SideMenu() {
   );
 }
 
-export const createMenu = () => {
+export const createMenu = ({ storageAPI }) => {
   const Menu = ({ width }) => {
     return (
       <>
@@ -79,7 +93,7 @@ export const createMenu = () => {
             <BottomNavigationAction label="Nova OS" icon={<PersonAdd />} />
           </BottomNavigation>
         )}
-        {isWidthUp("md", width) && <SideMenu />}
+        {isWidthUp("md", width) && <SideMenu storageAPI={storageAPI} />}
       </>
     );
   };
@@ -87,4 +101,4 @@ export const createMenu = () => {
   return Menu;
 };
 
-export default withWidth()(createMenu());
+export default withWidth()(createMenu({ storageAPI }));
