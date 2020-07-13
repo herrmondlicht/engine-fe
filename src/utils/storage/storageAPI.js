@@ -1,11 +1,11 @@
-export const storageAPI = (storage = window.localStorage) => ({
+export const storageAPI = (storage = window.sessionStorage) => ({
   setItem: (itemKey, value) => storage.setItem(itemKey, value),
-  getItem: keyName => storage.getItem(keyName),
-  removeItem: keyName => storage.removeItem(keyName)
+  getItem: (keyName) => storage.getItem(keyName),
+  removeItem: (keyName) => storage.removeItem(keyName),
 });
 
 export const STORAGE_KEYS = {
-  TOKEN: "token"
+  TOKEN: "token",
 };
 
 export default storageAPI();

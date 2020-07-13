@@ -1,12 +1,13 @@
 import React from "react";
 import { Grid, makeStyles } from "@material-ui/core";
 import SideMenu from "../SideMenu/SideMenu";
-import { Route, useRouteMatch, Switch } from "react-router-dom";
+import { Route, useRouteMatch, Switch, useHistory } from "react-router-dom";
 
 import appRoutes from "../../utils/appRoutes";
 import AuthorizedRoute from "../AuthorizedRoute";
+import storageAPI, { STORAGE_KEYS } from "../../utils/storage/storageAPI";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   homePageContainer: {
     width: "100%",
     height: "100%",
@@ -16,36 +17,43 @@ const useStyles = makeStyles(theme => ({
     height: "100%",
     width: "100%",
     [theme.breakpoints.down("sm")]: {
-      flexDirection: "column-reverse"
-    }
+      flexDirection: "column-reverse",
+    },
   },
   menu: {
     [theme.breakpoints.between("md", "xl")]: {
       width: theme.spacing(10),
       flexBasis: theme.spacing(10),
       padding: theme.spacing(1),
-      height: "100vh"
+      height: "100vh",
     },
   },
   container: {
-    height:"100%",
+    height: "100%",
     flex: 1,
     paddingTop: theme.spacing(7),
     paddingRight: theme.spacing(7),
     paddingBottom: theme.spacing(1),
     paddingLeft: theme.spacing(7),
     [theme.breakpoints.down("sm")]: {
-      padding: 0
+      padding: 0,
     },
-    overflow: "auto"
-  }
+    overflow: "auto",
+  },
 }));
 
-export const createHomePage = () => {
+export const createHomePage = ({ storageAPI }) => {
   const HomePage = () => {
     const classes = useStyles();
     const match = useRouteMatch();
     const { login, home, ...routes } = appRoutes;
+    const token = storageAPI.getItem(STORAGE_KEYS.TOKEN);
+    const history = useHistory();
+
+    if (!token) {
+      history.replace("/login");
+    }
+
     return (
       <div
         data-testid="HomePageContainer"
@@ -57,7 +65,7 @@ export const createHomePage = () => {
           </Grid>
           <Grid className={classes.container} item>
             <Switch>
-              {Object.values(routes).map(route => {
+              {Object.values(routes).map((route) => {
                 if (route.isLocked)
                   return (
                     <AuthorizedRoute
@@ -86,4 +94,4 @@ export const createHomePage = () => {
   return HomePage;
 };
 
-export default createHomePage();
+export default createHomePage({ storageAPI });
