@@ -106,6 +106,14 @@ export const createCustomerCarServiceList = ({ engineAPI }) =>
                     />
                   </div>
                 ))}
+              {filteredServices.length === 0 && (
+                <div className="flex p-5 w-full justify-center">
+                  <Typography>
+                    Opa! não existe serviço para esse veículo ainda. Clique em
+                    "adicionar" para incluir um novo serviço
+                  </Typography>
+                </div>
+              )}
             </div>
           </Paper>
         </div>
@@ -163,14 +171,19 @@ const ServiceCard = ({ serviceData, onDeleteClick }) => {
       onClick={() => history.push(`/services/${serviceData.id}`)}
     >
       <div
-        style={{ height: "200px", width: "255px" }}
+        style={{ height: "240px", width: "300px" }}
         className="flex flex-col p-2"
       >
         <div className="flex justify-between">
           <div className="flex flex-col">
-            <Typography variant="body1">valor MO:</Typography>
+            <Typography variant="body1">Valor mão de obra:</Typography>
             <Typography variant="h4" color="primary">
-              R$ {serviceData.service_price}
+              {Number(serviceData.service_price).toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
             </Typography>
           </div>
           <div className="flex justify-center items-center">
@@ -184,6 +197,12 @@ const ServiceCard = ({ serviceData, onDeleteClick }) => {
               <Delete color="error" />
             </IconButton>
           </div>
+        </div>
+        <div className="flex flex-col">
+          <Typography variant="body1">Quilometragem:</Typography>
+          <Typography variant="h5" color="primary">
+            {serviceData.odometer_reading || "Pendente"}
+          </Typography>
         </div>
         <div className="flex flex-col mt-2">
           <Typography variant="body2">Data:</Typography>

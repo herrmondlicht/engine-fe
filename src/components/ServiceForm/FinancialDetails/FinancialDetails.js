@@ -3,13 +3,6 @@ import { Grid, TextField, Typography, Divider } from "@material-ui/core";
 
 import CurrencyInput from "../../Common/CurrencyInput";
 import NumberFormat from "react-number-format";
-import { makeStyles } from "@material-ui/core";
-
-const useFinancialDetailsStyles = makeStyles((theme) => ({
-  totalPriceContainer: {
-    width: "auto",
-  },
-}));
 
 const createFinancialDetails = () =>
   function FinancialDetails({
@@ -17,11 +10,12 @@ const createFinancialDetails = () =>
     service_price = "",
     discount_price = "",
     observations = "",
+    odometer_reading = "",
     updateServicesValuesOnBlur,
     updateServiceValuesOnChange,
     updateObservationOnBlur,
+    updateValueOnBlur,
   }) {
-    const financialDetailsStyles = useFinancialDetailsStyles();
     const totalPrice =
       service_items_price + (service_price || 0) - (discount_price || 0);
 
@@ -33,11 +27,33 @@ const createFinancialDetails = () =>
     };
 
     return (
-      <>
-        <Grid container item xs={12} direction="row" spacing={4}>
-          <Grid container item xs={12} sm={12} direction="row" spacing={4}>
-            {/* payment */}
-            <Grid container item xs={12} sm={6}>
+      <div className="flex-col w-full">
+        <div className="flex w-full">
+          {/* payment */}
+          <div className="flex-col w-1/2">
+            <div className="flex-col">
+              <Grid container item alignItems="center">
+                <Typography variant="body1">Quilometragem</Typography>
+              </Grid>
+              <TextField
+                onChange={(e) =>
+                  updateServiceValuesOnChange("odometer_reading")(
+                    e.target.value
+                  )
+                }
+                onBlur={(e) =>
+                  updateValueOnBlur({
+                    key: "odometer_reading",
+                    value: e.target.value,
+                  })
+                }
+                value={odometer_reading}
+                size="small"
+                variant="outlined"
+                fullWidth
+              />
+            </div>
+            <div className="mt-4">
               <PricesView
                 servicePrice={service_price}
                 setServicePrice={updateServiceValuesOnChange("service_price")}
@@ -46,57 +62,44 @@ const createFinancialDetails = () =>
                 itemsPrice={service_items_price}
                 handleBlur={handleBlur}
               />
-            </Grid>
-            <Grid>
-              <Divider variant="fullWidth" orientation="vertical"></Divider>
-            </Grid>
-            <Grid
-              item
-              container
-              alignItems="center"
-              justify="center"
-              xs={12}
-              sm={6}
-              spacing={2}
-            >
-              <Grid
-                item
-                container
-                direction="column"
-                className={financialDetailsStyles.totalPriceContainer}
-              >
-                <Typography variant="h4">Total</Typography>
-                <Typography variant="h3">
-                  <NumberFormat
-                    value={totalPrice}
-                    displayType={"text"}
-                    prefix={"R$"}
-                    thousandSeparator="."
-                    decimalSeparator=","
-                    decimalScale={2}
-                    fixedDecimalScale={2}
-                  />
-                </Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item container xs={12}>
-            <TextField
-              onChange={(e) =>
-                updateServiceValuesOnChange("observations")(e.target.value)
-              }
-              onBlur={(e) => updateObservationOnBlur(e.target.value)}
-              value={observations}
-              label="Observações"
-              size="small"
-              rows="5"
-              variant="outlined"
-              multiline
-              fullWidth
-            />
-          </Grid>
-        </Grid>
-      </>
+            </div>
+          </div>
+          <div className="mx-10">
+            <Divider orientation="vertical"></Divider>
+          </div>
+          <div className="flex items-center justify-center w-1/2">
+            <div className="flex-col">
+              <Typography variant="h4">Total</Typography>
+              <Typography variant="h3">
+                <NumberFormat
+                  value={totalPrice}
+                  displayType={"text"}
+                  prefix={"R$"}
+                  thousandSeparator="."
+                  decimalSeparator=","
+                  decimalScale={2}
+                  fixedDecimalScale={2}
+                />
+              </Typography>
+            </div>
+          </div>
+        </div>
+        <div className="flex mt-6">
+          <TextField
+            onChange={(e) =>
+              updateServiceValuesOnChange("observations")(e.target.value)
+            }
+            onBlur={(e) => updateObservationOnBlur(e.target.value)}
+            value={observations}
+            label="Observações"
+            size="small"
+            rows="5"
+            variant="outlined"
+            multiline
+            fullWidth
+          />
+        </div>
+      </div>
     );
   };
 

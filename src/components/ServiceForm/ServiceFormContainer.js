@@ -53,6 +53,16 @@ export const createServiceFormContainer = ({ engineAPI }) =>
       [serviceId]
     );
 
+    const commitKeyValueToBackend = useCallback(
+      ({ key, value }) => {
+        engineAPI.service_orders.patch({
+          urlExtension: serviceId,
+          data: { [key]: value },
+        });
+      },
+      [serviceId]
+    );
+
     const commitObservationToBackend = useCallback(
       (observations) => {
         engineAPI.service_orders.patch({
@@ -102,12 +112,13 @@ export const createServiceFormContainer = ({ engineAPI }) =>
             updateTotalItemsPrice={updateTotalItemsPrice}
           />
         </PaperWithTitle>
-        <PaperWithTitle title="Pagamento">
+        <PaperWithTitle title="Pagamento & Mais detalhes">
           <FinancialDetails
             {...serviceData}
             updateServiceValuesOnChange={updateValuesToState}
             updateServicesValuesOnBlur={commitUpdateValuesToBackend}
             updateObservationOnBlur={commitObservationToBackend}
+            updateValueOnBlur={commitKeyValueToBackend}
           />
         </PaperWithTitle>
         <Snackbar
