@@ -10,7 +10,7 @@ import {
   withWidth,
   isWidthUp,
 } from "@material-ui/core";
-import { PersonAdd, List, ExitToApp } from "@material-ui/icons";
+import { Add, List, ExitToApp } from "@material-ui/icons";
 import { Link, useLocation, useHistory } from "react-router-dom";
 import storageAPI, { STORAGE_KEYS } from "../../utils/storage/storageAPI";
 
@@ -48,7 +48,7 @@ function SideMenu({ storageAPI }) {
                 location.pathname === "/customers/new" ? "primary" : "default"
               }
             >
-              <PersonAdd />
+              <Add />
             </IconButton>
           </Grid>
           <Grid item container justify="center">
@@ -88,9 +88,9 @@ export const createMenu = ({ storageAPI }) => {
       <>
         {isWidthDown("sm", width) && (
           <BottomNavigation>
-            <BottomNavigationAction label="Nova OS" icon={<PersonAdd />} />
+            <BottomNavigationAction label="Nova OS" icon={<Add />} />
             <BottomNavigationAction label="Clientes" icon={<List />} />
-            <BottomNavigationAction label="Nova OS" icon={<PersonAdd />} />
+            <BottomNavigationAction label="Nova OS" icon={<Add />} />
           </BottomNavigation>
         )}
         {isWidthUp("md", width) && <SideMenu storageAPI={storageAPI} />}

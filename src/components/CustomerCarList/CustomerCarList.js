@@ -14,9 +14,8 @@ import {
 import { Delete } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 
-import engineAPI from "utils/engineAPI/engineAPI";
-import ConfirmDeleteModal from "../Modals/ConfirmDeleteModal";
-import SearchBar from "../Common/SearchBar";
+import { engineAPI } from "utils";
+import { SearchBar, ConfirmDeleteModal } from "components";
 
 export const createCustomerCarList = ({ engineAPI }) =>
   function CustomerCarList() {

@@ -4,6 +4,7 @@ import { Search as SearchIcon, AddCircle } from "@material-ui/icons";
 
 const createSearchBar = () =>
   function SearchBar({setResearch, addAction}) {
+    console.log(SearchIcon)
     return (
       <div className="flex flex-col sm:flex-row items-center">
         <div className="w-full sm:w-1/2 flex items-center">
