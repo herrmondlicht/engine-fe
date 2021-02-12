@@ -6,7 +6,7 @@ import {
   Divider,
   IconButton,
 } from "@material-ui/core";
-import { Delete } from "@material-ui/icons";
+import { HiTrash as Delete } from "react-icons/hi";
 import { useHistory, useParams } from "react-router-dom";
 import moment from "moment";
 import Skeleton from "@material-ui/lab/Skeleton";
@@ -14,7 +14,7 @@ import Skeleton from "@material-ui/lab/Skeleton";
 import { engineAPI } from "utils";
 import { SearchBar, ConfirmDeleteModal } from "components";
 
-export const createCustomerCarServiceList = ({ engineAPI }) =>
+export const createCustomerCarServiceList = ({ engineAPI }) => 
   function CustomerCarServiceList() {
     const [services, setServices] = useState([]);
     const [customerCar, setCustomerCar] = useState({});

@@ -108,7 +108,7 @@ export const createServiceFormContainer = ({ engineAPI }) =>
         </PaperWithTitle>
         <PaperWithTitle title="Itens do Serviço">
           <ServiceItemsContainer
-            serviceOrderId={serviceData.id}
+            serviceOrderId={serviceData?.id}
             updateTotalItemsPrice={updateTotalItemsPrice}
           />
         </PaperWithTitle>

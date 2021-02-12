@@ -11,7 +11,7 @@ import {
   TableBody,
   TableContainer,
 } from "@material-ui/core";
-import { Delete } from "@material-ui/icons";
+import { HiTrash as Delete } from "react-icons/hi";
 import { useHistory } from "react-router-dom";
 
 import { engineAPI } from "utils";

@@ -2,10 +2,8 @@ import React from "react";
 import { Grid, makeStyles } from "@material-ui/core";
 import { Route, useRouteMatch, Switch, useHistory } from "react-router-dom";
 
-import { SideMenu } from "components";
-import appRoutes from "../../utils/appRoutes";
-import AuthorizedRoute from "../AuthorizedRoute";
-import storageAPI, { STORAGE_KEYS } from "../../utils/storage/storageAPI";
+import { SideMenu, AuthorizedRoute } from "components";
+import { appRoutes, storageAPI, STORAGE_KEYS } from "utils";
 
 const useStyles = makeStyles((theme) => ({
   homePageContainer: {
@@ -43,7 +41,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const createHomePage = ({ storageAPI }) => {
-  console.log(SideMenu)
   const HomePage = () => {
     const classes = useStyles();
     const match = useRouteMatch();

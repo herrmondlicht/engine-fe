@@ -1,10 +1,9 @@
 import React from "react";
 import { TextField, IconButton, Button } from "@material-ui/core";
-import { Search as SearchIcon, AddCircle } from "@material-ui/icons";
+import { HiSearch as SearchIcon, HiUserAdd as AddCircle } from "react-icons/hi";
 
 const createSearchBar = () =>
-  function SearchBar({setResearch, addAction}) {
-    console.log(SearchIcon)
+  function SearchBar({ setResearch, addAction }) {
     return (
       <div className="flex flex-col sm:flex-row items-center">
         <div className="w-full sm:w-1/2 flex items-center">

@@ -1,9 +1,12 @@
 import React from "react";
 //temporary /\/\/\/\/\/\
-import ServiceFormContainer from "../components/ServiceForm/ServiceFormContainer";
-import CustomerFormsContainerWithPaper from "../components/CustomerForms/CustomerFormsContainerWithPaper";
-import CustomerCarList from "../components/CustomerCarList/CustomerCarList";
-import CustomerCarServiceList from "../components/CustomerPage/CustomerCarServiceList";
+import {
+  ServiceFormContainer,
+  CustomerFormsContainerWithPaper,
+  CustomerCarList,
+  CustomerCarServiceList,
+} from "components";
+
 
 const routes = {
   customers: {

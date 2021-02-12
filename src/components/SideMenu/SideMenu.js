@@ -10,9 +10,13 @@ import {
   withWidth,
   isWidthUp,
 } from "@material-ui/core";
-import { Add, List, ExitToApp } from "@material-ui/icons";
+import {
+  HiPlus as Add,
+  HiViewList as List,
+  HiLogout as ExitToApp,
+} from "react-icons/hi";
 import { Link, useLocation, useHistory } from "react-router-dom";
-import storageAPI, { STORAGE_KEYS } from "../../utils/storage/storageAPI";
+import { storageAPI, STORAGE_KEYS } from "utils";
 
 const useStyles = makeStyles((theme) => ({
   sideMenuContainer: {
@@ -56,9 +60,7 @@ function SideMenu({ storageAPI }) {
               width={50}
               component={Link}
               to="/customers"
-              color={
-                location.pathname === "/customers" ? "primary" : "default"
-              }
+              color={location.pathname === "/customers" ? "primary" : "default"}
             >
               <List />
             </IconButton>
