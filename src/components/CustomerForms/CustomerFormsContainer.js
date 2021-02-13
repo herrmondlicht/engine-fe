@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 
-import engineAPI from "../../utils/engineAPI/engineAPI";
+import { engineAPI } from "utils";
 
 import CustomerFormsView from "./CustomerFormsView";
 

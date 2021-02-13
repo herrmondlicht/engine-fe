@@ -7,8 +7,7 @@ import {
   CustomerCarServiceList,
 } from "components";
 
-
-const routes = {
+export const appRoutes = {
   customers: {
     name: "Clientes",
     path: "customers",
@@ -45,5 +44,3 @@ const routes = {
     exact: true,
   },
 };
-
-export default routes;

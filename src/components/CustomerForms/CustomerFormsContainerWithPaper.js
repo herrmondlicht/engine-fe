@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import PaperWithTitle from "../Common/PaperWithTitle";
 import CustomerFormsContainer from "./CustomerFormsContainer";
 import useStyles from "../../hooks/FormStyleHook";
-import engineAPI from "../../utils/engineAPI/engineAPI";
+import { engineAPI } from "utils";
 
 export const createCustomerFormsContainerWithPaper = ({ engineAPI } = {}) =>
   function CustomerFormsContainerWithPaper(props) {
