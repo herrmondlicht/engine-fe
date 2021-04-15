@@ -6,14 +6,15 @@ import {
   Divider,
   IconButton,
 } from "@material-ui/core";
-import { Delete } from "@material-ui/icons";
+import { HiTrash as Delete } from "react-icons/hi";
 import { useHistory, useParams } from "react-router-dom";
 import moment from "moment";
-
-import engineAPI from "utils/engineAPI/engineAPI";
 import Skeleton from "@material-ui/lab/Skeleton";
-import ConfirmDeleteModal from "../Modals/ConfirmDeleteModal";
-import SearchBar from "../Common/SearchBar";
+
+import { engineAPI } from "utils";
+import { SearchBar, ConfirmDeleteModal } from "components";
+
+console.log(engineAPI);
 
 export const createCustomerCarServiceList = ({ engineAPI }) =>
   function CustomerCarServiceList() {

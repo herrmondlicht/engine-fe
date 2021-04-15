@@ -1,11 +1,13 @@
 import React from "react";
 //temporary /\/\/\/\/\/\
-import ServiceFormContainer from "../components/ServiceForm/ServiceFormContainer";
-import CustomerFormsContainerWithPaper from "../components/CustomerForms/CustomerFormsContainerWithPaper";
-import CustomerCarList from "../components/CustomerCarList/CustomerCarList";
-import CustomerCarServiceList from "../components/CustomerPage/CustomerCarServiceList";
+import {
+  ServiceFormContainer,
+  CustomerCarList,
+  CustomerCarServiceList,
+  CustomerForm,
+} from "components";
 
-const routes = {
+export const appRoutes = {
   customers: {
     name: "Clientes",
     path: "customers",
@@ -16,7 +18,7 @@ const routes = {
   newCustomer: {
     name: "Novo Cliente",
     path: "customers/new",
-    Component: CustomerFormsContainerWithPaper,
+    Component: CustomerForm,
     isLocked: true,
     exact: true,
   },
@@ -42,5 +44,3 @@ const routes = {
     exact: true,
   },
 };
-
-export default routes;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Grid, TextField, Button, IconButton } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
+import { HiTrash as DeleteIcon } from "react-icons/hi";
 import { makeStyles } from "@material-ui/core";
 
 import CurrencyInput from "../../Common/CurrencyInput";

@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useState, useMemo } from "react";
 import Skeleton from "@material-ui/lab/Skeleton";
 
 import ServiceItemsView from "./ServiceItemsView";
-import engineAPI from "../../../utils/engineAPI/engineAPI";
+import { engineAPI } from "utils";
 import { Box } from "@material-ui/core";
 
 const createServiceItemsContainer = ({ engineAPI }) =>

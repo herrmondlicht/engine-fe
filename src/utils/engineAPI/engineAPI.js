@@ -1,5 +1,5 @@
 import * as axios from "axios";
-import _storage, { STORAGE_KEYS } from "../storage/storageAPI";
+import { storageAPI as _storage, STORAGE_KEYS } from "utils";
 import routes from "./routes";
 
 export const requestMaker = (
@@ -81,4 +81,6 @@ const createAllRequestsFromResources = (routes) => {
   return routesWithRequests;
 };
 
-export default createAllRequestsFromResources(routes);
+export const engineAPI = createAllRequestsFromResources(routes);
+
+console.log("engine", engineAPI);

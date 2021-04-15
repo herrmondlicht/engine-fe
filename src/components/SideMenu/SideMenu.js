@@ -10,9 +10,13 @@ import {
   withWidth,
   isWidthUp,
 } from "@material-ui/core";
-import { PersonAdd, List, ExitToApp } from "@material-ui/icons";
+import {
+  HiPlus as Add,
+  HiViewList as List,
+  HiLogout as ExitToApp,
+} from "react-icons/hi";
 import { Link, useLocation, useHistory } from "react-router-dom";
-import storageAPI, { STORAGE_KEYS } from "../../utils/storage/storageAPI";
+import { storageAPI, STORAGE_KEYS } from "utils";
 
 const useStyles = makeStyles((theme) => ({
   sideMenuContainer: {
@@ -48,7 +52,7 @@ function SideMenu({ storageAPI }) {
                 location.pathname === "/customers/new" ? "primary" : "default"
               }
             >
-              <PersonAdd />
+              <Add />
             </IconButton>
           </Grid>
           <Grid item container justify="center">
@@ -56,9 +60,7 @@ function SideMenu({ storageAPI }) {
               width={50}
               component={Link}
               to="/customers"
-              color={
-                location.pathname === "/customers" ? "primary" : "default"
-              }
+              color={location.pathname === "/customers" ? "primary" : "default"}
             >
               <List />
             </IconButton>
@@ -88,9 +90,9 @@ export const createMenu = ({ storageAPI }) => {
       <>
         {isWidthDown("sm", width) && (
           <BottomNavigation>
-            <BottomNavigationAction label="Nova OS" icon={<PersonAdd />} />
+            <BottomNavigationAction label="Nova OS" icon={<Add />} />
             <BottomNavigationAction label="Clientes" icon={<List />} />
-            <BottomNavigationAction label="Nova OS" icon={<PersonAdd />} />
+            <BottomNavigationAction label="Nova OS" icon={<Add />} />
           </BottomNavigation>
         )}
         {isWidthUp("md", width) && <SideMenu storageAPI={storageAPI} />}

@@ -8,7 +8,7 @@ import ServiceItemsContainer from "./ServiceItems/ServiceItemsContainer";
 import PaperWithTitle from "../Common/PaperWithTitle";
 import useStyles from "../../hooks/FormStyleHook";
 import FinancialDetails from "./FinancialDetails/FinancialDetails";
-import engineAPI from "../../utils/engineAPI/engineAPI";
+import { engineAPI } from "utils";
 
 export const createServiceFormContainer = ({ engineAPI }) =>
   function ServiceFormContainer() {
@@ -108,7 +108,7 @@ export const createServiceFormContainer = ({ engineAPI }) =>
         </PaperWithTitle>
         <PaperWithTitle title="Itens do Serviço">
           <ServiceItemsContainer
-            serviceOrderId={serviceData.id}
+            serviceOrderId={serviceData?.id}
             updateTotalItemsPrice={updateTotalItemsPrice}
           />
         </PaperWithTitle>
