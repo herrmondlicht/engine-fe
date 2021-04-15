@@ -5,6 +5,7 @@ import {
   CustomerFormsContainerWithPaper,
   CustomerCarList,
   CustomerCarServiceList,
+  CustomerForm,
 } from "components";
 
 export const appRoutes = {
@@ -18,7 +19,7 @@ export const appRoutes = {
   newCustomer: {
     name: "Novo Cliente",
     path: "customers/new",
-    Component: CustomerFormsContainerWithPaper,
+    Component: CustomerForm,
     isLocked: true,
     exact: true,
   },
