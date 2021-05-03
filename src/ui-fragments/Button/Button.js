@@ -31,7 +31,7 @@ const Button = React.forwardRef(
     return (
       <button
         ref={ref}
-        onClick={onClick}
+        onClick={onClick ? onClick : undefined}
         className={`${sizeClasses} ${variantClasses} ${
           fw ? "w-full" : ""
         } rounded-full text-white font-semibold`}
