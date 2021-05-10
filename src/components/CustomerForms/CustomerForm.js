@@ -1,8 +1,9 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
 
 import { Input, Card, Button } from "ui-fragments";
+import { useValidator } from "hooks";
+import { yup } from "utils";
 
 const schema = yup.object().shape({
   CPF: yup.string(),
@@ -12,24 +13,8 @@ const schema = yup.object().shape({
   phone: yup.string(),
 });
 
-const useValidator = (validator) => {
-  const [errors, setErrors] = useState({});
-  const validate = useCallback(
-    (object) => {
-      try {
-        return validator.validateSync(object);
-      } catch (e) {
-        setErrors({ [e.path]: e.errors[0] });
-      }
-    },
-    [validator]
-  );
-
-  return { validate, errors };
-};
-
 const CustomerForm = () => {
-  const { register, handleSubmit, formState } = useForm();
+  const { register, handleSubmit } = useForm();
   const { errors, validate } = useValidator(schema);
 
   const submit = (data) => {
@@ -46,22 +31,51 @@ const CustomerForm = () => {
         <div className="mt-3">
           <div className="flex">
             <div className="w-1/3">
-              <Input fw label="CPF" placeholder="CPF" {...register("CPF")} error={errors.cpf} />
+              <Input
+                fw
+                label="CPF"
+                placeholder="CPF"
+                {...register("CPF")}
+                error={errors.cpf}
+              />
             </div>
             <div className="ml-12 w-full">
-              <Input fw label="Endereço" placeholder="Endereço" error={errors.address} />
+              <Input
+                fw
+                label="Endereço"
+                placeholder="Endereço"
+                {...register("address")}
+                error={errors.address}
+              />
             </div>
           </div>
           <div className="flex mt-3">
             <div className="w-1/3">
-              <Input fw label="Email" placeholder="Email" error={errors.email} />
+              <Input
+                fw
+                label="Email"
+                placeholder="Email"
+                {...register("email")}
+                error={errors.email}
+              />
             </div>
             <div className="ml-12 w-full flex">
               <div className="w-full">
-                <Input fw label="Nome" placeholder="Nome" error={errors.name} />
+                <Input
+                  fw
+                  label="Nome"
+                  placeholder="Nome"
+                  {...register("name")}
+                  error={errors.name}
+                />
               </div>
               <div className="ml-12 w-full">
-                <Input fw label="Telefone" placeholder="Telefone" />
+                <Input
+                  fw
+                  label="Telefone"
+                  placeholder="Telefone"
+                  {...register("phone")}
+                />
               </div>
             </div>
           </div>
