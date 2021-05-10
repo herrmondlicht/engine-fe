@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Grid, makeStyles, Paper } from "@material-ui/core";
 import EngineImage from "./engine_logo.png";
 import { storageAPI, STORAGE_KEYS, engineAPI } from "utils";
@@ -39,10 +39,17 @@ export const createLogin = (engineAPI, storageAPI) =>
     const [userInput, changeInput] = useState({ username: "", password: "" });
     const [errorMessage, setErrorMessage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const isMounted = useRef(true);
     const location = useLocation();
     const history = useHistory();
     const token = storageAPI.getItem(STORAGE_KEYS.TOKEN);
     const { from } = location.state || { from: { pathname: "/customers" } };
+
+    useEffect(() => {
+      return () => {
+        isMounted.current = false;
+      };
+    }, []);
 
     async function sendForm() {
       try {
@@ -53,7 +60,7 @@ export const createLogin = (engineAPI, storageAPI) =>
         setErrorMessage(getErrorMessage(e?.response?.status));
       }
 
-      setIsLoading(false);
+      isMounted.current && setIsLoading(false);
     }
 
     function loginUser(token) {
