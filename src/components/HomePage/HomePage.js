@@ -3,7 +3,8 @@ import { Grid, makeStyles } from "@material-ui/core";
 import { Route, useRouteMatch, Switch, useHistory } from "react-router-dom";
 
 import { SideMenu, AuthorizedRoute } from "components";
-import { appRoutes, storageAPI, STORAGE_KEYS } from "utils";
+import { appRoutes } from "appRoutes";
+import { storageAPI, STORAGE_KEYS } from "utils";
 
 const useStyles = makeStyles((theme) => ({
   homePageContainer: {
