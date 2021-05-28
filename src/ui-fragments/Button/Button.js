@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import propTypes from "prop-types";
 import Loader from "react-loader-spinner";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
+import { theme } from "twtheme";
 
 const Button = (
   { onClick, children, variant = "primary", size, fw, disabled, showLoader },
@@ -73,7 +74,7 @@ const ButtonContent = ({ children, showLoader, variant }) => {
           showLoader ? "opacity-100" : "opacity-0"
         }`}
       >
-        <Loader type="TailSpin" height={30} width={30} color="#FFF" />
+        <Loader type="TailSpin" height={30} width={30} color={theme.colors.white} />
       </div>
       {!showLoader && (
         <div

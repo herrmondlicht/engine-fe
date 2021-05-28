@@ -1,29 +1,70 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Input, Card, Button } from "ui-fragments";
-import { useValidator } from "hooks";
-import { yup } from "utils";
+import { useValidator, useCombinedForms, AVAILABLE_FORMS } from "hooks";
+import { engineAPI, yup } from "utils";
 
 const schema = yup.object().shape({
-  CPF: yup.string(),
+  documentNumber: yup.string(),
   address: yup.string(),
   email: yup.string(),
-  name: yup.string().required(),
+  fullname: yup.string().required(),
   phone: yup.string(),
 });
 
 const CustomerForm = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, setValue, formState, reset } = useForm();
   const { errors, validate } = useValidator(schema);
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    changeForm,
+    context: { customers: savedCustomerForm },
+  } = useCombinedForms();
 
-  const submit = (data) => {
-    console.log(data);
-    validate(data);
+  useEffect(() => {
+    if (savedCustomerForm) {
+      setValue("documentNumber", savedCustomerForm.document_number);
+      setValue("address", savedCustomerForm.address);
+      setValue("email", savedCustomerForm.email);
+      setValue("fullname", savedCustomerForm.fullname);
+      setValue("phone", savedCustomerForm.phone);
+    }
+    return () => {
+      reset();
+    };
+  }, [savedCustomerForm, reset, setValue]);
+
+  const getHTTPMethod = () => (savedCustomerForm?.id ? "patch" : "post");
+
+  const sendForm = async ({ documentNumber, ...data }) => {
+    const method = getHTTPMethod();
+    try {
+      const responseData = await engineAPI.customers[method]({
+        urlExtension: savedCustomerForm?.id,
+        data: {
+          ...data,
+          document_number: documentNumber,
+        },
+      });
+      changeForm(AVAILABLE_FORMS.CUSTOMER, responseData.data);
+      //show success notification
+    } catch (error) {
+      console.log(error);
+      //show notification
+    }
   };
+
+  const submit = async (data) => {
+    if (!validate(data)) return;
+    setIsLoading(true);
+    await sendForm(data);
+    setIsLoading(false);
+  };
+
   return (
-    <form onSubmit={handleSubmit(submit)}>
-      <Card>
+    <Card>
+      <form onSubmit={handleSubmit(submit)}>
         <p className="text-sm text-gray-600">Nova OS</p>
         <div className="my-3">
           <p className="text-2xl font-bold">Dados do Cliente</p>
@@ -35,8 +76,8 @@ const CustomerForm = () => {
                 fw
                 label="CPF"
                 placeholder="CPF"
-                {...register("CPF")}
-                error={errors.cpf}
+                {...register("documentNumber")}
+                error={errors.documentNumber}
               />
             </div>
             <div className="ml-12 w-full">
@@ -65,8 +106,8 @@ const CustomerForm = () => {
                   fw
                   label="Nome"
                   placeholder="Nome"
-                  {...register("name")}
-                  error={errors.name}
+                  {...register("fullname")}
+                  error={errors.fullname}
                 />
               </div>
               <div className="ml-12 w-full">
@@ -80,11 +121,22 @@ const CustomerForm = () => {
             </div>
           </div>
           <div className="mt-12 flex justify-end">
-            <Button>Registrar Usuário</Button>
+            <Button
+              showLoader={isLoading}
+              variant={
+                savedCustomerForm?.id && !formState.isDirty
+                  ? "success"
+                  : "primary"
+              }
+            >
+              {savedCustomerForm?.id
+                ? "Salvar Alterações"
+                : "Registrar Usuário"}
+            </Button>
           </div>
         </div>
-      </Card>
-    </form>
+      </form>
+    </Card>
   );
 };
 

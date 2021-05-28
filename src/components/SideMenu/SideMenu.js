@@ -59,6 +59,18 @@ function SideMenu({ storageAPI }) {
             <IconButton
               width={50}
               component={Link}
+              to="/customer_car"
+              color={
+                location.pathname === "/customer_car" ? "primary" : "default"
+              }
+            >
+              <Add />
+            </IconButton>
+          </Grid>
+          <Grid item container justify="center">
+            <IconButton
+              width={50}
+              component={Link}
               to="/customers"
               color={location.pathname === "/customers" ? "primary" : "default"}
             >

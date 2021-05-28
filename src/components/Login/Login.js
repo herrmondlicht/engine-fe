@@ -54,8 +54,8 @@ export const createLogin = (engineAPI, storageAPI) =>
     async function sendForm() {
       try {
         setIsLoading(true);
-        const response = await engineAPI.login.post({ data: userInput });
-        loginUser(response.data.token);
+        const data = await engineAPI.login.post({ data: userInput });
+        loginUser(data.token);
       } catch (e) {
         setErrorMessage(getErrorMessage(e?.response?.status));
       }
