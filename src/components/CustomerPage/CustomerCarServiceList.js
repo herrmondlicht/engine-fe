@@ -14,8 +14,6 @@ import Skeleton from "@material-ui/lab/Skeleton";
 import { engineAPI } from "utils";
 import { SearchBar, ConfirmDeleteModal } from "components";
 
-console.log(engineAPI);
-
 export const createCustomerCarServiceList = ({ engineAPI }) =>
   function CustomerCarServiceList() {
     const [services, setServices] = useState([]);
