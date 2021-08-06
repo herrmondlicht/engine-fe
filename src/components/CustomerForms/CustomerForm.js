@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Input, Card, Button } from "ui-fragments";
-import { useValidator, useCombinedForms, AVAILABLE_FORMS } from "hooks";
+import { useValidator } from "hooks";
 import { engineAPI, yup } from "utils";
 
 const schema = yup.object().shape({
@@ -13,44 +13,41 @@ const schema = yup.object().shape({
   phone: yup.string(),
 });
 
-const CustomerForm = () => {
+const CustomerForm = ({loadedCustomer}) => {
   const { register, handleSubmit, setValue, formState, reset } = useForm();
   const { errors, validate } = useValidator(schema);
   const [isLoading, setIsLoading] = useState(false);
-  const {
-    changeForm,
-    context: { customers: savedCustomerForm },
-  } = useCombinedForms();
 
   useEffect(() => {
-    if (savedCustomerForm) {
-      setValue("documentNumber", savedCustomerForm.document_number);
-      setValue("address", savedCustomerForm.address);
-      setValue("email", savedCustomerForm.email);
-      setValue("fullname", savedCustomerForm.fullname);
-      setValue("phone", savedCustomerForm.phone);
+    if (loadedCustomer) {
+      setValue("documentNumber", loadedCustomer.document_number);
+      setValue("address", loadedCustomer.address);
+      setValue("email", loadedCustomer.email);
+      setValue("fullname", loadedCustomer.fullname);
+      setValue("phone", loadedCustomer.phone);
     }
     return () => {
       reset();
     };
-  }, [savedCustomerForm, reset, setValue]);
+  }, [loadedCustomer, reset, setValue]);
 
-  const getHTTPMethod = () => (savedCustomerForm?.id ? "patch" : "post");
+  const getHTTPMethod = () => (loadedCustomer?.id ? "patch" : "post");
 
   const sendForm = async ({ documentNumber, ...data }) => {
     const method = getHTTPMethod();
     try {
-      const responseData = await engineAPI.customers[method]({
-        urlExtension: savedCustomerForm?.id,
+      await engineAPI.customers[method]({
+        urlExtension: loadedCustomer?.id,
         data: {
           ...data,
           document_number: documentNumber,
         },
       });
-      changeForm(AVAILABLE_FORMS.CUSTOMER, responseData.data);
+      //TODO
       //show success notification
     } catch (error) {
       console.log(error);
+      //TODO
       //show notification
     }
   };
@@ -124,12 +121,12 @@ const CustomerForm = () => {
             <Button
               showLoader={isLoading}
               variant={
-                savedCustomerForm?.id && !formState.isDirty
+                loadedCustomer?.id && !formState.isDirty
                   ? "success"
                   : "primary"
               }
             >
-              {savedCustomerForm?.id
+              {loadedCustomer?.id
                 ? "Salvar Alterações"
                 : "Registrar Usuário"}
             </Button>
