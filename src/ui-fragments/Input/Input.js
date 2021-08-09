@@ -17,7 +17,7 @@ const inputError = ["bg-error-2 ring-2 ring-error-0"].join(" ");
 const Input = React.forwardRef(
   ({ label, fw, placeholder, error, ...props }, ref) => {
     return (
-      <div className="pb-7 relative">
+      <div className="pb-6 relative">
         {label ? (
           <div className="mb-4 ml-1">
             <Label error={error}>{label}</Label>
