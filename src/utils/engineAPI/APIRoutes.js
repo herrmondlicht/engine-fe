@@ -1,4 +1,4 @@
-const routes = {
+const APIRoutes = {
   login: {
     url: "/session/login",
     isLocked: false,
@@ -20,4 +20,5 @@ const routes = {
     isLocked: true,
   },
 };
-export default routes;
+
+export { APIRoutes };

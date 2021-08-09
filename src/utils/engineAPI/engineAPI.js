@@ -1,6 +1,5 @@
 import * as axios from "axios";
-import { storageAPI as _storage, STORAGE_KEYS } from "utils";
-import routes from "./routes";
+import { storageAPI as _storage, STORAGE_KEYS, APIRoutes } from "utils";
 
 export const requestMaker =
   ({ method, url, isLocked }, { storage = window.localStorage } = {}) =>
@@ -80,4 +79,4 @@ const createAllRequestsFromResources = (routes) => {
   return routesWithRequests;
 };
 
-export const engineAPI = createAllRequestsFromResources(routes);
+export const engineAPI = createAllRequestsFromResources(APIRoutes);
