@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { translateAPIFieldName } from "utils";
+import { convertFormKeyToAPI } from "utils";
 import { useValidator } from "./useValidator";
 
 const useCustomForm = ({ schema, preloadedData }) => {
@@ -12,7 +12,7 @@ const useCustomForm = ({ schema, preloadedData }) => {
       Object.keys(schema.fields).forEach((fieldKey) =>
         formMethods.setValue(
           fieldKey,
-          preloadedData[translateAPIFieldName(fieldKey)]
+          preloadedData[convertFormKeyToAPI(fieldKey)]
         )
       );
     }
