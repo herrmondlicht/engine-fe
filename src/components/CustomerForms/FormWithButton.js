@@ -13,7 +13,7 @@ const FormWithButton = ({
   buttonConfig: { titleWhenEditing, defaultTitle },
 }) => {
   const {
-    formMethods: { register, handleSubmit, formState, reset },
+    formMethods: { handleSubmit, formState, reset, ...formMethods },
     validationMethods: { errors, validate },
   } = useCustomForm({ schema: formValidationSchema, preloadedData });
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +34,7 @@ const FormWithButton = ({
         <p className="text-2xl font-bold">{description}</p>
       </div>
       <div className="mt-3">
-        <Form register={register} errors={errors} />
+        <Form errors={errors} {...formMethods} />
       </div>
       <div className="flex justify-end">
         <Button
