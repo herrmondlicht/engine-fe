@@ -1,36 +1,83 @@
-import React, { useState } from "react";
+import { useMemo } from "react";
+import useSWR from "swr";
 
-import { Input, Card, Button } from "ui-fragments";
-import { useCustomForm } from "hooks/useCustomForm";
-import { engineAPI, yup } from "utils";
+import { Card, Input, ScreenLoader } from "ui-fragments";
+import {
+  engineAPI,
+  fixPayloadKeys,
+  yup,
+  APIRoutes,
+  convertFormKeyToAPI,
+} from "utils";
+import { FormWithButton } from "./FormWithButton";
 
 const carFormSchema = yup.object().shape({
   model: yup.string().required(),
   make: yup.string().required(),
-  manufactureYear: yup.string().required(),
+  manufactureYear: yup.number().required(),
   fuel: yup.string().required().required(),
+  licensePlate: yup.string().required(),
+  color: yup.string(),
+  displacement: yup.string(),
 });
 
-const CarForm = ({ loadedData }) => {
-  const getHTTPMethod = () => (loadedData?.id ? "patch" : "post");
-  const {
-    formMethods: { register, handleSubmit, formState },
-    validationMethods: { validate, errors },
-  } = useCustomForm({
-    schema: carFormSchema,
-    preloadedData: loadedData,
-  });
-  const [isLoading, setIsLoading] = useState(false);
+const getHTTPMethod = (loadedData) => (loadedData ? "patch" : "post");
 
-  const sendForm = async ({ documentNumber, ...data }) => {
-    const method = getHTTPMethod();
+const CarForm = ({ loadedData }) => {
+  const { cars, customer_cars, customers } = loadedData;
+  const formDefaultData = {
+    ...cars,
+    ...customer_cars,
+  };
+  const { data: carsData, isValidating } = useSWR(
+    APIRoutes.cars.url,
+    async () => engineAPI.cars.get(),
+    { revalidateOnFocus: false, dedupingInterval: 5000 }
+  );
+  const carsAutocompleteData = carsData?.data;
+
+  const sendNewCarForm = async ({ model, make, manufactureYear, fuel }) => {
     try {
-      await engineAPI.customers[method]({
-        urlExtension: loadedData?.id,
-        data: {
-          ...data,
-          document_number: documentNumber,
-        },
+      const payload = {
+        ...(loadedData.cars ? loadedData.cars : {}),
+        model,
+        make,
+        manufactureYear,
+        fuel,
+      };
+      const data = await engineAPI.cars.post({
+        data: fixPayloadKeys(payload, { fieldTranslator: convertFormKeyToAPI }),
+      });
+      return data?.data;
+      //TODO
+      //show success notification
+    } catch (error) {
+      console.log(error);
+      return {};
+      //TODO
+      //show notification
+    }
+  };
+
+  const sendNewCustomerCarForm = async ({
+    color,
+    displacement,
+    licensePlate,
+    car_id,
+  }) => {
+    const method = getHTTPMethod(loadedData?.customer_cars?.id);
+    try {
+      const payload = {
+        ...(loadedData.customer_cars ? loadedData.customer_cars : {}),
+        color,
+        displacement,
+        licensePlate,
+        car_id,
+        customer_id: customers.id,
+      };
+      await engineAPI.customer_cars[method]({
+        urlExtension: loadedData?.customer_cars?.id,
+        data: fixPayloadKeys(payload, { fieldTranslator: convertFormKeyToAPI }),
       });
       //TODO
       //show success notification
@@ -41,72 +88,147 @@ const CarForm = ({ loadedData }) => {
     }
   };
 
-  const submit = async (data) => {
-    if (!validate(data)) return;
-    setIsLoading(true);
-    await sendForm(data);
-    setIsLoading(false);
+  const onSubmit = async (data) => {
+    const { id } = await sendNewCarForm(data);
+    if (!id) {
+      /**TODO: notification */
+      return;
+    }
+    await sendNewCustomerCarForm({
+      ...data,
+      car_id: id,
+    });
   };
 
   return (
     <Card>
-      <form onSubmit={handleSubmit(submit)}>
-        <p className="text-sm text-gray-600">Nova OS</p>
-        <div className="my-3">
-          <p className="text-2xl font-bold">Dados do veículo</p>
-        </div>
-        <div className="mt-3">
-          <div className="flex gap-3">
-            <div className="w-full">
-              <Input
-                fw
-                label="Modelo"
-                placeholder="Modelo"
-                {...register("model")}
-                error={errors.model}
-              />
-            </div>
-            <div className="w-full">
-              <Input
-                fw
-                label="Marca"
-                placeholder="Marca"
-                {...register("make")}
-                error={errors.make}
-              />
-            </div>
-            <div className="w-1/3">
-              <Input
-                fw
-                label="Ano"
-                placeholder="Ano"
-                {...register("manufactureYear")}
-                error={errors.manufactureYear}
-              />
-            </div>
-            <div className="w-full">
-              <Input
-                fw
-                label="Combustivel"
-                placeholder="Combustivel"
-                {...register("fuel")}
-                error={errors.fuel}
-              />
-            </div>
-          </div>
-          <div className="mt-12 flex justify-end">
-            <Button
-              showLoader={isLoading}
-              variant={
-                loadedData?.id && !formState.isDirty ? "success" : "primary"
-              }
-            >
-              {loadedData?.id ? "Salvar Alterações" : "Registrar Usuário"}
-            </Button>
-          </div>
-        </div>
-      </form>
+      <ScreenLoader isLoading={isValidating && !carsAutocompleteData}>
+        <FormWithButton
+          formValidationSchema={carFormSchema}
+          Form={(props) => (
+            <CarFormView
+              {...props}
+              carsAutocompleteData={carsAutocompleteData}
+            />
+          )}
+          buttonConfig={{
+            defaultTitle: "Registrar Veículo",
+            titleWhenEditing: "Salvar Alterações",
+          }}
+          onFormSubmit={onSubmit}
+          preloadedData={formDefaultData}
+          description="Dados do veículo"
+          title="Nova OS"
+        />
+      </ScreenLoader>
     </Card>
+  );
+};
+
+const CarFormView = ({
+  register,
+  errors,
+  carsAutocompleteData = [],
+  watch,
+}) => {
+  const getUnique = (make, index, array) => array.indexOf(make) === index;
+  const makeValue = watch("make");
+
+  const makesOptions = useMemo(
+    () => carsAutocompleteData.map((car) => car.make).filter(getUnique),
+    [carsAutocompleteData]
+  );
+
+  const modelsFilteredBySelectedMake = useMemo(
+    () =>
+      carsAutocompleteData
+        .filter((car) => car.make === makeValue)
+        .map((car) => car.model)
+        .filter(getUnique),
+    [carsAutocompleteData, makeValue]
+  );
+
+  return (
+    <>
+      <div className="flex gap-3 md:gap-8 flex-wrap">
+        <div className="flex-1" style={{ minWidth: "200px" }}>
+          <Input
+            fw
+            label="Marca"
+            placeholder="Marca"
+            {...register("make")}
+            error={errors.model}
+            list="carMakes"
+          />
+
+          <datalist id="carMakes">
+            {makesOptions.map((make) => (
+              <option value={make} key={make} />
+            ))}
+          </datalist>
+        </div>
+        <div className="flex-1" style={{ minWidth: "200px" }}>
+          <Input
+            fw
+            label="Modelo"
+            placeholder="Modelo"
+            {...register("model")}
+            error={errors.model}
+            list="carModels"
+          />
+          <datalist id="carModels">
+            {modelsFilteredBySelectedMake.map((model) => (
+              <option value={model} key={model} />
+            ))}
+          </datalist>
+        </div>
+        <div className="flex-1 sm:flex-none" style={{ minWidth: "100px" }}>
+          <Input
+            fw
+            label="Ano"
+            placeholder="Ano"
+            {...register("manufactureYear")}
+            error={errors.manufactureYear}
+          />
+        </div>
+        <div className="flex-1" style={{ minWidth: "200px" }}>
+          <Input
+            fw
+            label="Combustível"
+            placeholder="Combustível"
+            {...register("fuel")}
+            error={errors.fuel}
+          />
+        </div>
+        <div className="flex-1" style={{ minWidth: "200px" }}>
+          <Input
+            fw
+            label="Placa"
+            placeholder="Placa"
+            {...register("licensePlate")}
+            error={errors.licensePlate}
+          />
+        </div>
+        <div className="flex-1" style={{ minWidth: "200px" }}>
+          <Input
+            fw
+            label="Cilindradas"
+            placeholder="Cilindradas"
+            {...register("displacement")}
+            error={errors.displacement}
+          />
+        </div>
+        <div className="flex-1" style={{ minWidth: "200px" }}>
+          <Input
+            fw
+            label="Cor"
+            placeholder="Cor"
+            {...register("color")}
+            error={errors.color}
+          />
+        </div>
+      </div>
+    </>
   );
 };
 
