@@ -53,7 +53,7 @@ const RegisterForm = () => {
       {customer_cars?.id && (
         <div className="mb-10">
           <ScreenLoader isLoading={isLoading} radius>
-            <CarForm loadedData={cars} />
+            <CarForm loadedData={{ cars, customer_cars, customers }} />
           </ScreenLoader>
         </div>
       )}
