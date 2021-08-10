@@ -1,13 +1,10 @@
 import { apiFieldsKey } from "./apiFieldsKeys";
 
-const translateAPIFieldName = (
+const convertAPIkeyToForm = (
   fieldName,
   { fieldsToKey = apiFieldsKey } = {}
 ) => {
   const keyFound = Object.entries(fieldsToKey).reduce((found, [key, value]) => {
-    if (key === fieldName) {
-      return value;
-    }
     if (value === fieldName) {
       return key;
     }
@@ -17,10 +14,30 @@ const translateAPIFieldName = (
   return keyFound;
 };
 
+const convertFormKeyToAPI = (
+  fieldName,
+  { fieldsToKey = apiFieldsKey } = {}
+) => {
+  const valueFound = Object.entries(fieldsToKey).reduce(
+    (found, [key, value]) => {
+      if (key === fieldName) {
+        return value;
+      }
+      return found;
+    },
+    fieldName
+  );
+
+  return valueFound;
+};
+
 const fixPayloadKeys = (
   payload,
-  { fieldTranslator = translateAPIFieldName, fieldsToKey = apiFieldsKey } = {}
+  { fieldTranslator, fieldsToKey = apiFieldsKey } = {}
 ) => {
+  if (!fieldTranslator) {
+    throw new Error("Please specify a fieldTranslator");
+  }
   return Object.entries(payload).reduce((prev, [key, value]) => {
     return {
       ...prev,
@@ -29,4 +46,4 @@ const fixPayloadKeys = (
   }, {});
 };
 
-export { translateAPIFieldName, fixPayloadKeys };
+export { convertFormKeyToAPI, convertAPIkeyToForm, fixPayloadKeys };

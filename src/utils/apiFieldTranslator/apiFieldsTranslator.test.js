@@ -1,4 +1,8 @@
-import { translateAPIFieldName, fixPayloadKeys } from "./apiFieldsTranslator";
+import {
+  convertAPIkeyToForm,
+  convertFormKeyToAPI,
+  fixPayloadKeys,
+} from "./apiFieldsTranslator";
 
 describe("apiFieldsTranslator", () => {
   const fieldsToKey = {
@@ -8,17 +12,17 @@ describe("apiFieldsTranslator", () => {
     field4: "field_4",
   };
 
-  it("should return the correspondent value for translation keys", () => {
+  it("should convert key to mapped api prop key", () => {
     Object.keys(fieldsToKey).forEach((key) => {
-      const current = translateAPIFieldName(key, { fieldsToKey });
+      const current = convertFormKeyToAPI(key, { fieldsToKey });
       const expected = fieldsToKey[key];
       expect(current).toBe(expected);
     });
   });
 
-  it("should return the correspondent key for translation value", () => {
+  it("should convert key to form key", () => {
     Object.entries(fieldsToKey).forEach(([key, value]) => {
-      const current = translateAPIFieldName(value, { fieldsToKey });
+      const current = convertAPIkeyToForm(value, { fieldsToKey });
       const expected = key;
       expect(current).toBe(expected);
     });
@@ -33,7 +37,7 @@ describe("fixPayloadKeys", () => {
     field4: "field_4",
   };
 
-  it("should fix the payload keys according to API correctly", () => {
+  it("should convert form payload to API payload", () => {
     const payload = {
       field1: "foo",
       field4: "bar",
@@ -42,13 +46,16 @@ describe("fixPayloadKeys", () => {
       field_1: "foo",
       field_4: "bar",
     };
-    const actual = fixPayloadKeys(payload, { fieldsToKey });
+    const actual = fixPayloadKeys(payload, {
+      fieldsToKey,
+      fieldTranslator: convertFormKeyToAPI,
+    });
     expect(actual).toEqual(expected);
   });
 
-  it("should return the correspondent key for translation value", () => {
+  it("should convert response from API to form payload", () => {
     Object.entries(fieldsToKey).forEach(([key, value]) => {
-      const current = translateAPIFieldName(value, { fieldsToKey });
+      const current = convertAPIkeyToForm(value, { fieldsToKey });
       const expected = key;
       expect(current).toBe(expected);
     });
