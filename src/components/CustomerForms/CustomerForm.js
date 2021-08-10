@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Input, Card } from "ui-fragments";
-import { engineAPI, fixPayloadKeys, yup } from "utils";
+import { convertFormKeyToAPI, engineAPI, fixPayloadKeys, yup } from "utils";
 import { FormWithButton } from "./FormWithButton";
 
 const schema = yup.object().shape({
@@ -20,7 +20,7 @@ const CustomerForm = ({ loadedCustomer }) => {
     try {
       await engineAPI.customers[method]({
         urlExtension: loadedCustomer?.id,
-        data: fixPayloadKeys(data),
+        data: fixPayloadKeys(data, { fieldTranslator: convertFormKeyToAPI }),
       });
       //TODO
       //show success notification
