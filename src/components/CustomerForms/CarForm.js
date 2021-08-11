@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useHistory } from "react-router-dom";
 import useSWR from "swr";
 
 import { Card, Input, ScreenLoader } from "ui-fragments";
@@ -29,6 +30,7 @@ const CarForm = ({ loadedData }) => {
     ...cars,
     ...customer_cars,
   };
+  const history = useHistory();
   const { data: carsData, isValidating } = useSWR(
     APIRoutes.cars.url,
     async () => engineAPI.cars.get(),
@@ -75,14 +77,16 @@ const CarForm = ({ loadedData }) => {
         car_id,
         customer_id: customers.id,
       };
-      await engineAPI.customer_cars[method]({
+      const data = await engineAPI.customer_cars[method]({
         urlExtension: loadedData?.customer_cars?.id,
         data: fixPayloadKeys(payload, { fieldTranslator: convertFormKeyToAPI }),
       });
       //TODO
       //show success notification
+      return data?.data;
     } catch (error) {
       console.log(error);
+      return {};
       //TODO
       //show notification
     }
@@ -94,10 +98,11 @@ const CarForm = ({ loadedData }) => {
       /**TODO: notification */
       return;
     }
-    await sendNewCustomerCarForm({
+    const { id: customerCarId } = await sendNewCustomerCarForm({
       ...data,
       car_id: id,
     });
+    if (customerCarId) history.push(`/customer_car/${customerCarId}`);
   };
 
   return (

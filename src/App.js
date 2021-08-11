@@ -6,7 +6,7 @@ import HomePage from "./components/HomePage/HomePage";
 import { ThemeProvider } from "@material-ui/core/styles";
 
 import theme from "./theme";
-import { CombinedFormContextProvider } from "hooks";
+import { CombinedFormsProvider } from "context";
 
 function App() {
   return (
@@ -17,9 +17,9 @@ function App() {
             <Login />
           </Route>
           <Route path="/">
-            <CombinedFormContextProvider value={{}}>
+            <CombinedFormsProvider value={{}}>
               <HomePage />
-            </CombinedFormContextProvider>
+            </CombinedFormsProvider>
           </Route>
         </Switch>
       </Router>
