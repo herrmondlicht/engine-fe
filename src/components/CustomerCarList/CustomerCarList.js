@@ -30,7 +30,7 @@ export const createCustomerCarList = ({ engineAPI }) =>
         const response = await engineAPI.customer_cars.get({
           urlExtension: "?include=cars,customers",
         });
-        setData(response.data.data);
+        setData(response.data);
       } catch (e) {}
     }, []);
 

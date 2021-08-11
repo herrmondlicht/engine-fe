@@ -32,6 +32,7 @@ const createCustomerFormsView = () =>
       isFormFilled,
       errorType,
       hideSendButton,
+      customerFormRef,
     } = props;
     const classes = useStyles();
     return (
@@ -49,8 +50,7 @@ const createCustomerFormsView = () =>
           </Grid>
           <Grid container item sm={9} spacing={2}>
             <CustomerView
-              changeFormForKey={changeCustomerFormForKey}
-              form={customerForm}
+              formRef={props.customerFormRef}
             />
           </Grid>
         </Grid>

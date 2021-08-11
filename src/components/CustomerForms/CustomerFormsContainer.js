@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 
 import { engineAPI } from "utils";
 
@@ -16,6 +16,7 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
     const [modelsList, changeModelsList] = useState(null);
     const [isFormFilled, setIsFormFilled] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [customerFormId, setCustomerFormId] = useState(null);
     const [carForm, setCarForm] = useState({
       model: "",
       make: "",
@@ -23,13 +24,7 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
       fuel: "",
     });
 
-    const [customerForm, setCustomerForm] = useState({
-      documentNumber: "",
-      fullName: "",
-      address: "",
-      email: "",
-      phone: "",
-    });
+    const customerFormRef = useRef(null);
 
     const [customerCarForm, setCustomerCarForm] = useState({
       licensePlate: "",
@@ -41,7 +36,7 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
 
     const fetchModelsFromMaker = useCallback(async function () {
       const modelsList = await engineAPI.cars.get();
-      changeModelsList(modelsList.data.data);
+      changeModelsList(modelsList.data);
     }, []);
 
     const fetchClientData = useCallback(async () => {
@@ -50,9 +45,7 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
         !customerSubFormsIds.customerFormId
       ) {
         const {
-          data: {
-            data: { customer_cars, customers, cars },
-          },
+          data: { customer_cars, customers, cars },
         } = await engineAPI.customer_cars.get({
           urlExtension: customerSubFormsIds.customerCarFormId,
           params: {
@@ -67,11 +60,6 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
           ...customer_cars,
           licensePlate: customer_cars.license_plate,
         });
-        setCustomerForm({
-          ...customers,
-          documentNumber: customers.document_number,
-          fullName: customers.fullname,
-        });
 
         setIdForCustomerSubForm({
           customerFormId: customers.id,
@@ -84,26 +72,23 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
       setIdForCustomerSubForm,
     ]);
 
-    const requestAPIForSubform = ({
-      method,
-      resource,
-      subFormIdName,
-      id,
-    }) => async ({ data, urlExtension, ...requestOptions }) => {
-      const urlExtensions = [];
-      if (urlExtension) urlExtensions.push(urlExtension);
-      if (id) urlExtensions.push(`${id}`);
+    const requestAPIForSubform =
+      ({ method, resource, subFormIdName, id }) =>
+      async ({ data, urlExtension, ...requestOptions }) => {
+        const urlExtensions = [];
+        if (urlExtension) urlExtensions.push(urlExtension);
+        if (id) urlExtensions.push(`${id}`);
 
-      const response = await engineAPI[resource][method]({
-        data,
-        ...(urlExtensions.length
-          ? { urlExtension: urlExtensions.join("/") }
-          : {}),
-        ...requestOptions,
-      });
-      setIdForCustomerSubForm({ [subFormIdName]: response.data.data.id });
-      return response.data.data;
-    };
+        const response = await engineAPI[resource][method]({
+          data,
+          ...(urlExtensions.length
+            ? { urlExtension: urlExtensions.join("/") }
+            : {}),
+          ...requestOptions,
+        });
+        setIdForCustomerSubForm({ [subFormIdName]: response.data.data.id });
+        return response.data.data;
+      };
 
     const getResourcePostOrPutRequest = (subFormIdName, resource) => {
       const id = customerSubFormsIds[subFormIdName];
@@ -152,11 +137,11 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
         );
         const response = await request({
           data: {
-            document_number: customerForm.documentNumber,
-            fullname: customerForm.fullName,
-            address: customerForm.address,
-            email: customerForm.email,
-            phone: customerForm.phone,
+            document_number: customerFormRef.current.documentNumber,
+            fullname: customerFormRef.current.fullName,
+            address: customerFormRef.current.address,
+            email: customerFormRef.current.email,
+            phone: customerFormRef.current.phone,
           },
         });
         return response;
@@ -227,10 +212,9 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
     return (
       <CustomerFormsView
         changeCarFormForKey={getChangeFormKeyToForm(setCarForm)}
-        changeCustomerFormForKey={getChangeFormKeyToForm(setCustomerForm)}
         changeCustomerCarFormForKey={getChangeFormKeyToForm(setCustomerCarForm)}
         modelsList={modelsList}
-        customerForm={customerForm}
+        customerFormRef={customerFormRef}
         customerCarForm={customerCarForm}
         carForm={carForm}
         errorType={errorType}

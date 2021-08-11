@@ -1,5 +1,8 @@
 import React from "react";
 
+import { AVAILABLE_FORMS } from "context";
+import { useCombinedForms } from "hooks";
+
 import { Input, Card } from "ui-fragments";
 import { convertFormKeyToAPI, engineAPI, fixPayloadKeys, yup } from "utils";
 import { FormWithButton } from "./FormWithButton";
@@ -12,18 +15,22 @@ const schema = yup.object().shape({
   phone: yup.string(),
 });
 
-const CustomerForm = ({ loadedCustomer }) => {
-  const getHTTPMethod = () => (loadedCustomer?.id ? "patch" : "post");
+const getHTTPMethod = (data) => (data ? "patch" : "post");
 
+const CustomerForm = ({ loadedCustomer }) => {
+  const { changeForm, context } = useCombinedForms();
+  console.log(context);
   const sendForm = async (data) => {
-    const method = getHTTPMethod();
+    const method = getHTTPMethod(loadedCustomer?.id);
     try {
-      await engineAPI.customers[method]({
+      const { data: customerData } = await engineAPI.customers[method]({
         urlExtension: loadedCustomer?.id,
         data: fixPayloadKeys(data, { fieldTranslator: convertFormKeyToAPI }),
       });
+      console.log(customerData);
       //TODO
       //show success notification
+      changeForm(AVAILABLE_FORMS.CUSTOMER, customerData);
     } catch (error) {
       console.log(error);
       //TODO
