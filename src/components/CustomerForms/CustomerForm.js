@@ -18,8 +18,7 @@ const schema = yup.object().shape({
 const getHTTPMethod = (data) => (data ? "patch" : "post");
 
 const CustomerForm = ({ loadedCustomer }) => {
-  const { changeForm, context } = useCombinedForms();
-  console.log(context);
+  const { changeForm } = useCombinedForms();
   const sendForm = async (data) => {
     const method = getHTTPMethod(loadedCustomer?.id);
     try {
@@ -27,7 +26,6 @@ const CustomerForm = ({ loadedCustomer }) => {
         urlExtension: loadedCustomer?.id,
         data: fixPayloadKeys(data, { fieldTranslator: convertFormKeyToAPI }),
       });
-      console.log(customerData);
       //TODO
       //show success notification
       changeForm(AVAILABLE_FORMS.CUSTOMER, customerData);
@@ -59,6 +57,15 @@ const CustomerForm = ({ loadedCustomer }) => {
 const CustomerFormView = ({ register, errors }) => (
   <div className="flex-col gap-3 md:gap-0">
     <div className="flex gap-3 md:gap-8 flex-wrap">
+      <div className="flex-1" style={{ minWidth: "200px" }}>
+        <Input
+          fw
+          label="Nome"
+          placeholder="Nome"
+          {...register("fullname")}
+          error={errors.fullname}
+        />
+      </div>
       <div className="flex-1 sm:flex-none" style={{ minWidth: "200px" }}>
         <Input
           fw
@@ -68,17 +75,17 @@ const CustomerFormView = ({ register, errors }) => (
           error={errors.documentNumber}
         />
       </div>
-      <div className="flex-1" style={{ minWidth: "200px" }}>
-        <Input
-          fw
-          label="Endereço"
-          placeholder="Endereço"
-          {...register("address")}
-          error={errors.address}
-        />
-      </div>
     </div>
     <div className="flex gap-3 md:gap-8 flex-wrap">
+      <div className="flex-1 md:flex-none" style={{ minWidth: "200px" }}>
+        <Input
+          fw
+          label="Telefone"
+          placeholder="Telefone"
+          {...register("phone")}
+          error={errors.phone}
+        />
+      </div>
       <div className="flex-1 md:flex-none" style={{ minWidth: "200px" }}>
         <Input
           fw
@@ -88,14 +95,13 @@ const CustomerFormView = ({ register, errors }) => (
           error={errors.email}
         />
       </div>
-
       <div className="flex-1" style={{ minWidth: "200px" }}>
         <Input
           fw
-          label="Nome"
-          placeholder="Nome"
-          {...register("fullname")}
-          error={errors.fullname}
+          label="Endereço"
+          placeholder="Endereço"
+          {...register("address")}
+          error={errors.address}
         />
       </div>
     </div>

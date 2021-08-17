@@ -13,7 +13,7 @@ const inputBaseClass = [
   "focus:ring-primary-0",
 ].join(" ");
 
-const inputError = ["bg-error-2 ring-2 ring-error-0"].join(" ");
+const inputError = ["bg-error-2", "ring-2", "ring-error-0"].join(" ");
 
 const placeholderClass = css`
   ::-webkit-input-placeholder {
@@ -45,7 +45,6 @@ const Input = React.forwardRef(
       ...(error ? [inputError] : []),
       ...(uppercase ? ["uppercase"] : []),
     ].join(" ");
-
     return (
       <div className="pb-6 relative">
         {label ? (

@@ -21,7 +21,6 @@ const FormWithButton = ({
 
   const { isDirty } = formState;
   const submit = async (data) => {
-    console.log(validate(data), errors);
     if (!validate(data)) return;
     setIsLoading(true);
     reset(data);
