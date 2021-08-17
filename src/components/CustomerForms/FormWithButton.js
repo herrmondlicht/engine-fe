@@ -17,9 +17,11 @@ const FormWithButton = ({
     validationMethods: { errors, validate },
   } = useCustomForm({ schema: formValidationSchema, preloadedData });
   const [isLoading, setIsLoading] = useState(false);
+  const isValidPreloadData = Object.values(preloadedData ?? {}).length > 0;
 
   const { isDirty } = formState;
   const submit = async (data) => {
+    console.log(validate(data), errors);
     if (!validate(data)) return;
     setIsLoading(true);
     reset(data);
@@ -39,9 +41,9 @@ const FormWithButton = ({
       <div className="flex justify-end">
         <Button
           showLoader={isLoading}
-          variant={preloadedData && !isDirty ? "success" : "primary"}
+          variant={isValidPreloadData && !isDirty ? "success" : "primary"}
         >
-          {preloadedData ? titleWhenEditing : defaultTitle}
+          {isValidPreloadData ? titleWhenEditing : defaultTitle}
         </Button>
       </div>
     </form>

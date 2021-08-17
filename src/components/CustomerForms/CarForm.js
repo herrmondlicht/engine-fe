@@ -159,6 +159,16 @@ const CarFormView = ({
         <div className="flex-1" style={{ minWidth: "200px" }}>
           <Input
             fw
+            uppercase
+            label="Placa"
+            placeholder="Placa"
+            {...register("licensePlate")}
+            error={errors.licensePlate}
+          />
+        </div>
+        <div className="flex-1" style={{ minWidth: "200px" }}>
+          <Input
+            fw
             label="Marca"
             placeholder="Marca"
             {...register("make")}
@@ -203,15 +213,6 @@ const CarFormView = ({
             placeholder="Combustível"
             {...register("fuel")}
             error={errors.fuel}
-          />
-        </div>
-        <div className="flex-1" style={{ minWidth: "200px" }}>
-          <Input
-            fw
-            label="Placa"
-            placeholder="Placa"
-            {...register("licensePlate")}
-            error={errors.licensePlate}
           />
         </div>
         <div className="flex-1" style={{ minWidth: "200px" }}>
