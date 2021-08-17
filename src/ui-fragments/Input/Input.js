@@ -1,5 +1,6 @@
 import React from "react";
 import { Label } from "ui-fragments/Typography";
+import { css } from "@emotion/css";
 
 const inputBaseClass = [
   "p-4",
@@ -14,8 +15,37 @@ const inputBaseClass = [
 
 const inputError = ["bg-error-2 ring-2 ring-error-0"].join(" ");
 
+const placeholderClass = css`
+  ::-webkit-input-placeholder {
+    /* WebKit browsers */
+    text-transform: none;
+  }
+  :-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    text-transform: none;
+  }
+  ::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    text-transform: none;
+  }
+  :-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+    text-transform: none;
+  }
+  ::placeholder {
+    /* Recent browsers */
+    text-transform: none;
+  }
+`;
+
 const Input = React.forwardRef(
-  ({ label, fw, placeholder, error, ...props }, ref) => {
+  ({ label, fw, placeholder, error, uppercase, ...props }, ref) => {
+    const modifierClasses = [
+      ...(fw ? ["w-full"] : []),
+      ...(error ? [inputError] : []),
+      ...(uppercase ? ["uppercase"] : []),
+    ].join(" ");
+
     return (
       <div className="pb-6 relative">
         {label ? (
@@ -25,12 +55,10 @@ const Input = React.forwardRef(
         ) : null}
         <input
           autoComplete="no"
-          className={`${inputBaseClass} ${fw ? "w-full" : ""} ${
-            error ? inputError : ""
-          }`}
           placeholder={placeholder}
           ref={ref}
           {...props}
+          className={`${inputBaseClass} ${modifierClasses} ${placeholderClass}`}
         />
         {error && (
           <label className="absolute w-full bottom-0 left-0 font-medium ml-1 mt-1 text-sm text-error-0">
