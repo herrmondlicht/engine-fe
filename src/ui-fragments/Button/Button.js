@@ -21,6 +21,9 @@ const Button = (
 
   const variantClasses = useMemo(() => {
     const variantColor = `${variant}-0`;
+    if (variant.startsWith("ghost")) {
+      return [];
+    }
     return [
       `bg-${variantColor}`,
       "focus:ring-2",
@@ -50,7 +53,7 @@ const Button = (
 
 const ButtonContent = ({ children, showLoader, variant }) => {
   const variantIcon = useMemo(() => {
-    const sizeClasses = "h-7 w-7"
+    const sizeClasses = "h-7 w-7";
     switch (variant) {
       case "success":
         return <CheckCircleIcon className={sizeClasses} />;
@@ -74,7 +77,12 @@ const ButtonContent = ({ children, showLoader, variant }) => {
           showLoader ? "opacity-100" : "opacity-0"
         }`}
       >
-        <Loader type="TailSpin" height={30} width={30} color={theme.colors.white} />
+        <Loader
+          type="TailSpin"
+          height={30}
+          width={30}
+          color={theme.colors.white}
+        />
       </div>
       {!showLoader && (
         <div
