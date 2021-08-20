@@ -20,7 +20,7 @@ export const createCustomerFormsContainerWithPaper = ({ engineAPI } = {}) =>
           service_price: 0,
         },
       });
-      history.push(`/services/${data.data.id}`);
+      history.push(`/services/${data.id}`);
     };
 
     return (

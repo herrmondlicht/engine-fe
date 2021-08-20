@@ -1,15 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { Grid, TextField } from "@material-ui/core";
 
 export const createCustomerFormView = () =>
-  function CustomerFormView({ changeFormForKey, form }) {
+  function CustomerFormView({ formRef }) {
+    const [form, setForm] = useState({
+      documentNumber: "",
+      fullName: "",
+      address: "",
+      email: "",
+      phone: "",
+    });
+
     const handleDocumentNumberChangeForKey = (key) =>
       function (e) {
         e.persist();
-        changeFormForKey(key)({
-          target: { value: e?.target?.value.replace(/\D/g, "") },
-        });
+        setForm((oldValues) => ({
+          ...oldValues,
+          [key]: e?.target?.value.replace(/\D/g, ""),
+        }));
       };
+    const changeFormForKey = (key) => (e) => {
+      e.persist();
+      setForm((oldValues) => ({
+        ...oldValues,
+        [key]: e?.target?.value,
+      }));
+    };
+
+    formRef.current = form;
 
     return (
       <>

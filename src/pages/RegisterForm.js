@@ -1,12 +1,18 @@
 import { CustomerForm } from "components";
-import { AVAILABLE_FORMS, useCombinedForms } from "hooks";
+import { CarForm } from "components/CustomerForms/CarForm";
+import { AVAILABLE_FORMS } from "context";
+import { useCombinedForms } from "hooks";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ScreenLoader } from "ui-fragments";
 import { engineAPI } from "utils";
 
 const RegisterForm = () => {
-  const { changeForm, clear } = useCombinedForms();
+  const {
+    changeForm,
+    clear,
+    combinedForms: { customer_cars, customers, cars },
+  } = useCombinedForms();
   const [isLoading, setIsLoading] = useState(false);
   const { customer_car_id } = useParams();
 
@@ -25,8 +31,10 @@ const RegisterForm = () => {
       } finally {
         setIsLoading(false);
       }
+    } else {
+      clear();
     }
-  }, [changeForm, customer_car_id]);
+  }, [changeForm, customer_car_id, clear]);
 
   useEffect(() => {
     loadCustomerCarIfParam();
@@ -38,11 +46,21 @@ const RegisterForm = () => {
     },
     [clear]
   );
+
   return (
     <div>
-      <ScreenLoader isLoading={isLoading} radius>
-        <CustomerForm />
-      </ScreenLoader>
+      <div className="mb-10">
+        <ScreenLoader isLoading={isLoading} radius>
+          <CustomerForm loadedCustomer={customers} />
+        </ScreenLoader>
+      </div>
+      {customers?.id && (
+        <div className="mb-10">
+          <ScreenLoader isLoading={isLoading} radius>
+            <CarForm loadedData={{ cars, customer_cars, customers }} />
+          </ScreenLoader>
+        </div>
+      )}
     </div>
   );
 };

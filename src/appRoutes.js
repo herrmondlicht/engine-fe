@@ -1,5 +1,3 @@
-import React from "react";
-//temporary /\/\/\/\/\/\
 import {
   ServiceFormContainer,
   CustomerCarList,
@@ -12,7 +10,7 @@ export const appRoutes = {
   customers: {
     name: "Clientes",
     path: "customers",
-    Component: CustomerCarList,
+    Component: CustomerFormsContainerWithPaper,
     isLocked: true,
   },
   newCustomer: {
@@ -25,12 +23,6 @@ export const appRoutes = {
     name: "Mais Novo Cliente",
     path: "customer_car/:customer_car_id?",
     Component: RegisterForm,
-    isLocked: true,
-  },
-  customer: {
-    name: "Cliente",
-    path: "customers/:id",
-    Component: () => <div>TODO: Customer</div>,
     isLocked: true,
   },
   customerCar: {
