@@ -13,11 +13,12 @@ export const createAddCustomerCarView = () =>
     }
 
     function applyLicensePlateMask(value) {
-      if (value)
+      if (value) {
         return value.replace(
           /^.{3}(?!-)/g,
-          `${value.toUpperCase().slice(0, 3)}-`
+          `${value.toUpperCase().slice(0, 3)}-`,
         );
+      }
       return "";
     }
 
@@ -35,7 +36,7 @@ export const createAddCustomerCarView = () =>
             onKeyDown={licenseKeyDown}
             value={form.licensePlate}
             size="small"
-            label={"Placa"}
+            label="Placa"
             variant="outlined"
             inputProps={{ maxLength: "8" }}
             fullWidth
@@ -45,7 +46,7 @@ export const createAddCustomerCarView = () =>
           <TextField
             onChange={changeFormForKey("color")}
             size="small"
-            label={"Cor"}
+            label="Cor"
             variant="outlined"
             value={form.color}
             fullWidth
@@ -55,7 +56,7 @@ export const createAddCustomerCarView = () =>
           <TextField
             onChange={changeFormForKey("displacement")}
             size="small"
-            label={"Cilindradas"}
+            label="Cilindradas"
             inputProps={{ maxLength: "3" }}
             variant="outlined"
             value={form.displacement}

@@ -1,26 +1,27 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 import { TextField, Grid, makeStyles } from "@material-ui/core";
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     height: "100%",
     width: "100%",
-    position: "absolute"
+    position: "absolute",
   },
   loginButton: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
   errorMessage: {
     width: "100%",
     textAlign: "center",
-    color: theme.palette.error.main
-  }
+    color: theme.palette.error.main,
+  },
 }));
 
-function LoginForm({ userInput, changeInput, sendForm, errorMessage, isLoading }) {
+function LoginForm({
+  userInput, changeInput, sendForm, errorMessage, isLoading,
+}) {
   const classes = useStyles();
 
   function onFormSubmit(e) {
@@ -46,10 +47,10 @@ function LoginForm({ userInput, changeInput, sendForm, errorMessage, isLoading }
             size="small"
             variant="outlined"
             value={userInput.username}
-            onChange={e =>
+            onChange={(e) =>
               changeInput({ ...userInput, username: e.target.value })
             }
-          ></TextField>
+          />
         </Grid>
         <Grid item>
           <TextField
@@ -60,10 +61,10 @@ function LoginForm({ userInput, changeInput, sendForm, errorMessage, isLoading }
             size="small"
             value={userInput.password}
             variant="outlined"
-            onChange={e =>
+            onChange={(e) =>
               changeInput({ ...userInput, password: e.target.value })
             }
-          ></TextField>
+          />
         </Grid>
         <Grid item>
           <Button

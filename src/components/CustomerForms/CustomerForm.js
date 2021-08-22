@@ -4,7 +4,9 @@ import { AVAILABLE_FORMS } from "context";
 import { useCombinedForms } from "hooks";
 
 import { Input, Card } from "ui-fragments";
-import { convertFormKeyToAPI, engineAPI, fixPayloadKeys, yup } from "utils";
+import {
+  convertFormKeyToAPI, engineAPI, fixPayloadKeys, yup,
+} from "utils";
 import { FormWithButton } from "./FormWithButton";
 
 const schema = yup.object().shape({
@@ -26,13 +28,13 @@ const CustomerForm = ({ loadedCustomer }) => {
         urlExtension: loadedCustomer?.id,
         data: fixPayloadKeys(data, { fieldTranslator: convertFormKeyToAPI }),
       });
-      //TODO
-      //show success notification
+      // TODO
+      // show success notification
       changeForm(AVAILABLE_FORMS.CUSTOMER, customerData);
     } catch (error) {
       console.log(error);
-      //TODO
-      //show notification
+      // TODO
+      // show notification
     }
   };
 

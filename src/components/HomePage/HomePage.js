@@ -1,6 +1,8 @@
 import React from "react";
 import { Grid, makeStyles } from "@material-ui/core";
-import { Route, useRouteMatch, Switch, useHistory } from "react-router-dom";
+import {
+  Route, useRouteMatch, Switch, useHistory,
+} from "react-router-dom";
 
 import { SideMenu, AuthorizedRoute } from "components";
 import { appRoutes } from "appRoutes";
@@ -45,6 +47,7 @@ export const createHomePage = ({ storageAPI }) => {
   const HomePage = () => {
     const classes = useStyles();
     const match = useRouteMatch();
+    // eslint-disable-next-line no-unused-vars
     const { login, home, ...routes } = appRoutes;
     const token = storageAPI.getItem(STORAGE_KEYS.TOKEN);
     const history = useHistory();
@@ -65,7 +68,7 @@ export const createHomePage = ({ storageAPI }) => {
           <Grid className={classes.container} item>
             <Switch>
               {Object.values(routes).map((route) => {
-                if (route.isLocked)
+                if (route.isLocked) {
                   return (
                     <AuthorizedRoute
                       key={route.name}
@@ -73,16 +76,16 @@ export const createHomePage = ({ storageAPI }) => {
                       path={`${match.path}${route.path}`}
                     />
                   );
-                else
-                  return (
-                    <Route
-                      exact={route.exact}
-                      key={route.name}
-                      path={`${match.path}${route.path}`}
-                    >
-                      <route.Component />
-                    </Route>
-                  );
+                }
+                return (
+                  <Route
+                    exact={route.exact}
+                    key={route.name}
+                    path={`${match.path}${route.path}`}
+                  >
+                    <route.Component />
+                  </Route>
+                );
               })}
             </Switch>
           </Grid>

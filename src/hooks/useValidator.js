@@ -13,7 +13,7 @@ export const useValidator = (validator) => {
         return false;
       }
     },
-    [validator]
+    [validator],
   );
 
   return { validate, errors };

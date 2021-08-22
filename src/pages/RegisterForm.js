@@ -1,3 +1,4 @@
+import React from "react";
 import { CustomerForm } from "components";
 import { CarForm } from "components/CustomerForms/CarForm";
 import { AVAILABLE_FORMS } from "context";
@@ -27,7 +28,7 @@ const RegisterForm = () => {
         changeForm(AVAILABLE_FORMS.CUSTOMER_CAR, data?.customer_cars);
         changeForm(AVAILABLE_FORMS.CUSTOMER, data?.customers);
       } catch (e) {
-        //show notification
+        // show notification
       } finally {
         setIsLoading(false);
       }
@@ -44,7 +45,7 @@ const RegisterForm = () => {
     () => () => {
       clear();
     },
-    [clear]
+    [clear],
   );
 
   return (

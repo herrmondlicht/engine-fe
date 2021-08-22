@@ -35,5 +35,4 @@ function ConfirmDeleteModal({ handleClose, isOpen, onConfirmationClick }) {
   );
 }
 
-
-export default ConfirmDeleteModal
+export default ConfirmDeleteModal;

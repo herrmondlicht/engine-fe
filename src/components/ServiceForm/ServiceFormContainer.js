@@ -3,12 +3,12 @@ import { useParams } from "react-router-dom";
 import { Snackbar } from "@material-ui/core/";
 import MuiAlert from "@material-ui/lab/Alert";
 
+import { engineAPI } from "utils";
 import CustomerFormsContainer from "../CustomerForms/CustomerFormsContainer";
 import ServiceItemsContainer from "./ServiceItems/ServiceItemsContainer";
 import PaperWithTitle from "../Common/PaperWithTitle";
 import useStyles from "../../hooks/FormStyleHook";
 import FinancialDetails from "./FinancialDetails/FinancialDetails";
-import { engineAPI } from "utils";
 
 export const createServiceFormContainer = ({ engineAPI }) =>
   function ServiceFormContainer() {
@@ -50,7 +50,7 @@ export const createServiceFormContainer = ({ engineAPI }) =>
           },
         });
       },
-      [serviceId]
+      [serviceId],
     );
 
     const commitKeyValueToBackend = useCallback(
@@ -60,7 +60,7 @@ export const createServiceFormContainer = ({ engineAPI }) =>
           data: { [key]: value },
         });
       },
-      [serviceId]
+      [serviceId],
     );
 
     const commitObservationToBackend = useCallback(
@@ -70,7 +70,7 @@ export const createServiceFormContainer = ({ engineAPI }) =>
           data: { observations },
         });
       },
-      [serviceId]
+      [serviceId],
     );
 
     const updateValuesToState = useCallback(
@@ -80,16 +80,15 @@ export const createServiceFormContainer = ({ engineAPI }) =>
           [key]: value,
         }));
       },
-      []
+      [],
     );
 
     const updateTotalItemsPrice = useCallback(
-      (totalPrice) =>
-        setServiceData((prevServiceData) => ({
-          ...prevServiceData,
-          service_items_price: totalPrice,
-        })),
-      []
+      (totalPrice) => setServiceData((prevServiceData) => ({
+        ...prevServiceData,
+        service_items_price: totalPrice,
+      })),
+      [],
     );
     useEffect(() => {
       getSeviceById();

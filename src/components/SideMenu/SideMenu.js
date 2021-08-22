@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   sideMenu: {
     minHeight: theme.spacing(10),
     padding: `${theme.spacing(2)}px 0`,
-    width: `100%`,
+    width: "100%",
   },
 }));
 
@@ -80,7 +80,7 @@ function SideMenu({ storageAPI }) {
           <Grid item container justify="center">
             <IconButton
               color="secondary"
-              title={"Sair"}
+              title="Sair"
               width={50}
               onClick={() => {
                 storageAPI.removeItem(STORAGE_KEYS.TOKEN);
@@ -97,20 +97,18 @@ function SideMenu({ storageAPI }) {
 }
 
 export const createMenu = ({ storageAPI }) => {
-  const Menu = ({ width }) => {
-    return (
-      <>
-        {isWidthDown("sm", width) && (
-          <BottomNavigation>
-            <BottomNavigationAction label="Nova OS" icon={<Add />} />
-            <BottomNavigationAction label="Clientes" icon={<List />} />
-            <BottomNavigationAction label="Nova OS" icon={<Add />} />
-          </BottomNavigation>
-        )}
-        {isWidthUp("md", width) && <SideMenu storageAPI={storageAPI} />}
-      </>
-    );
-  };
+  const Menu = ({ width }) => (
+    <>
+      {isWidthDown("sm", width) && (
+        <BottomNavigation>
+          <BottomNavigationAction label="Nova OS" icon={<Add />} />
+          <BottomNavigationAction label="Clientes" icon={<List />} />
+          <BottomNavigationAction label="Nova OS" icon={<Add />} />
+        </BottomNavigation>
+      )}
+      {isWidthUp("md", width) && <SideMenu storageAPI={storageAPI} />}
+    </>
+  );
 
   return Menu;
 };
