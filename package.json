@@ -28,18 +28,11 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build-tailwind": "tailwindcss build src/tailwind.css -o src/twoutput.css",
-    "lint": "eslint --fix ./src"
+    "lint": "eslint --fix ./src",
+    "prepare": "husky install"
   },
   "lint-staged": {
-    "src/**/*.{ts,css,html,js}": [
-      "yarn eslint --fix"
-    ]
-  },
-  "husky": {
-    "hooks": {
-        "pre-commit": "lint-staged",
-        "pre-push": "yarn test"
-      }
+    "*.js": "eslint --fix"
   },
   "eslintConfig": {
     "extends": "react-app"
