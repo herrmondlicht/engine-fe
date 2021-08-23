@@ -1,7 +1,6 @@
-import React from 'react'
-import { TextField } from '@material-ui/core';
-import NumberFormat from 'react-number-format';
-
+import React from "react";
+import { TextField } from "@material-ui/core";
+import NumberFormat from "react-number-format";
 
 const createCurrencyInput = () =>
   function CurrencyInput({ onChange, ...props }) {
@@ -12,27 +11,27 @@ const createCurrencyInput = () =>
         fullWidth
         getInputRef={props.inputRef}
         onValueChange={({ floatValue }) => {
-          const value = floatValue !== undefined ? parseFloat(floatValue.toFixed(2)) : ""
+          const value = floatValue !== undefined ? parseFloat(floatValue.toFixed(2)) : "";
 
-          if (onChange)
+          if (onChange) {
             onChange({
               target: {
                 value,
               },
             });
+          }
         }}
         customInput={TextField}
         thousandSeparator="."
         decimalSeparator=","
         prefix="R$"
-        isNumericString={true}
+        isNumericString
         allowNegative={false}
         decimalScale={2}
         fixedDecimalScale={2}
         {...props}
       />
-    )
-  }
-
+    );
+  };
 
 export default createCurrencyInput();

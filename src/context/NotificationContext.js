@@ -63,17 +63,20 @@ const NotificationProvider = ({ children }) => {
   );
 };
 
-const Alert = ({ type, title, message, isRemovable, onCloseAction }) => {
+// eslint-disable-next-line no-unused-vars
+const Alert = ({
+  type, title, message, isRemovable, onCloseAction,
+}) => {
   const getVariationFromType = (type) => {
     switch (type) {
-      case NOTIFICATION_TYPES.ERROR:
-        return "error-0";
-      case NOTIFICATION_TYPES.INFO:
-        return "primary-0";
-      case NOTIFICATION_TYPES.SUCCESS:
-        return "success-0";
-      default:
-        return "warning-0";
+    case NOTIFICATION_TYPES.ERROR:
+      return "error-0";
+    case NOTIFICATION_TYPES.INFO:
+      return "primary-0";
+    case NOTIFICATION_TYPES.SUCCESS:
+      return "success-0";
+    default:
+      return "warning-0";
     }
   };
 

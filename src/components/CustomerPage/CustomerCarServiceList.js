@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, {
+  useState, useEffect, useCallback, useMemo,
+} from "react";
 import {
   Card,
   Typography,
@@ -57,8 +59,8 @@ export const createCustomerCarServiceList = ({ engineAPI }) =>
 
     const deleteService = useCallback(() => {
       try {
-        setServices((oldData) =>
-          oldData.filter((data) => data.id !== idPendingDelete)
+        setServices((oldData) => oldData.filter((data) =>
+          data.id !== idPendingDelete),
         );
         handleModalClose();
         engineAPI.service_orders.delete({
@@ -75,9 +77,8 @@ export const createCustomerCarServiceList = ({ engineAPI }) =>
     const filteredServices = useMemo(() => {
       if (search === "") return services;
       return services.filter(
-        (service) =>
-          service.id.toString().includes(search) ||
-          service.service_price.toString().includes(search)
+        (service) => service.id.toString().includes(search) ||
+          service.service_price.toString().includes(search),
       );
     }, [services, search]);
 
@@ -108,8 +109,7 @@ export const createCustomerCarServiceList = ({ engineAPI }) =>
               {filteredServices.length === 0 && (
                 <div className="flex p-5 w-full justify-center">
                   <Typography>
-                    Opa! não existe serviço para esse veículo ainda. Clique em
-                    "adicionar" para incluir um novo serviço
+                    {"Opa! não existe serviço para esse veículo ainda. Clique em \"adicionar\" para incluir um novo serviço"}
                   </Typography>
                 </div>
               )}
@@ -125,27 +125,26 @@ export const createCustomerCarServiceList = ({ engineAPI }) =>
     );
   };
 
-const ServiceSearch = ({ addNewService, setResearch, customerCar }) => {
-  return (
-    <Paper
-      variant="outlined"
-      className="flex flex-col h-full w-full p-10 overflow-hidden"
-    >
-      <Typography variant="h5">
-        Serviços do veículo{" "}
-        {customerCar.license_plate &&
+const ServiceSearch = ({ addNewService, setResearch, customerCar }) => (
+  <Paper
+    variant="outlined"
+    className="flex flex-col h-full w-full p-10 overflow-hidden"
+  >
+    <Typography variant="h5">
+      Serviços do veículo
+      {" "}
+      {customerCar.license_plate &&
           customerCar.license_plate.replace(
             /^.{3}(?!-)/g,
-            `${customerCar.license_plate.toUpperCase().slice(0, 3)}-`
+            `${customerCar.license_plate.toUpperCase().slice(0, 3)}-`,
           )}
-      </Typography>
-      <Divider variant="fullWidth" />
-      <div className="mt-10">
-        <SearchBar addAction={addNewService} setResearch={setResearch} />
-      </div>
-    </Paper>
-  );
-};
+    </Typography>
+    <Divider variant="fullWidth" />
+    <div className="mt-10">
+      <SearchBar addAction={addNewService} setResearch={setResearch} />
+    </div>
+  </Paper>
+);
 
 const SkeletonCards = () => (
   <>

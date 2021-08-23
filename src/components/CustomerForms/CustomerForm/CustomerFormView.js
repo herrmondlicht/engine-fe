@@ -11,14 +11,13 @@ export const createCustomerFormView = () =>
       phone: "",
     });
 
-    const handleDocumentNumberChangeForKey = (key) =>
-      function (e) {
-        e.persist();
-        setForm((oldValues) => ({
-          ...oldValues,
-          [key]: e?.target?.value.replace(/\D/g, ""),
-        }));
-      };
+    const handleDocumentNumberChangeForKey = (key) => function(e) {
+      e.persist();
+      setForm((oldValues) => ({
+        ...oldValues,
+        [key]: e?.target?.value.replace(/\D/g, ""),
+      }));
+    };
     const changeFormForKey = (key) => (e) => {
       e.persist();
       setForm((oldValues) => ({
@@ -36,7 +35,7 @@ export const createCustomerFormView = () =>
             onChange={handleDocumentNumberChangeForKey("documentNumber")}
             value={form.documentNumber}
             size="small"
-            label={"CPF (Número)"}
+            label="CPF (Número)"
             variant="outlined"
             inputProps={{ maxLength: "11" }}
             fullWidth
@@ -47,7 +46,7 @@ export const createCustomerFormView = () =>
             onChange={handleDocumentNumberChangeForKey("phone")}
             value={form.phone}
             size="small"
-            label={"Telefone (Número)"}
+            label="Telefone (Número)"
             variant="outlined"
             fullWidth
           />
@@ -57,7 +56,7 @@ export const createCustomerFormView = () =>
             value={form.fullName}
             onChange={changeFormForKey("fullName")}
             size="small"
-            label={"Nome"}
+            label="Nome"
             variant="outlined"
             fullWidth
           />
@@ -67,7 +66,7 @@ export const createCustomerFormView = () =>
             value={form.email}
             onChange={changeFormForKey("email")}
             size="small"
-            label={"E-mail"}
+            label="E-mail"
             type="email"
             variant="outlined"
             fullWidth
@@ -78,7 +77,7 @@ export const createCustomerFormView = () =>
             value={form.address}
             onChange={changeFormForKey("address")}
             size="small"
-            label={"Endereço"}
+            label="Endereço"
             variant="outlined"
             fullWidth
           />

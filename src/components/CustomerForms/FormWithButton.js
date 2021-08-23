@@ -13,7 +13,9 @@ const FormWithButton = ({
   buttonConfig: { titleWhenEditing, defaultTitle },
 }) => {
   const {
-    formMethods: { handleSubmit, formState, reset, ...formMethods },
+    formMethods: {
+      handleSubmit, formState, reset, ...formMethods
+    },
     validationMethods: { errors, validate },
   } = useCustomForm({ schema: formValidationSchema, preloadedData });
   const [isLoading, setIsLoading] = useState(false);

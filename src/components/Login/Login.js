@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Grid, makeStyles, Paper } from "@material-ui/core";
-import EngineImage from "./engine_logo.png";
 import { storageAPI, STORAGE_KEYS, engineAPI } from "utils";
 import { useLocation, useHistory, Redirect } from "react-router-dom";
+import EngineImage from "./engine_logo.png";
 import LoginForm from "./LoginForm";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,69 +33,66 @@ const getErrorMessage = (code) => {
   return errorMessage;
 };
 
-export const createLogin = (engineAPI, storageAPI) =>
-  function Login() {
-    const classes = useStyles();
-    const [userInput, changeInput] = useState({ username: "", password: "" });
-    const [errorMessage, setErrorMessage] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const isMounted = useRef(true);
-    const location = useLocation();
-    const history = useHistory();
-    const token = storageAPI.getItem(STORAGE_KEYS.TOKEN);
-    const { from } = location.state || { from: { pathname: "/customers" } };
+export const createLogin = (engineAPI, storageAPI) => function Login() {
+  const classes = useStyles();
+  const [userInput, changeInput] = useState({ username: "", password: "" });
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const isMounted = useRef(true);
+  const location = useLocation();
+  const history = useHistory();
+  const token = storageAPI.getItem(STORAGE_KEYS.TOKEN);
+  const { from } = location.state || { from: { pathname: "/customers" } };
 
-    useEffect(() => {
-      return () => {
-        isMounted.current = false;
-      };
-    }, []);
+  useEffect(() => () => {
+    isMounted.current = false;
+  }, []);
 
-    async function sendForm() {
-      try {
-        setIsLoading(true);
-        const data = await engineAPI.login.post({ data: userInput });
-        loginUser(data.token);
-      } catch (e) {
-        setErrorMessage(getErrorMessage(e?.response?.status));
-      }
-
-      isMounted.current && setIsLoading(false);
+  async function sendForm() {
+    try {
+      setIsLoading(true);
+      const data = await engineAPI.login.post({ data: userInput });
+      loginUser(data.token);
+    } catch (e) {
+      setErrorMessage(getErrorMessage(e?.response?.status));
     }
 
-    function loginUser(token) {
-      storageAPI.setItem(STORAGE_KEYS.TOKEN, token);
-      changeInput({ username: "", password: "" });
-      history.replace(from);
-    }
+    isMounted.current && setIsLoading(false);
+  }
 
-    if (token) {
-      return <Redirect to={{ pathname: from.pathname }} />;
-    }
+  function loginUser(token) {
+    storageAPI.setItem(STORAGE_KEYS.TOKEN, token);
+    changeInput({ username: "", password: "" });
+    history.replace(from);
+  }
 
-    return (
-      <Grid
-        container
-        justify="center"
-        alignItems="center"
-        className={classes.root}
-      >
-        <Paper className={classes.loginContainer}>
-          <img
-            src={EngineImage}
-            alt="logo"
-            className={classes.engineImage}
-          ></img>
-          <LoginForm
-            errorMessage={errorMessage}
-            changeInput={changeInput}
-            userInput={userInput}
-            sendForm={sendForm}
-            isLoading={isLoading}
-          />
-        </Paper>
-      </Grid>
-    );
-  };
+  if (token) {
+    return <Redirect to={{ pathname: from.pathname }} />;
+  }
+
+  return (
+    <Grid
+      container
+      justify="center"
+      alignItems="center"
+      className={classes.root}
+    >
+      <Paper className={classes.loginContainer}>
+        <img
+          src={EngineImage}
+          alt="logo"
+          className={classes.engineImage}
+        />
+        <LoginForm
+          errorMessage={errorMessage}
+          changeInput={changeInput}
+          userInput={userInput}
+          sendForm={sendForm}
+          isLoading={isLoading}
+        />
+      </Paper>
+    </Grid>
+  );
+};
 
 export default createLogin(engineAPI, storageAPI);

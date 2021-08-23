@@ -1,3 +1,4 @@
+import React from "react";
 import { useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import useSWR from "swr";
@@ -34,11 +35,13 @@ const CarForm = ({ loadedData }) => {
   const { data: carsData, isValidating } = useSWR(
     APIRoutes.cars.url,
     async () => engineAPI.cars.get(),
-    { revalidateOnFocus: false, dedupingInterval: 5000 }
+    { revalidateOnFocus: false, dedupingInterval: 5000 },
   );
   const carsAutocompleteData = carsData?.data;
 
-  const sendNewCarForm = async ({ model, make, manufactureYear, fuel }) => {
+  const sendNewCarForm = async ({
+    model, make, manufactureYear, fuel,
+  }) => {
     try {
       const payload = {
         ...(loadedData.cars ? loadedData.cars : {}),
@@ -51,13 +54,13 @@ const CarForm = ({ loadedData }) => {
         data: fixPayloadKeys(payload, { fieldTranslator: convertFormKeyToAPI }),
       });
       return data?.data;
-      //TODO
-      //show success notification
+      // TODO
+      // show success notification
     } catch (error) {
       console.log(error);
       return {};
-      //TODO
-      //show notification
+      // TODO
+      // show notification
     }
   };
 
@@ -81,21 +84,21 @@ const CarForm = ({ loadedData }) => {
         urlExtension: loadedData?.customer_cars?.id,
         data: fixPayloadKeys(payload, { fieldTranslator: convertFormKeyToAPI }),
       });
-      //TODO
-      //show success notification
+      // TODO
+      // show success notification
       return data?.data;
     } catch (error) {
       console.log(error);
       return {};
-      //TODO
-      //show notification
+      // TODO
+      // show notification
     }
   };
 
   const onSubmit = async (data) => {
     const { id } = await sendNewCarForm(data);
     if (!id) {
-      /**TODO: notification */
+      /** TODO: notification */
       return;
     }
     const { id: customerCarId } = await sendNewCustomerCarForm({
@@ -141,16 +144,15 @@ const CarFormView = ({
 
   const makesOptions = useMemo(
     () => carsAutocompleteData.map((car) => car.make).filter(getUnique),
-    [carsAutocompleteData]
+    [carsAutocompleteData],
   );
 
   const modelsFilteredBySelectedMake = useMemo(
-    () =>
-      carsAutocompleteData
-        .filter((car) => car.make === makeValue)
-        .map((car) => car.model)
-        .filter(getUnique),
-    [carsAutocompleteData, makeValue]
+    () => carsAutocompleteData
+      .filter((car) => car.make === makeValue)
+      .map((car) => car.model)
+      .filter(getUnique),
+    [carsAutocompleteData, makeValue],
   );
 
   return (

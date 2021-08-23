@@ -9,12 +9,10 @@ const useCustomForm = ({ schema, preloadedData }) => {
 
   useEffect(() => {
     if (preloadedData) {
-      Object.keys(schema.fields).forEach((fieldKey) =>
-        formMethods.setValue(
-          fieldKey,
-          preloadedData[convertFormKeyToAPI(fieldKey)]
-        )
-      );
+      Object.keys(schema.fields).forEach((fieldKey) => formMethods.setValue(
+        fieldKey,
+        preloadedData[convertFormKeyToAPI(fieldKey)],
+      ));
     }
     return () => {
       formMethods.reset();

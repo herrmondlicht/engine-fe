@@ -3,33 +3,34 @@ import { storageAPI as _storage, STORAGE_KEYS, APIRoutes } from "utils";
 
 export const requestMaker =
   ({ method, url, isLocked }, { storage = window.localStorage } = {}) =>
-  async ({ data, params = {}, urlExtension } = {}) => {
-    const { query } = params;
-    if (query) {
-      params.query = JSON.stringify(query);
-    }
-    const headers = {};
-    if (isLocked)
-      headers.Authorization = `Bearer ${storage.getItem(STORAGE_KEYS.TOKEN)}`;
-    try {
-      const response = await axios({
-        headers,
-        method,
-        baseURL: process.env.REACT_APP_API_SERVICE,
-        url: `${url}${urlExtension ? "/" + urlExtension : ""}`,
-        data,
-        params,
-      });
-      return response?.data;
-    } catch (err) {
-      if (err?.response?.status === 401 && isLocked) {
-        storage.removeItem(STORAGE_KEYS.TOKEN);
-        window.location.assign("/login");
-      } else {
-        throw err;
+    async ({ data, params = {}, urlExtension } = {}) => {
+      const { query } = params;
+      if (query) {
+        params.query = JSON.stringify(query);
       }
-    }
-  };
+      const headers = {};
+      if (isLocked) {
+        headers.Authorization = `Bearer ${storage.getItem(STORAGE_KEYS.TOKEN)}`;
+      }
+      try {
+        const response = await axios({
+          headers,
+          method,
+          baseURL: process.env.REACT_APP_API_SERVICE,
+          url: `${url}${urlExtension ? `/${urlExtension}` : ""}`,
+          data,
+          params,
+        });
+        return response?.data;
+      } catch (err) {
+        if (err?.response?.status === 401 && isLocked) {
+          storage.removeItem(STORAGE_KEYS.TOKEN);
+          window.location.assign("/login");
+        } else {
+          throw err;
+        }
+      }
+    };
 
 const createMethodsForURL = (routeObj) => ({
   get: requestMaker(
@@ -38,7 +39,7 @@ const createMethodsForURL = (routeObj) => ({
       isLocked: routeObj.isLocked,
       url: routeObj.url,
     },
-    { storage: _storage }
+    { storage: _storage },
   ),
   post: requestMaker(
     {
@@ -46,7 +47,7 @@ const createMethodsForURL = (routeObj) => ({
       isLocked: routeObj.isLocked,
       url: routeObj.url,
     },
-    { storage: _storage }
+    { storage: _storage },
   ),
   patch: requestMaker(
     {
@@ -54,7 +55,7 @@ const createMethodsForURL = (routeObj) => ({
       isLocked: routeObj.isLocked,
       url: routeObj.url,
     },
-    { storage: _storage }
+    { storage: _storage },
   ),
   delete: requestMaker(
     {
@@ -62,7 +63,7 @@ const createMethodsForURL = (routeObj) => ({
       isLocked: routeObj.isLocked,
       url: routeObj.url,
     },
-    { storage: _storage }
+    { storage: _storage },
   ),
 });
 
@@ -74,7 +75,7 @@ const createAllRequestsFromResources = (routes) => {
         ...createMethodsForURL(routes[routeKey]),
       },
     }),
-    {}
+    {},
   );
   return routesWithRequests;
 };

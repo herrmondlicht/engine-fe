@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, {
+  useState, useEffect, useCallback, useMemo,
+} from "react";
 import {
   Paper,
   IconButton,
@@ -42,7 +44,8 @@ export const createCustomerCarList = ({ engineAPI }) =>
     const deleteClient = useCallback(() => {
       try {
         setData((oldData) =>
-          oldData.filter((data) => data.customer_cars.id !== idPendingDelete)
+          oldData.filter((data) =>
+            data.customer_cars.id !== idPendingDelete),
         );
         handleModalClose();
         engineAPI.customer_cars.delete({
@@ -61,23 +64,20 @@ export const createCustomerCarList = ({ engineAPI }) =>
         e.preventDefault();
         history.push("/customers/new");
       },
-      [history]
+      [history],
     );
 
     const filteredData = useMemo(
-      () =>
-        dataArray.filter((data) => {
-          return (
-            data.customer_cars.license_plate
-              .toLowerCase()
-              .includes(research.toLocaleLowerCase()) ||
+      () => dataArray.filter((data) => (
+        data.customer_cars.license_plate
+          .toLowerCase()
+          .includes(research.toLocaleLowerCase()) ||
             data.customers.fullname
               .toLowerCase()
               .includes(research.toLocaleLowerCase()) ||
             data.cars.model.toLowerCase().includes(research.toLocaleLowerCase())
-          );
-        }),
-      [research, dataArray]
+      )),
+      [research, dataArray],
     );
 
     useEffect(() => {
@@ -124,7 +124,7 @@ const ClientsTable = ({ data = [], onDelete }) => {
             <TableCell align="right">Modelo</TableCell>
             <TableCell align="right">Cliente</TableCell>
             <TableCell align="right">Ano do veículo</TableCell>
-            <TableCell align="right"></TableCell>
+            <TableCell align="right" />
           </TableRow>
         </TableHead>
         <TableBody className="h-full">
@@ -135,11 +135,9 @@ const ClientsTable = ({ data = [], onDelete }) => {
               customer_cars: customerCar,
             }) => (
               <TableRow
-                onClick={() =>
-                  history.push(
-                    `/customers/${customer.id}/cars/${customerCar.id}`
-                  )
-                }
+                onClick={() => history.push(
+                  `/customers/${customer.id}/cars/${customerCar.id}`,
+                )}
                 key={customerCar.id}
                 className="hover:bg-gray-300 cursor-pointer"
               >
@@ -161,7 +159,7 @@ const ClientsTable = ({ data = [], onDelete }) => {
                   </IconButton>
                 </TableCell>
               </TableRow>
-            )
+            ),
           )}
         </TableBody>
       </Table>

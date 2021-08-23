@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-import {storageAPI,  STORAGE_KEYS } from "utils";
+import { storageAPI, STORAGE_KEYS } from "utils";
 
 function AuthorizedRoute(props) {
   const token = storageAPI.getItem(STORAGE_KEYS.TOKEN);
