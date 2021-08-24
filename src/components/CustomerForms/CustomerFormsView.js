@@ -17,101 +17,100 @@ import CustomerView from "./CustomerForm/CustomerFormView";
 import useStyles from "../../hooks/FormStyleHook";
 import { getErrorMessage } from "../../utils/errorMessages";
 
-const createCustomerFormsView = () => function CustomerFormsView(props) {
-  const {
-    changeCarFormForKey,
-    changeCustomerCarFormForKey,
-    modelsList,
-    customerCarForm,
-    carForm,
-    sendForm,
-    isLoading,
-    isFormFilled,
-    errorType,
-    hideSendButton,
-  } = props;
-  const classes = useStyles();
-  return (
-    <>
-      <Grid
-        container
-        item
-        sm={12}
-        spacing={2}
-        justify="center"
-        direction="row"
-      >
-        <Grid item sm={3}>
-          <Typography>Dados do Cliente</Typography>
-        </Grid>
-        <Grid container item sm={9} spacing={2}>
-          <CustomerView
-            formRef={props.customerFormRef}
-          />
-        </Grid>
-      </Grid>
-      <Grid container item xs={12}>
-        <Divider variant="fullWidth" className={classes.divider} />
-      </Grid>
-      {!modelsList ? (
-        <LinearProgress />
-      ) : (
-        <>
-          <Grid
-            container
-            item
-            sm={12}
-            spacing={2}
-            justify="center"
-            direction="row"
-          >
-            <Grid item sm={3}>
-              <Typography>Dados do Veículo</Typography>
-            </Grid>
-            <Grid container item sm={9} spacing={2}>
-              <CarFormView
-                modelsList={modelsList}
-                form={carForm}
-                changeFormForKey={changeCarFormForKey}
-              />
-              <CustomerCarFormView
-                changeFormForKey={changeCustomerCarFormForKey}
-                form={customerCarForm}
-              />
-            </Grid>
+const createCustomerFormsView = () =>
+  function CustomerFormsView(props) {
+    const {
+      changeCarFormForKey,
+      changeCustomerCarFormForKey,
+      modelsList,
+      customerCarForm,
+      carForm,
+      sendForm,
+      isLoading,
+      isFormFilled,
+      errorType,
+      hideSendButton,
+    } = props;
+    const classes = useStyles();
+    return (
+      <>
+        <Grid
+          container
+          item
+          sm={12}
+          spacing={2}
+          justify="center"
+          direction="row"
+        >
+          <Grid item sm={3}>
+            <Typography>Dados do Cliente</Typography>
           </Grid>
-          <Grid
-            item
-            container
-            xs={12}
-            alignItems="flex-end"
-            direction="column"
-            className={classes.formWrapper}
-          >
-            <FormErrorMessage errorType={errorType} />
-            {!hideSendButton && (
-              <Box width={250} mt={3}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  disabled={isLoading}
-                  onClick={sendForm}
-                  fullWidth
-                  data-testid="CustomerFormsView_button"
-                >
-                  {isLoading && <FormLoadingButtonText />}
-                  {isFormFilled && !isLoading && <FormFilledButtonText />}
-                  {!isLoading && !isFormFilled && "Confirmar Dados"}
-                </Button>
-              </Box>
-            )}
+          <Grid container item sm={9} spacing={2}>
+            <CustomerView formRef={props.customerFormRef} />
           </Grid>
-        </>
-      )}
-    </>
-  );
-};
+        </Grid>
+        <Grid container item xs={12}>
+          <Divider variant="fullWidth" className={classes.divider} />
+        </Grid>
+        {!modelsList ? (
+          <LinearProgress />
+        ) : (
+          <>
+            <Grid
+              container
+              item
+              sm={12}
+              spacing={2}
+              justify="center"
+              direction="row"
+            >
+              <Grid item sm={3}>
+                <Typography>Dados do Veículo</Typography>
+              </Grid>
+              <Grid container item sm={9} spacing={2}>
+                <CarFormView
+                  modelsList={modelsList}
+                  form={carForm}
+                  changeFormForKey={changeCarFormForKey}
+                />
+                <CustomerCarFormView
+                  changeFormForKey={changeCustomerCarFormForKey}
+                  form={customerCarForm}
+                />
+              </Grid>
+            </Grid>
+            <Grid
+              item
+              container
+              xs={12}
+              alignItems="flex-end"
+              direction="column"
+              className={classes.formWrapper}
+            >
+              <FormErrorMessage errorType={errorType} />
+              {!hideSendButton && (
+                <Box width={250} mt={3}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    disabled={isLoading}
+                    onClick={sendForm}
+                    fullWidth
+                    data-testid="CustomerFormsView_button"
+                  >
+                    {isLoading && <FormLoadingButtonText />}
+                    {isFormFilled && !isLoading && <FormFilledButtonText />}
+                    {!isLoading && !isFormFilled && "Confirmar Dados"}
+                  </Button>
+                </Box>
+              )}
+            </Grid>
+          </>
+        )}
+      </>
+    );
+  };
 
 function FormFilledButtonText() {
   return (

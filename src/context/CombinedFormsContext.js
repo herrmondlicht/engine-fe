@@ -28,10 +28,10 @@ const CombinedFormsProvider = ({ children }) => {
   const changeForm = useCallback((key, value = {}) => {
     if (typeof value !== "object") {
       throw new Error(
-        "Wrong value passed to Combine Forms. Expected an object",
+        "Wrong value passed to Combine Forms. Expected an object"
       );
     }
-    setForms((prevData) => ({
+    setForms(prevData => ({
       ...prevData,
       [key]: value,
     }));

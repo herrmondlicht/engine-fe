@@ -1,6 +1,4 @@
-import React, {
-  useState, useEffect, useCallback, useRef,
-} from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 
 import { engineAPI } from "utils";
 
@@ -73,23 +71,23 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
       setIdForCustomerSubForm,
     ]);
 
-    const requestAPIForSubform = ({
-      method, resource, subFormIdName, id,
-    }) => async ({ data, urlExtension, ...requestOptions }) => {
-      const urlExtensions = [];
-      if (urlExtension) urlExtensions.push(urlExtension);
-      if (id) urlExtensions.push(`${id}`);
+    const requestAPIForSubform =
+      ({ method, resource, subFormIdName, id }) =>
+      async ({ data, urlExtension, ...requestOptions }) => {
+        const urlExtensions = [];
+        if (urlExtension) urlExtensions.push(urlExtension);
+        if (id) urlExtensions.push(`${id}`);
 
-      const response = await engineAPI[resource][method]({
-        data,
-        ...(urlExtensions.length ?
-          { urlExtension: urlExtensions.join("/") } :
-          {}),
-        ...requestOptions,
-      });
-      setIdForCustomerSubForm({ [subFormIdName]: response.data.data.id });
-      return response.data.data;
-    };
+        const response = await engineAPI[resource][method]({
+          data,
+          ...(urlExtensions.length
+            ? { urlExtension: urlExtensions.join("/") }
+            : {}),
+          ...requestOptions,
+        });
+        setIdForCustomerSubForm({ [subFormIdName]: response.data.data.id });
+        return response.data.data;
+      };
 
     const getResourcePostOrPutRequest = (subFormIdName, resource) => {
       const id = customerSubFormsIds[subFormIdName];
@@ -134,7 +132,7 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
       try {
         const request = getResourcePostOrPutRequest(
           "customerFormId",
-          "customers",
+          "customers"
         );
         const response = await request({
           data: {
@@ -155,7 +153,7 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
       try {
         const request = getResourcePostOrPutRequest(
           "customerCarFormId",
-          "customers",
+          "customers"
         );
         const response = await request({
           urlExtension: `${customerId}/cars`,
@@ -183,7 +181,7 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
       if (responseCar?.id && responseCustomer?.id) {
         const response = await insertNewCustomerCar(
           responseCar.id,
-          responseCustomer.id,
+          responseCustomer.id
         );
         if (response?.id) {
           afterSendAction(response.id);
@@ -192,9 +190,9 @@ export const createCustomerFormsContainer = ({ engineAPI }) =>
       setIsLoading(false);
     }
 
-    const getChangeFormKeyToForm = (setForm) => (key) => (event) => {
+    const getChangeFormKeyToForm = setForm => key => event => {
       if (event.persist) event.persist();
-      setForm((prev) => ({ ...prev, [key]: event?.target?.value }));
+      setForm(prev => ({ ...prev, [key]: event?.target?.value }));
     };
 
     useEffect(() => {

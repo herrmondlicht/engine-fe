@@ -11,7 +11,8 @@ const createCurrencyInput = () =>
         fullWidth
         getInputRef={props.inputRef}
         onValueChange={({ floatValue }) => {
-          const value = floatValue !== undefined ? parseFloat(floatValue.toFixed(2)) : "";
+          const value =
+            floatValue !== undefined ? parseFloat(floatValue.toFixed(2)) : "";
 
           if (onChange) {
             onChange({

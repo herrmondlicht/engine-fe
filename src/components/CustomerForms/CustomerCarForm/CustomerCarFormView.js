@@ -16,7 +16,7 @@ export const createAddCustomerCarView = () =>
       if (value) {
         return value.replace(
           /^.{3}(?!-)/g,
-          `${value.toUpperCase().slice(0, 3)}-`,
+          `${value.toUpperCase().slice(0, 3)}-`
         );
       }
       return "";

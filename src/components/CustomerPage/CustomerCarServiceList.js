@@ -1,6 +1,4 @@
-import React, {
-  useState, useEffect, useCallback, useMemo,
-} from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
   Card,
   Typography,
@@ -46,10 +44,11 @@ export const createCustomerCarServiceList = ({ engineAPI }) =>
           urlExtension: `${customerCarId}/services?include=customer_cars`,
         });
         const responseServices = response.data.data;
-        setServices(responseServices.map((service) => service.service_orders));
+        setServices(responseServices.map(service => service.service_orders));
         setCustomerCar(responseServices[0].customer_cars);
-      } catch {}
-      setIsLoading(false);
+      } finally {
+        setIsLoading(false);
+      }
     }, [customerCarId]);
 
     const handleModalClose = useCallback(() => {
@@ -59,14 +58,16 @@ export const createCustomerCarServiceList = ({ engineAPI }) =>
 
     const deleteService = useCallback(() => {
       try {
-        setServices((oldData) => oldData.filter((data) =>
-          data.id !== idPendingDelete),
+        setServices(oldData =>
+          oldData.filter(data => data.id !== idPendingDelete)
         );
         handleModalClose();
         engineAPI.service_orders.delete({
           urlExtension: idPendingDelete,
         });
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     }, [idPendingDelete, handleModalClose]);
 
     const onDeleteClick = useCallback(({ id }) => {
@@ -77,8 +78,9 @@ export const createCustomerCarServiceList = ({ engineAPI }) =>
     const filteredServices = useMemo(() => {
       if (search === "") return services;
       return services.filter(
-        (service) => service.id.toString().includes(search) ||
-          service.service_price.toString().includes(search),
+        service =>
+          service.id.toString().includes(search) ||
+          service.service_price.toString().includes(search)
       );
     }, [services, search]);
 
@@ -98,7 +100,7 @@ export const createCustomerCarServiceList = ({ engineAPI }) =>
             <div className="flex flex-wrap justify-center p-2">
               {isLoading && <SkeletonCards />}
               {!isLoading &&
-                filteredServices.map((serviceData) => (
+                filteredServices.map(serviceData => (
                   <div key={serviceData.id} className="m-3">
                     <ServiceCard
                       serviceData={serviceData}
@@ -109,7 +111,9 @@ export const createCustomerCarServiceList = ({ engineAPI }) =>
               {filteredServices.length === 0 && (
                 <div className="flex p-5 w-full justify-center">
                   <Typography>
-                    {"Opa! não existe serviço para esse veículo ainda. Clique em \"adicionar\" para incluir um novo serviço"}
+                    {
+                      'Opa! não existe serviço para esse veículo ainda. Clique em "adicionar" para incluir um novo serviço'
+                    }
                   </Typography>
                 </div>
               )}
@@ -131,13 +135,12 @@ const ServiceSearch = ({ addNewService, setResearch, customerCar }) => (
     className="flex flex-col h-full w-full p-10 overflow-hidden"
   >
     <Typography variant="h5">
-      Serviços do veículo
-      {" "}
+      Serviços do veículo{" "}
       {customerCar.license_plate &&
-          customerCar.license_plate.replace(
-            /^.{3}(?!-)/g,
-            `${customerCar.license_plate.toUpperCase().slice(0, 3)}-`,
-          )}
+        customerCar.license_plate.replace(
+          /^.{3}(?!-)/g,
+          `${customerCar.license_plate.toUpperCase().slice(0, 3)}-`
+        )}
     </Typography>
     <Divider variant="fullWidth" />
     <div className="mt-10">
@@ -186,7 +189,7 @@ const ServiceCard = ({ serviceData, onDeleteClick }) => {
           </div>
           <div className="flex justify-center items-center">
             <IconButton
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
                 e.preventDefault();
                 onDeleteClick({ id: serviceData.id });

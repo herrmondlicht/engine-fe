@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
 
-export const useValidator = (validator) => {
+export const useValidator = validator => {
   const [errors, setErrors] = useState({});
   const validate = useCallback(
-    (object) => {
+    object => {
       try {
         validator.validateSync(object);
         setErrors({});
@@ -13,7 +13,7 @@ export const useValidator = (validator) => {
         return false;
       }
     },
-    [validator],
+    [validator]
   );
 
   return { validate, errors };

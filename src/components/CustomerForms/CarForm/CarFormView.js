@@ -11,15 +11,15 @@ import {
 
 import AutocompleteField from "../../Common/Autocomplete";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     padding: 10,
   },
   selectLabel: {
-    "top": "-14px",
-    "left": "12px",
-    "background": "white",
-    "padding": "3px",
+    top: "-14px",
+    left: "12px",
+    background: "white",
+    padding: "3px",
     "&.MuiInputLabel-shrink": {
       paddingTop: "6px",
       zIndex: 1,
@@ -32,26 +32,27 @@ export const createAddCarFormView = () =>
     const classes = useStyles();
     const getUniqueEntries = (obj, index, arr) => arr.indexOf(obj) === index;
 
-    const onChangeYear = (e) => {
+    const onChangeYear = e => {
       e.persist();
       if (e.target.value?.length <= 4) changeFormForKey("year")(e);
     };
 
     const makesOptions = useMemo(
-      () => modelsList.map((car) => car.make).filter(getUniqueEntries),
-      [modelsList],
+      () => modelsList.map(car => car.make).filter(getUniqueEntries),
+      [modelsList]
     );
 
     const modelsFilteredBySelectedMake = useMemo(
-      () => modelsList.filter((car) => car.make === form.make),
-      [modelsList, form.make],
+      () => modelsList.filter(car => car.make === form.make),
+      [modelsList, form.make]
     );
 
     const modelsOptions = useMemo(
-      () => modelsFilteredBySelectedMake
-        .map((car) => car.model)
-        .filter(getUniqueEntries),
-      [modelsFilteredBySelectedMake],
+      () =>
+        modelsFilteredBySelectedMake
+          .map(car => car.model)
+          .filter(getUniqueEntries),
+      [modelsFilteredBySelectedMake]
     );
 
     return (
@@ -78,7 +79,7 @@ export const createAddCarFormView = () =>
         <Grid item xs={12} sm={3}>
           <FormControl fullWidth>
             <InputLabel id="fuel-select" className={classes.selectLabel}>
-            Combustível
+              Combustível
             </InputLabel>
             <Select
               labelId="fuel-select"

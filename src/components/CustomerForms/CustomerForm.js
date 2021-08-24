@@ -1,12 +1,14 @@
 import React from "react";
 
-import { AVAILABLE_FORMS, NOTIFICATION_DURATION, NOTIFICATION_TYPES } from "context";
+import {
+  AVAILABLE_FORMS,
+  NOTIFICATION_DURATION,
+  NOTIFICATION_TYPES,
+} from "context";
 import { useCombinedForms, useNotification } from "hooks";
 
 import { Input, Card } from "ui-fragments";
-import {
-  convertFormKeyToAPI, engineAPI, fixPayloadKeys, yup,
-} from "utils";
+import { convertFormKeyToAPI, engineAPI, fixPayloadKeys, yup } from "utils";
 import { FormWithButton } from "./FormWithButton";
 
 const schema = yup.object().shape({
@@ -17,12 +19,12 @@ const schema = yup.object().shape({
   phone: yup.string(),
 });
 
-const getHTTPMethod = (data) => (data ? "patch" : "post");
+const getHTTPMethod = data => (data ? "patch" : "post");
 
 const CustomerForm = ({ loadedCustomer }) => {
-  const { showNotification }= useNotification();
+  const { showNotification } = useNotification();
   const { changeForm } = useCombinedForms();
-  const sendForm = async (data) => {
+  const sendForm = async data => {
     const method = getHTTPMethod(loadedCustomer?.id);
     try {
       const { data: customerData } = await engineAPI.customers[method]({
@@ -33,9 +35,12 @@ const CustomerForm = ({ loadedCustomer }) => {
       showNotification({
         id: "customerAdded",
         duration: NOTIFICATION_DURATION.SHORT,
-        title: loadedCustomer?.id? "Cliente atualizado!": "Cliente adicionado!",
-        type: loadedCustomer?.id ?
-          NOTIFICATION_TYPES.INFO : NOTIFICATION_TYPES.SUCCESS,
+        title: loadedCustomer?.id
+          ? "Cliente atualizado!"
+          : "Cliente adicionado!",
+        type: loadedCustomer?.id
+          ? NOTIFICATION_TYPES.INFO
+          : NOTIFICATION_TYPES.SUCCESS,
       });
       changeForm(AVAILABLE_FORMS.CUSTOMER, customerData);
     } catch (error) {
@@ -44,7 +49,8 @@ const CustomerForm = ({ loadedCustomer }) => {
         id: "customerAddedError",
         duration: NOTIFICATION_DURATION.LONG,
         title: "Opa algo deu errado!",
-        message: "Não foi possível adicionar o cliente. Revise os dados e tente novamente",
+        message:
+          "Não foi possível adicionar o cliente. Revise os dados e tente novamente",
         type: NOTIFICATION_TYPES.ERROR,
       });
     }

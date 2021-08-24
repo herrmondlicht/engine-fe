@@ -1,7 +1,11 @@
 import React from "react";
 import { CustomerForm } from "components";
 import { CarForm } from "components/CustomerForms/CarForm";
-import { AVAILABLE_FORMS, NOTIFICATION_DURATION, NOTIFICATION_TYPES } from "context";
+import {
+  AVAILABLE_FORMS,
+  NOTIFICATION_DURATION,
+  NOTIFICATION_TYPES,
+} from "context";
 import { useCombinedForms, useNotification } from "hooks";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -52,7 +56,7 @@ const RegisterForm = () => {
     () => () => {
       clear();
     },
-    [clear],
+    [clear]
   );
 
   return (

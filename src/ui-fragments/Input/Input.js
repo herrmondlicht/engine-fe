@@ -39,9 +39,7 @@ const placeholderClass = css`
 `;
 
 const Input = React.forwardRef(
-  ({
-    label, fw, placeholder, error, uppercase, ...props
-  }, ref) => {
+  ({ label, fw, placeholder, error, uppercase, ...props }, ref) => {
     const modifierClasses = [
       ...(fw ? ["w-full"] : []),
       ...(error ? [inputError] : []),
@@ -68,7 +66,7 @@ const Input = React.forwardRef(
         )}
       </div>
     );
-  },
+  }
 );
 
 export { Input };

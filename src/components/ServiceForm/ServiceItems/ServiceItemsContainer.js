@@ -11,7 +11,7 @@ const createServiceItemsContainer = ({ engineAPI }) =>
     const [isFetching, setIsFetching] = useState(true);
     const itemsURLExtension = useMemo(
       () => `${serviceOrderId}/items`,
-      [serviceOrderId],
+      [serviceOrderId]
     );
 
     const fetchServiceItems = useCallback(async () => {
@@ -34,20 +34,20 @@ const createServiceItemsContainer = ({ engineAPI }) =>
 
     const editItemInArray =
       ({ id, field, value }) =>
-        (item) => {
-          if (item.id === id) {
-            return {
-              ...item,
-              [field]: value,
-            };
-          }
-          return item;
-        };
+      item => {
+        if (item.id === id) {
+          return {
+            ...item,
+            [field]: value,
+          };
+        }
+        return item;
+      };
 
     const updateServiceItem = useCallback(
       async ({ id, key: field, value }) => {
-        setServiceItems((oldServiceItemsArray) =>
-          oldServiceItemsArray.map(editItemInArray({ id, field, value })),
+        setServiceItems(oldServiceItemsArray =>
+          oldServiceItemsArray.map(editItemInArray({ id, field, value }))
         );
         engineAPI.service_orders.patch({
           urlExtension: `${itemsURLExtension}/${id}`,
@@ -56,19 +56,19 @@ const createServiceItemsContainer = ({ engineAPI }) =>
           },
         });
       },
-      [itemsURLExtension],
+      [itemsURLExtension]
     );
 
     const deleteServiceItem = useCallback(
       async ({ id }) => {
-        setServiceItems((oldServiceItems) =>
-          oldServiceItems.filter((serviceItem) => serviceItem.id !== id),
+        setServiceItems(oldServiceItems =>
+          oldServiceItems.filter(serviceItem => serviceItem.id !== id)
         );
         engineAPI.service_orders.delete({
           urlExtension: `${itemsURLExtension}/${id}`,
         });
       },
-      [itemsURLExtension],
+      [itemsURLExtension]
     );
 
     const createNewServiceItem = useCallback(async () => {
@@ -77,7 +77,7 @@ const createServiceItemsContainer = ({ engineAPI }) =>
       } = await engineAPI.service_orders.post({
         urlExtension: itemsURLExtension,
       });
-      setServiceItems((oldServiceItemsArray) => [
+      setServiceItems(oldServiceItemsArray => [
         ...oldServiceItemsArray,
         { id: data.id, hasFocus: true },
       ]);
@@ -90,9 +90,9 @@ const createServiceItemsContainer = ({ engineAPI }) =>
     useEffect(() => {
       const totalPrice = serviceItems.reduce(
         (prev, { quantity = 0, unit_price = 0 }) =>
-        // eslint-disable-next-line camelcase
+          // eslint-disable-next-line camelcase
           prev + quantity * unit_price,
-        0,
+        0
       );
       updateTotalItemsPrice(totalPrice);
     }, [updateTotalItemsPrice, serviceItems]);

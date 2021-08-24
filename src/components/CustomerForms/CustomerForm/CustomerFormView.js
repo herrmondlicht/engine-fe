@@ -11,16 +11,17 @@ export const createCustomerFormView = () =>
       phone: "",
     });
 
-    const handleDocumentNumberChangeForKey = (key) => function(e) {
+    const handleDocumentNumberChangeForKey = key =>
+      function (e) {
+        e.persist();
+        setForm(oldValues => ({
+          ...oldValues,
+          [key]: e?.target?.value.replace(/\D/g, ""),
+        }));
+      };
+    const changeFormForKey = key => e => {
       e.persist();
-      setForm((oldValues) => ({
-        ...oldValues,
-        [key]: e?.target?.value.replace(/\D/g, ""),
-      }));
-    };
-    const changeFormForKey = (key) => (e) => {
-      e.persist();
-      setForm((oldValues) => ({
+      setForm(oldValues => ({
         ...oldValues,
         [key]: e?.target?.value,
       }));

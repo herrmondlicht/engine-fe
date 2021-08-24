@@ -32,14 +32,6 @@ module.exports = {
     "require-jsdoc": 0,
     // temporary
     camelcase: 0,
-    "max-len": [
-      "warn",
-      {
-        ignoreStrings: true,
-        ignoreTemplateLiterals: true,
-        ignoreComments: true,
-      },
-    ],
     "react-hooks/exhaustive-deps": "error",
   },
   settings: {

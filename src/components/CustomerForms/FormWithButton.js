@@ -13,16 +13,14 @@ const FormWithButton = ({
   buttonConfig: { titleWhenEditing, defaultTitle },
 }) => {
   const {
-    formMethods: {
-      handleSubmit, formState, reset, ...formMethods
-    },
+    formMethods: { handleSubmit, formState, reset, ...formMethods },
     validationMethods: { errors, validate },
   } = useCustomForm({ schema: formValidationSchema, preloadedData });
   const [isLoading, setIsLoading] = useState(false);
   const isValidPreloadData = Object.values(preloadedData ?? {}).length > 0;
 
   const { isDirty } = formState;
-  const submit = async (data) => {
+  const submit = async data => {
     if (!validate(data)) return;
     setIsLoading(true);
     reset(data);

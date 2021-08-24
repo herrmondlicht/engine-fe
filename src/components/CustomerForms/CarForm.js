@@ -25,7 +25,7 @@ const carFormSchema = yup.object().shape({
   displacement: yup.string(),
 });
 
-const getHTTPMethod = (loadedData) => (loadedData ? "patch" : "post");
+const getHTTPMethod = loadedData => (loadedData ? "patch" : "post");
 
 const CarForm = ({ loadedData }) => {
   const { showNotification } = useNotification();
@@ -38,13 +38,11 @@ const CarForm = ({ loadedData }) => {
   const { data: carsData, isValidating } = useSWR(
     APIRoutes.cars.url,
     async () => engineAPI.cars.get(),
-    { revalidateOnFocus: false, dedupingInterval: 5000 },
+    { revalidateOnFocus: false, dedupingInterval: 5000 }
   );
   const carsAutocompleteData = carsData?.data;
 
-  const sendNewCarForm = async ({
-    model, make, manufactureYear, fuel,
-  }) => {
+  const sendNewCarForm = async ({ model, make, manufactureYear, fuel }) => {
     try {
       const payload = {
         ...(loadedData.cars ? loadedData.cars : {}),
@@ -60,9 +58,10 @@ const CarForm = ({ loadedData }) => {
       showNotification({
         id: "carAdded",
         duration: NOTIFICATION_DURATION.SHORT,
-        title: loadedData.cars? "Veículo atualizado!": "Veículo adicionado!",
-        type: loadedData.cars ?
-          NOTIFICATION_TYPES.INFO : NOTIFICATION_TYPES.SUCCESS,
+        title: loadedData.cars ? "Veículo atualizado!" : "Veículo adicionado!",
+        type: loadedData.cars
+          ? NOTIFICATION_TYPES.INFO
+          : NOTIFICATION_TYPES.SUCCESS,
       });
 
       return data?.data;
@@ -103,13 +102,15 @@ const CarForm = ({ loadedData }) => {
       showNotification({
         id: "carAdded",
         duration: NOTIFICATION_DURATION.SHORT,
-        title: loadedData.cars? "Veículo atualizado!": "Veículo adicionado!",
-        type: loadedData.cars ?
-          NOTIFICATION_TYPES.INFO : NOTIFICATION_TYPES.SUCCESS,
+        title: loadedData.cars ? "Veículo atualizado!" : "Veículo adicionado!",
+        type: loadedData.cars
+          ? NOTIFICATION_TYPES.INFO
+          : NOTIFICATION_TYPES.SUCCESS,
       });
       return data?.data;
     } catch (error) {
-      console.log(error); showNotification({
+      console.log(error);
+      showNotification({
         id: "carAddedError",
         duration: NOTIFICATION_DURATION.LONG,
         title: "Opa algo deu errado!",
@@ -120,7 +121,7 @@ const CarForm = ({ loadedData }) => {
     }
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async data => {
     const { id } = await sendNewCarForm(data);
     if (!id) {
       return;
@@ -137,7 +138,7 @@ const CarForm = ({ loadedData }) => {
       <ScreenLoader isLoading={isValidating && !carsAutocompleteData}>
         <FormWithButton
           formValidationSchema={carFormSchema}
-          Form={(props) => (
+          Form={props => (
             <CarFormView
               {...props}
               carsAutocompleteData={carsAutocompleteData}
@@ -167,16 +168,17 @@ const CarFormView = ({
   const makeValue = watch("make");
 
   const makesOptions = useMemo(
-    () => carsAutocompleteData.map((car) => car.make).filter(getUnique),
-    [carsAutocompleteData],
+    () => carsAutocompleteData.map(car => car.make).filter(getUnique),
+    [carsAutocompleteData]
   );
 
   const modelsFilteredBySelectedMake = useMemo(
-    () => carsAutocompleteData
-      .filter((car) => car.make === makeValue)
-      .map((car) => car.model)
-      .filter(getUnique),
-    [carsAutocompleteData, makeValue],
+    () =>
+      carsAutocompleteData
+        .filter(car => car.make === makeValue)
+        .map(car => car.model)
+        .filter(getUnique),
+    [carsAutocompleteData, makeValue]
   );
 
   return (
@@ -203,7 +205,7 @@ const CarFormView = ({
           />
 
           <datalist id="carMakes">
-            {makesOptions.map((make) => (
+            {makesOptions.map(make => (
               <option value={make} key={make} />
             ))}
           </datalist>
@@ -218,7 +220,7 @@ const CarFormView = ({
             list="carModels"
           />
           <datalist id="carModels">
-            {modelsFilteredBySelectedMake.map((model) => (
+            {modelsFilteredBySelectedMake.map(model => (
               <option value={model} key={model} />
             ))}
           </datalist>

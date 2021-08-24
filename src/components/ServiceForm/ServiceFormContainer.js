@@ -18,8 +18,8 @@ export const createServiceFormContainer = ({ engineAPI }) =>
     const [serviceData, setServiceData] = useState({});
     const [snackError, setSnackError] = useState(false);
 
-    const setIdForCustomerSubForm = (idChangeObject) =>
-      setCustomerSubFormsIds((prev) => ({
+    const setIdForCustomerSubForm = idChangeObject =>
+      setCustomerSubFormsIds(prev => ({
         ...prev,
         ...idChangeObject,
       }));
@@ -50,7 +50,7 @@ export const createServiceFormContainer = ({ engineAPI }) =>
           },
         });
       },
-      [serviceId],
+      [serviceId]
     );
 
     const commitKeyValueToBackend = useCallback(
@@ -60,35 +60,36 @@ export const createServiceFormContainer = ({ engineAPI }) =>
           data: { [key]: value },
         });
       },
-      [serviceId],
+      [serviceId]
     );
 
     const commitObservationToBackend = useCallback(
-      (observations) => {
+      observations => {
         engineAPI.service_orders.patch({
           urlExtension: serviceId,
           data: { observations },
         });
       },
-      [serviceId],
+      [serviceId]
     );
 
     const updateValuesToState = useCallback(
-      (key) => (value) => {
-        setServiceData((prevServiceData) => ({
+      key => value => {
+        setServiceData(prevServiceData => ({
           ...prevServiceData,
           [key]: value,
         }));
       },
-      [],
+      []
     );
 
     const updateTotalItemsPrice = useCallback(
-      (totalPrice) => setServiceData((prevServiceData) => ({
-        ...prevServiceData,
-        service_items_price: totalPrice,
-      })),
-      [],
+      totalPrice =>
+        setServiceData(prevServiceData => ({
+          ...prevServiceData,
+          service_items_price: totalPrice,
+        })),
+      []
     );
     useEffect(() => {
       getSeviceById();

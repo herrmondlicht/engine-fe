@@ -4,20 +4,25 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Button } from "ui-fragments/Button";
 
 const Alert = ({
-  type, title, message, isRemovable, onCloseAction, duration,
+  type,
+  title,
+  message,
+  isRemovable,
+  onCloseAction,
+  duration,
 }) => {
   const [opacity, setOpacity] = useState("0");
 
-  const getVariationFromType = (type) => {
+  const getVariationFromType = type => {
     switch (type) {
-    case NOTIFICATION_TYPES.ERROR:
-      return "error-0";
-    case NOTIFICATION_TYPES.INFO:
-      return "primary-0";
-    case NOTIFICATION_TYPES.SUCCESS:
-      return "success-0";
-    default:
-      return "warning-0";
+      case NOTIFICATION_TYPES.ERROR:
+        return "error-0";
+      case NOTIFICATION_TYPES.INFO:
+        return "primary-0";
+      case NOTIFICATION_TYPES.SUCCESS:
+        return "success-0";
+      default:
+        return "warning-0";
     }
   };
 
@@ -26,11 +31,15 @@ const Alert = ({
     return `bg-${variation}`;
   }, [type]);
 
-  const notificationClass = useMemo(() => [
-    "cursor-pointer relative bg-primary-0 z-40 rounded shadow-md flex transition-opacity duration-500 ease-in-out",
-    notificationBackgroundClasses,
-    `opacity-${opacity}`,
-  ].join(" "), [notificationBackgroundClasses, opacity]);
+  const notificationClass = useMemo(
+    () =>
+      [
+        "cursor-pointer relative bg-primary-0 z-40 rounded shadow-md flex transition-opacity duration-500 ease-in-out",
+        notificationBackgroundClasses,
+        `opacity-${opacity}`,
+      ].join(" "),
+    [notificationBackgroundClasses, opacity]
+  );
 
   const onClose = useCallback(() => {
     setOpacity("0");

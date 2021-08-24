@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import {
-  Grid, TextField, Button, IconButton, makeStyles } from "@material-ui/core";
+  Grid,
+  TextField,
+  Button,
+  IconButton,
+  makeStyles,
+} from "@material-ui/core";
 import { HiTrash as DeleteIcon } from "react-icons/hi";
 
 import CurrencyInput from "../../Common/CurrencyInput";
 
-const useServiceItemsStyle = makeStyles((theme) => ({
+const useServiceItemsStyle = makeStyles(theme => ({
   mb2: {
     marginBottom: theme.spacing(1),
   },
@@ -15,45 +20,46 @@ const useServiceItemsStyle = makeStyles((theme) => ({
   },
 }));
 
-const createServiceItemsView = () => function ServiceItemsView({
-  serviceItems = [],
-  updateKeyValue,
-  createNewServiceItem,
-  deleteServiceItem,
-}) {
-  const serviceItemsClasses = useServiceItemsStyle();
-  return (
-    <Grid
-      alignItems="center"
-      justify="center"
-      container
-      item
-      xs={12}
-      direction="column"
-      className={serviceItemsClasses.mb2}
-    >
-      {serviceItems.map((item) => (
-        <ServiceItem
-          key={item.id}
-          {...item}
-          updateKeyValue={updateKeyValue}
-          deleteServiceItem={deleteServiceItem}
-        />
-      ))}
-      <Grid container item xs className={serviceItemsClasses.px1}>
-        <Button
-          variant="outlined"
-          color="secondary"
-          onClick={createNewServiceItem}
-          disableElevation
-          fullWidth
-        >
+const createServiceItemsView = () =>
+  function ServiceItemsView({
+    serviceItems = [],
+    updateKeyValue,
+    createNewServiceItem,
+    deleteServiceItem,
+  }) {
+    const serviceItemsClasses = useServiceItemsStyle();
+    return (
+      <Grid
+        alignItems="center"
+        justify="center"
+        container
+        item
+        xs={12}
+        direction="column"
+        className={serviceItemsClasses.mb2}
+      >
+        {serviceItems.map(item => (
+          <ServiceItem
+            key={item.id}
+            {...item}
+            updateKeyValue={updateKeyValue}
+            deleteServiceItem={deleteServiceItem}
+          />
+        ))}
+        <Grid container item xs className={serviceItemsClasses.px1}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={createNewServiceItem}
+            disableElevation
+            fullWidth
+          >
             Adicionar Novo item
-        </Button>
+          </Button>
+        </Grid>
       </Grid>
-    </Grid>
-  );
-};
+    );
+  };
 
 function ServiceItem({
   id,
@@ -66,10 +72,10 @@ function ServiceItem({
   const [price, setPrice] = useState(unit_price);
   const serviceItemsClasses = useServiceItemsStyle();
 
-  const handleOnBlur = (key) =>
-    (e) => updateKeyValue({ id, key, value: e.target.value });
+  const handleOnBlur = key => e =>
+    updateKeyValue({ id, key, value: e.target.value });
 
-  const priceChange = (e) => {
+  const priceChange = e => {
     setPrice(e.target.value);
   };
 
@@ -108,7 +114,9 @@ function ServiceItem({
         <Grid item xs={6}>
           <CurrencyInput
             onChange={priceChange}
-            onBlur={(e) => updateKeyValue({ id, key: "unit_price", value: price })}
+            onBlur={e =>
+              updateKeyValue({ id, key: "unit_price", value: price })
+            }
             label="Preço Un."
             value={price}
             fullWidth

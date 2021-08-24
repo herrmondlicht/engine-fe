@@ -1,14 +1,12 @@
 import React from "react";
 import { Grid, makeStyles } from "@material-ui/core";
-import {
-  Route, useRouteMatch, Switch, useHistory,
-} from "react-router-dom";
+import { Route, useRouteMatch, Switch, useHistory } from "react-router-dom";
 
 import { SideMenu, AuthorizedRoute } from "components";
 import { appRoutes } from "appRoutes";
 import { storageAPI, STORAGE_KEYS } from "utils";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   homePageContainer: {
     width: "100%",
     height: "100%",
@@ -67,7 +65,7 @@ export const createHomePage = ({ storageAPI }) => {
           </Grid>
           <Grid className={classes.container} item>
             <Switch>
-              {Object.values(routes).map((route) => {
+              {Object.values(routes).map(route => {
                 if (route.isLocked) {
                   return (
                     <AuthorizedRoute

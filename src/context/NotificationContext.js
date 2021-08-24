@@ -25,7 +25,7 @@ const defaultNotificationSettings = {
 
 const defaultContext = {
   showNotification: (settings = defaultNotificationSettings) => {},
-  removeNotification: (id) => {},
+  removeNotification: id => {},
 };
 
 const NotificationContext = React.createContext(defaultContext);
@@ -36,20 +36,20 @@ const NotificationProvider = ({ children }) => {
 
   const showNotification = useCallback(
     (settings = defaultNotificationSettings) => {
-      setNotifications((notifications) =>
-        [
-          ...notifications.filter((notification) =>
-            notification.id !== settings.id,
-          ),
-          { ...defaultNotificationSettings, ...settings },
-        ],
-      );
-    }, []);
+      setNotifications(notifications => [
+        ...notifications.filter(
+          notification => notification.id !== settings.id
+        ),
+        { ...defaultNotificationSettings, ...settings },
+      ]);
+    },
+    []
+  );
 
-  const removeNotification = (id) =>
-    setNotifications((notifications) => notifications.filter((notification) =>
-      notification.id !== id,
-    ));
+  const removeNotification = id =>
+    setNotifications(notifications =>
+      notifications.filter(notification => notification.id !== id)
+    );
 
   return (
     <>
@@ -58,13 +58,13 @@ const NotificationProvider = ({ children }) => {
           className="relative right-0 mt-3 md:mr-5 md:mt-5 flex flex-col gap-5"
           style={{ width: "310px" }}
         >
-          {notifications.map((notification) => (
+          {notifications.map(notification => (
             <Alert
               key={notification.id}
               {...notification}
               onCloseAction={() => removeNotification(notification.id)}
-            />),
-          )}
+            />
+          ))}
         </div>
       </div>
       <Provider

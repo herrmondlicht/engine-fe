@@ -1,6 +1,4 @@
-import React, {
-  useState, useEffect, useCallback, useMemo,
-} from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
   Paper,
   IconButton,
@@ -33,7 +31,9 @@ export const createCustomerCarList = ({ engineAPI }) =>
           urlExtension: "?include=cars,customers",
         });
         setData(response.data);
-      } catch (e) {}
+      } catch (e) {
+        console.error(e);
+      }
     }, []);
 
     const handleModalClose = useCallback(() => {
@@ -43,15 +43,16 @@ export const createCustomerCarList = ({ engineAPI }) =>
 
     const deleteClient = useCallback(() => {
       try {
-        setData((oldData) =>
-          oldData.filter((data) =>
-            data.customer_cars.id !== idPendingDelete),
+        setData(oldData =>
+          oldData.filter(data => data.customer_cars.id !== idPendingDelete)
         );
         handleModalClose();
         engineAPI.customer_cars.delete({
           urlExtension: idPendingDelete,
         });
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     }, [idPendingDelete, handleModalClose]);
 
     const onListRowDeleteClick = useCallback(({ id }) => {
@@ -60,24 +61,26 @@ export const createCustomerCarList = ({ engineAPI }) =>
     }, []);
 
     const addNewCustomer = useCallback(
-      (e) => {
+      e => {
         e.preventDefault();
         history.push("/customers/new");
       },
-      [history],
+      [history]
     );
 
     const filteredData = useMemo(
-      () => dataArray.filter((data) => (
-        data.customer_cars.license_plate
-          .toLowerCase()
-          .includes(research.toLocaleLowerCase()) ||
+      () =>
+        dataArray.filter(
+          data =>
+            data.customer_cars.license_plate
+              .toLowerCase()
+              .includes(research.toLocaleLowerCase()) ||
             data.customers.fullname
               .toLowerCase()
               .includes(research.toLocaleLowerCase()) ||
             data.cars.model.toLowerCase().includes(research.toLocaleLowerCase())
-      )),
-      [research, dataArray],
+        ),
+      [research, dataArray]
     );
 
     useEffect(() => {
@@ -135,9 +138,11 @@ const ClientsTable = ({ data = [], onDelete }) => {
               customer_cars: customerCar,
             }) => (
               <TableRow
-                onClick={() => history.push(
-                  `/customers/${customer.id}/cars/${customerCar.id}`,
-                )}
+                onClick={() =>
+                  history.push(
+                    `/customers/${customer.id}/cars/${customerCar.id}`
+                  )
+                }
                 key={customerCar.id}
                 className="hover:bg-gray-300 cursor-pointer"
               >
@@ -149,7 +154,7 @@ const ClientsTable = ({ data = [], onDelete }) => {
                 <TableCell align="right">{car.manufacture_year}</TableCell>
                 <TableCell align="right">
                   <IconButton
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       e.preventDefault();
                       onDelete({ id: customerCar.id });
@@ -159,7 +164,7 @@ const ClientsTable = ({ data = [], onDelete }) => {
                   </IconButton>
                 </TableCell>
               </TableRow>
-            ),
+            )
           )}
         </TableBody>
       </Table>

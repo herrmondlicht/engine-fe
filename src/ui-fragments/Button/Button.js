@@ -5,19 +5,17 @@ import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
 import { theme } from "twtheme";
 
 const Button = (
-  {
-    onClick, children, variant = "primary", size, fw, disabled, showLoader,
-  },
-  ref,
+  { onClick, children, variant = "primary", size, fw, disabled, showLoader },
+  ref
 ) => {
   const sizeClasses = useMemo(() => {
     switch (size) {
-    case "small":
-      return ["p-2", "px-4", "text-sm"].join(" ");
-    case "big":
-      return ["p-4", "px-6", "text-lg"].join(" ");
-    default:
-      return ["p-3", "px-5", "text-md"].join(" ");
+      case "small":
+        return ["p-2", "px-4", "text-sm"].join(" ");
+      case "big":
+        return ["p-4", "px-6", "text-lg"].join(" ");
+      default:
+        return ["p-3", "px-5", "text-md"].join(" ");
     }
   }, [size]);
 
@@ -57,12 +55,12 @@ const ButtonContent = ({ children, showLoader, variant }) => {
   const variantIcon = useMemo(() => {
     const sizeClasses = "h-7 w-7";
     switch (variant) {
-    case "success":
-      return <CheckCircleIcon className={sizeClasses} />;
-    case "error":
-      return <XCircleIcon className={sizeClasses} />;
-    default:
-      return null;
+      case "success":
+        return <CheckCircleIcon className={sizeClasses} />;
+      case "error":
+        return <XCircleIcon className={sizeClasses} />;
+      default:
+        return null;
     }
   }, [variant]);
   return (

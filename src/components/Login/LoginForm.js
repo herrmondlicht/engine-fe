@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import { TextField, Grid, makeStyles } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     height: "100%",
     width: "100%",
@@ -20,7 +20,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function LoginForm({
-  userInput, changeInput, sendForm, errorMessage, isLoading,
+  userInput,
+  changeInput,
+  sendForm,
+  errorMessage,
+  isLoading,
 }) {
   const classes = useStyles();
 
@@ -47,7 +51,7 @@ function LoginForm({
             size="small"
             variant="outlined"
             value={userInput.username}
-            onChange={(e) =>
+            onChange={e =>
               changeInput({ ...userInput, username: e.target.value })
             }
           />
@@ -61,7 +65,7 @@ function LoginForm({
             size="small"
             value={userInput.password}
             variant="outlined"
-            onChange={(e) =>
+            onChange={e =>
               changeInput({ ...userInput, password: e.target.value })
             }
           />

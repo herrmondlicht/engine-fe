@@ -18,7 +18,7 @@ import {
 import { Link, useLocation, useHistory } from "react-router-dom";
 import { storageAPI, STORAGE_KEYS } from "utils";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   sideMenuContainer: {
     height: "100%",
     width: "100%",
