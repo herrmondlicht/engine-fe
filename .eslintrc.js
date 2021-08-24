@@ -1,9 +1,10 @@
+/* eslint-disable no-undef */
 module.exports = {
   env: {
     browser: true,
     es2021: true,
   },
-  extends: ["plugin:react/recommended", "google"],
+  extends: ["plugin:react/recommended", "google", "eslint:recommended"],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -37,6 +38,7 @@ module.exports = {
       },
     ],
     "indent": ["error", 2],
+    "react-hooks/exhaustive-deps": "error",
   },
   settings: {
     react: { version: "detect" },
