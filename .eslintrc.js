@@ -4,7 +4,12 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ["plugin:react/recommended", "google", "eslint:recommended"],
+  extends: [
+    "plugin:react/recommended",
+    "google",
+    "eslint:recommended",
+    "prettier",
+  ],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -26,9 +31,7 @@ module.exports = {
     "react/display-name": 0,
     "require-jsdoc": 0,
     // temporary
-    "camelcase": 0,
-    "object-curly-spacing": ["error", "always"],
-    "quotes": ["error", "double"],
+    camelcase: 0,
     "max-len": [
       "warn",
       {
@@ -37,7 +40,6 @@ module.exports = {
         ignoreComments: true,
       },
     ],
-    "indent": ["error", 2],
     "react-hooks/exhaustive-deps": "error",
   },
   settings: {
