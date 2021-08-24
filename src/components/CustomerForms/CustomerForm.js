@@ -1,7 +1,7 @@
 import React from "react";
 
-import { AVAILABLE_FORMS } from "context";
-import { useCombinedForms } from "hooks";
+import { AVAILABLE_FORMS, NOTIFICATION_DURATION, NOTIFICATION_TYPES } from "context";
+import { useCombinedForms, useNotification } from "hooks";
 
 import { Input, Card } from "ui-fragments";
 import {
@@ -20,6 +20,7 @@ const schema = yup.object().shape({
 const getHTTPMethod = (data) => (data ? "patch" : "post");
 
 const CustomerForm = ({ loadedCustomer }) => {
+  const { showNotification }= useNotification();
   const { changeForm } = useCombinedForms();
   const sendForm = async (data) => {
     const method = getHTTPMethod(loadedCustomer?.id);
@@ -29,12 +30,23 @@ const CustomerForm = ({ loadedCustomer }) => {
         data: fixPayloadKeys(data, { fieldTranslator: convertFormKeyToAPI }),
       });
       // TODO
-      // show success notification
+      showNotification({
+        id: "customerAdded",
+        duration: NOTIFICATION_DURATION.SHORT,
+        title: loadedCustomer?.id? "Cliente atualizado!": "Cliente adicionado!",
+        type: loadedCustomer?.id ?
+          NOTIFICATION_TYPES.INFO : NOTIFICATION_TYPES.SUCCESS,
+      });
       changeForm(AVAILABLE_FORMS.CUSTOMER, customerData);
     } catch (error) {
       console.log(error);
-      // TODO
-      // show notification
+      showNotification({
+        id: "customerAddedError",
+        duration: NOTIFICATION_DURATION.LONG,
+        title: "Opa algo deu errado!",
+        message: "Não foi possível adicionar o cliente. Revise os dados e tente novamente",
+        type: NOTIFICATION_TYPES.ERROR,
+      });
     }
   };
 
