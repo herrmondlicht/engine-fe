@@ -1,8 +1,8 @@
 import React from "react";
 import { CustomerForm } from "components";
 import { CarForm } from "components/CustomerForms/CarForm";
-import { AVAILABLE_FORMS } from "context";
-import { useCombinedForms } from "hooks";
+import { AVAILABLE_FORMS, NOTIFICATION_DURATION, NOTIFICATION_TYPES } from "context";
+import { useCombinedForms, useNotification } from "hooks";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ScreenLoader } from "ui-fragments";
@@ -14,6 +14,7 @@ const RegisterForm = () => {
     clear,
     combinedForms: { customer_cars, customers, cars },
   } = useCombinedForms();
+  const { showNotification } = useNotification();
   const [isLoading, setIsLoading] = useState(false);
   const { customer_car_id } = useParams();
 
@@ -28,14 +29,20 @@ const RegisterForm = () => {
         changeForm(AVAILABLE_FORMS.CUSTOMER_CAR, data?.customer_cars);
         changeForm(AVAILABLE_FORMS.CUSTOMER, data?.customers);
       } catch (e) {
-        // show notification
+        showNotification({
+          id: "customerCarLoadError",
+          duration: NOTIFICATION_DURATION.LONG,
+          type: NOTIFICATION_TYPES.ERROR,
+          title: "Opa, algo deu errado!",
+          message: "Não foi possível carregar os dados desse cliente",
+        });
       } finally {
         setIsLoading(false);
       }
     } else {
       clear();
     }
-  }, [changeForm, customer_car_id, clear]);
+  }, [customer_car_id, changeForm, showNotification, clear]);
 
   useEffect(() => {
     loadCustomerCarIfParam();
