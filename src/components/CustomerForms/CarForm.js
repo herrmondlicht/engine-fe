@@ -1,3 +1,5 @@
+import { NOTIFICATION_DURATION, NOTIFICATION_TYPES } from "context";
+import { useNotification } from "hooks";
 import React from "react";
 import { useMemo } from "react";
 import { useHistory } from "react-router-dom";
@@ -26,6 +28,7 @@ const carFormSchema = yup.object().shape({
 const getHTTPMethod = (loadedData) => (loadedData ? "patch" : "post");
 
 const CarForm = ({ loadedData }) => {
+  const { showNotification } = useNotification();
   const { cars, customer_cars, customers } = loadedData;
   const formDefaultData = {
     ...cars,
@@ -53,14 +56,27 @@ const CarForm = ({ loadedData }) => {
       const data = await engineAPI.cars.post({
         data: fixPayloadKeys(payload, { fieldTranslator: convertFormKeyToAPI }),
       });
+
+      showNotification({
+        id: "carAdded",
+        duration: NOTIFICATION_DURATION.SHORT,
+        title: loadedData.cars? "Veículo atualizado!": "Veículo adicionado!",
+        type: loadedData.cars ?
+          NOTIFICATION_TYPES.INFO : NOTIFICATION_TYPES.SUCCESS,
+      });
+
       return data?.data;
-      // TODO
-      // show success notification
     } catch (error) {
       console.log(error);
+      showNotification({
+        id: "carAddedError",
+        duration: NOTIFICATION_DURATION.LONG,
+        title: "Opa algo deu errado!",
+        message: "Veículo não adicionado. Revise os dados e tente novamente",
+        type: NOTIFICATION_TYPES.ERROR,
+      });
+
       return {};
-      // TODO
-      // show notification
     }
   };
 
@@ -84,21 +100,29 @@ const CarForm = ({ loadedData }) => {
         urlExtension: loadedData?.customer_cars?.id,
         data: fixPayloadKeys(payload, { fieldTranslator: convertFormKeyToAPI }),
       });
-      // TODO
-      // show success notification
+      showNotification({
+        id: "carAdded",
+        duration: NOTIFICATION_DURATION.SHORT,
+        title: loadedData.cars? "Veículo atualizado!": "Veículo adicionado!",
+        type: loadedData.cars ?
+          NOTIFICATION_TYPES.INFO : NOTIFICATION_TYPES.SUCCESS,
+      });
       return data?.data;
     } catch (error) {
-      console.log(error);
+      console.log(error); showNotification({
+        id: "carAddedError",
+        duration: NOTIFICATION_DURATION.LONG,
+        title: "Opa algo deu errado!",
+        message: "Veículo não adicionado. Revise os dados e tente novamente",
+        type: NOTIFICATION_TYPES.ERROR,
+      });
       return {};
-      // TODO
-      // show notification
     }
   };
 
   const onSubmit = async (data) => {
     const { id } = await sendNewCarForm(data);
     if (!id) {
-      /** TODO: notification */
       return;
     }
     const { id: customerCarId } = await sendNewCustomerCarForm({
