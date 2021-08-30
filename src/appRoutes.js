@@ -1,9 +1,8 @@
 import {
-  ServiceFormContainer,
   CustomerCarServiceList,
   CustomerFormsContainerWithPaper,
 } from "components";
-import { RegisterForm } from "pages";
+import { RegisterForm, ServicePage } from "pages";
 
 export const appRoutes = {
   customers: {
@@ -33,7 +32,7 @@ export const appRoutes = {
   newService: {
     name: "Serviço",
     path: "services/:service_id",
-    Component: ServiceFormContainer,
+    Component: ServicePage,
     isLocked: true,
   },
 };
