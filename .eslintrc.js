@@ -24,7 +24,7 @@ module.exports = {
     "eslint-plugin-react",
     "eslint-plugin-react-hooks",
   ],
-  ignorePatterns: ["temp.js", "**/*.test.js"],
+  ignorePatterns: ["temp.js", "**/*.test.js", "**/src/twtheme.js"],
   rules: {
     "react/prop-types": 0,
     "react-in-jsx-scope": 0,
