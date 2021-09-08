@@ -8,7 +8,7 @@ import {
 } from "context";
 import { useCombinedForms, useNotification } from "hooks";
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { ScreenLoader } from "ui-fragments";
 import { engineAPI } from "utils";
 
@@ -21,6 +21,7 @@ const RegisterForm = () => {
   const { showNotification } = useNotification();
   const [isLoading, setIsLoading] = useState(false);
   const { customer_car_id } = useParams();
+  const history = useHistory();
 
   const loadCustomerCarIfParam = useCallback(async () => {
     if (customer_car_id) {
@@ -69,7 +70,10 @@ const RegisterForm = () => {
       {customers?.id && (
         <div className="mb-10">
           <ScreenLoader isLoading={isLoading} radius>
-            <CarForm loadedData={{ cars, customer_cars, customers }} />
+            <CarForm
+              loadedData={{ cars, customer_cars, customers }}
+              onSubmitAction={({ id }) => history.push(`/customer_car/${id}`)}
+            />
           </ScreenLoader>
         </div>
       )}
