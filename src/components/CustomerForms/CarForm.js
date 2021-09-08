@@ -27,14 +27,13 @@ const carFormSchema = yup.object().shape({
 
 const getHTTPMethod = loadedData => (loadedData ? "patch" : "post");
 
-const CarForm = ({ loadedData }) => {
-  const { showNotification } = useNotification();
+const CarForm = ({ loadedData, onSubmitAction }) => {
+  const { showNotification, showErrorNotification } = useNotification();
   const { cars, customer_cars, customers } = loadedData;
   const formDefaultData = {
     ...cars,
     ...customer_cars,
   };
-  const history = useHistory();
   const { data: carsData, isValidating } = useSWR(
     APIRoutes.cars.url,
     async () => engineAPI.cars.get(),
@@ -67,14 +66,11 @@ const CarForm = ({ loadedData }) => {
       return data?.data;
     } catch (error) {
       console.log(error);
-      showNotification({
+      showErrorNotification({
         id: "carAddedError",
-        duration: NOTIFICATION_DURATION.LONG,
         title: "Opa algo deu errado!",
         message: "Veículo não adicionado. Revise os dados e tente novamente",
-        type: NOTIFICATION_TYPES.ERROR,
       });
-
       return {};
     }
   };
@@ -110,12 +106,10 @@ const CarForm = ({ loadedData }) => {
       return data?.data;
     } catch (error) {
       console.log(error);
-      showNotification({
+      showErrorNotification({
         id: "carAddedError",
-        duration: NOTIFICATION_DURATION.LONG,
         title: "Opa algo deu errado!",
         message: "Veículo não adicionado. Revise os dados e tente novamente",
-        type: NOTIFICATION_TYPES.ERROR,
       });
       return {};
     }
@@ -126,11 +120,17 @@ const CarForm = ({ loadedData }) => {
     if (!id) {
       return;
     }
-    const { id: customerCarId } = await sendNewCustomerCarForm({
+    const dataToSubmit = {
       ...data,
       car_id: id,
-    });
-    if (customerCarId) history.push(`/customer_car/${customerCarId}`);
+    };
+    const { id: customerCarId } = await sendNewCustomerCarForm(dataToSubmit);
+    if (onSubmitAction) {
+      onSubmitAction({
+        ...dataToSubmit,
+        id: customerCarId,
+      });
+    }
   };
 
   return (
