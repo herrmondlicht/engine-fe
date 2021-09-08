@@ -11,7 +11,7 @@ const Title = ({ children, size, color }) => {
   const sizeClass = TITLE_SIZES[size] || TITLE_SIZES.MEDIUM;
   const colorClass = color || "black";
 
-  return <p className={`${sizeClass} ${colorClass}`}>{children}</p>;
+  return <p className={`${sizeClass} ${colorClass} font-bold`}>{children}</p>;
 };
 
 Title.propTypes = {
