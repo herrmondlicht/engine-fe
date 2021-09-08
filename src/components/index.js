@@ -2,6 +2,7 @@ export * from "./Common";
 export * from "./CustomerForms";
 export * from "./Login";
 export * from "./ServiceForm";
+export * from "./CustomerDetails";
 export { default as CustomerCarList } from "./CustomerCarList/CustomerCarList";
 export { default as HomePage } from "./HomePage/HomePage";
 export { default as CustomerCarServiceList } from "./CustomerPage/CustomerCarServiceList";
