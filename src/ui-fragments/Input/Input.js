@@ -1,6 +1,7 @@
 import React from "react";
 import { Label } from "ui-fragments/Typography";
 import { css } from "@emotion/css";
+import propTypes from "prop-types";
 
 const inputBaseClass = [
   "p-4",
@@ -68,5 +69,13 @@ const Input = React.forwardRef(
     );
   }
 );
+
+Input.propTypes = {
+  label: propTypes.string,
+  fw: propTypes.bool,
+  placeholder: propTypes.string,
+  error: propTypes.string,
+  uppercase: propTypes.bool,
+};
 
 export { Input };
