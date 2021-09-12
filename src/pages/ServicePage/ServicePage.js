@@ -1,12 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import useSWR from "swr";
 import { useParams } from "react-router-dom";
+import PlusCircleIcon from "@heroicons/react/solid/PlusCircleIcon";
 
 import { CustomerDetails, PageTitle } from "components";
 import { useNotification } from "hooks";
-import { Card, Input, ScreenLoader, Text, Title } from "ui-fragments";
+import {
+  Card,
+  Input,
+  ScreenLoader,
+  Text,
+  Button,
+  BUTTON_VARIANTS,
+} from "ui-fragments";
 import {
   engineAPI,
+  fixPayloadKeys,
   fromBRL,
   handleCurrencyFieldChange,
   toBRL,
@@ -65,10 +74,12 @@ const ServicePage = () => {
 };
 
 const ServiceItemsFetcher = ({ serviceId }) => {
+  const { showErrorNotification } = useNotification();
   const {
     data: serviceItemsData,
     error,
     isValidating,
+    revalidate,
   } = useSWR(
     `services/${serviceId}/items`,
     serviceId
@@ -76,8 +87,65 @@ const ServiceItemsFetcher = ({ serviceId }) => {
           engineAPI.service_orders.get({
             urlExtension: `${serviceId}/items`,
           })
-      : null
+      : null,
+    { dedupingInterval: 3000 }
   );
+
+  useEffect(() => {
+    if (error) {
+      showErrorNotification({
+        message: "Não conseguimos carregar os items desse serviço",
+      });
+    }
+  }, [error, showErrorNotification]);
+
+  const submitServiceItem = useCallback(
+    values => {
+      try {
+        engineAPI.service_orders.patch({
+          urlExtension: `${serviceId}/items/${values?.id}`,
+          data: fixPayloadKeys(values),
+        });
+      } catch (e) {
+        showErrorNotification({
+          id: "ErrorServiceItemUpdate",
+          message: "Os itens do serviço não foram atualizados",
+        });
+      }
+    },
+    [serviceId, showErrorNotification]
+  );
+
+  const addNewItem = async () => {
+    try {
+      await engineAPI.service_orders.post({
+        urlExtension: `${serviceId}/items`,
+      });
+      revalidate();
+    } catch (e) {
+      showErrorNotification({
+        id: "ErrorServiceItemUpdate",
+        message: "Item não adicionado",
+      });
+    }
+  };
+
+  const deleteItem = async id => {
+    try {
+      if (!id) {
+        return;
+      }
+      await engineAPI.service_orders.delete({
+        urlExtension: `${serviceId}/items/${id}`,
+      });
+      revalidate();
+    } catch (e) {
+      showErrorNotification({
+        id: "ErrorServiceItemUpdate",
+        message: "Item não excluído. Tente novamente",
+      });
+    }
+  };
 
   return (
     <ScreenLoader isValidating={isValidating}>
@@ -104,21 +172,34 @@ const ServiceItemsFetcher = ({ serviceId }) => {
         <div className="flex flex-col gap-1 w-full">
           {serviceItemsData?.data?.map(serviceItem => (
             <div key={serviceItem?.id}>
-              <ServiceItem serviceItem={serviceItem} />
+              <ServiceItem
+                serviceItem={serviceItem}
+                onSubmitChanges={submitServiceItem}
+                onDeleteItem={deleteItem}
+              />
             </div>
           ))}
+          <div className="flex justify-center">
+            <Button variant={BUTTON_VARIANTS.GHOST} onClick={addNewItem}>
+              <PlusCircleIcon className="text-black text-sm h-10 w-10" />
+            </Button>
+          </div>
         </div>
       </div>
     </ScreenLoader>
   );
 };
 
-const ServiceItem = ({ serviceItem }) => {
+const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
   const {
-    formMethods: { register, watch, setValue },
+    formMethods: { register, watch, setValue, formState },
   } = useCustomForm({ schema: serviceItemSchema, preloadedData: serviceItem });
-
-  const [quantity, unitPrice] = watch(["quantity", "unitPrice"]);
+  const isDirty = formState.isDirty;
+  const [quantity, unitPrice, description] = watch([
+    "quantity",
+    "unitPrice",
+    "description",
+  ]);
 
   const unitPriceControl = register("unitPrice");
 
@@ -128,6 +209,31 @@ const ServiceItem = ({ serviceItem }) => {
       handleCurrencyFieldChange(Number(serviceItem.unit_price).toFixed(2))
     );
   }, [serviceItem.unit_price, setValue]);
+
+  useEffect(() => {
+    if (!isDirty) {
+      return;
+    }
+    const updateDeduper = setTimeout(() => {
+      onSubmitChanges({
+        id: serviceItem.id,
+        quantity,
+        unitPrice: fromBRL(unitPrice),
+        description,
+      });
+    }, 1000);
+
+    return () => {
+      clearTimeout(updateDeduper);
+    };
+  }, [
+    quantity,
+    unitPrice,
+    description,
+    onSubmitChanges,
+    isDirty,
+    serviceItem.id,
+  ]);
 
   return (
     <div className="flex gap-2 flex-1 flex-wrap">
