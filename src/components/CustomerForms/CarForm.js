@@ -182,87 +182,85 @@ const CarFormView = ({
   );
 
   return (
-    <>
-      <div className="flex gap-3 md:gap-8 flex-wrap">
-        <div className="flex-1" style={{ minWidth: "200px" }}>
-          <Input
-            fw
-            uppercase
-            label="Placa"
-            placeholder="Placa"
-            {...register("licensePlate")}
-            error={errors.licensePlate}
-          />
-        </div>
-        <div className="flex-1" style={{ minWidth: "200px" }}>
-          <Input
-            fw
-            label="Marca"
-            placeholder="Marca"
-            {...register("make")}
-            error={errors.model}
-            list="carMakes"
-          />
-
-          <datalist id="carMakes">
-            {makesOptions.map(make => (
-              <option value={make} key={make} />
-            ))}
-          </datalist>
-        </div>
-        <div className="flex-1" style={{ minWidth: "200px" }}>
-          <Input
-            fw
-            label="Modelo"
-            placeholder="Modelo"
-            {...register("model")}
-            error={errors.model}
-            list="carModels"
-          />
-          <datalist id="carModels">
-            {modelsFilteredBySelectedMake.map(model => (
-              <option value={model} key={model} />
-            ))}
-          </datalist>
-        </div>
-        <div className="flex-1 sm:flex-none" style={{ minWidth: "100px" }}>
-          <Input
-            fw
-            label="Ano"
-            placeholder="Ano"
-            {...register("manufactureYear")}
-            error={errors.manufactureYear}
-          />
-        </div>
-        <div className="flex-1" style={{ minWidth: "200px" }}>
-          <Input
-            fw
-            label="Combustível"
-            placeholder="Combustível"
-            {...register("fuel")}
-            error={errors.fuel}
-          />
-        </div>
-        <div className="flex-1" style={{ minWidth: "200px" }}>
-          <Input
-            fw
-            label="Cilindradas"
-            placeholder="Cilindradas"
-            {...register("displacement")}
-            error={errors.displacement}
-          />
-        </div>
-        <div className="flex-1" style={{ minWidth: "200px" }}>
-          <Input
-            fw
-            label="Cor"
-            placeholder="Cor"
-            {...register("color")}
-            error={errors.color}
-          />
-        </div>
+    <div className="flex gap-3 md:gap-8 flex-wrap">
+      <div className="flex-1" style={{ minWidth: "200px" }}>
+        <Input
+          fw
+          uppercase
+          label="Placa"
+          placeholder="Placa"
+          {...register("licensePlate")}
+          error={errors.licensePlate}
+        />
       </div>
-    </>
+      <div className="flex-1" style={{ minWidth: "200px" }}>
+        <Input
+          fw
+          label="Marca"
+          placeholder="Marca"
+          {...register("make")}
+          error={errors.model}
+          list="carMakes"
+        />
+
+        <datalist id="carMakes">
+          {makesOptions.map(make => (
+            <option value={make} key={make} />
+          ))}
+        </datalist>
+      </div>
+      <div className="flex-1" style={{ minWidth: "200px" }}>
+        <Input
+          fw
+          label="Modelo"
+          placeholder="Modelo"
+          {...register("model")}
+          error={errors.model}
+          list="carModels"
+        />
+        <datalist id="carModels">
+          {modelsFilteredBySelectedMake.map(model => (
+            <option value={model} key={model} />
+          ))}
+        </datalist>
+      </div>
+      <div className="flex-1" style={{ minWidth: "100px" }}>
+        <Input
+          fw
+          label="Ano"
+          placeholder="Ano"
+          {...register("manufactureYear")}
+          error={errors.manufactureYear}
+        />
+      </div>
+      <div className="flex-1" style={{ minWidth: "200px" }}>
+        <Input
+          fw
+          label="Combustível"
+          placeholder="Combustível"
+          {...register("fuel")}
+          error={errors.fuel}
+        />
+      </div>
+      <div className="flex-1" style={{ minWidth: "200px" }}>
+        <Input
+          fw
+          label="Cilindradas"
+          placeholder="Cilindradas"
+          {...register("displacement")}
+          error={errors.displacement}
+        />
+      </div>
+      <div className="flex-1" style={{ minWidth: "200px" }}>
+        <Input
+          fw
+          label="Cor"
+          placeholder="Cor"
+          {...register("color")}
+          error={errors.color}
+        />
+      </div>
+    </div>
   );
 };
 
