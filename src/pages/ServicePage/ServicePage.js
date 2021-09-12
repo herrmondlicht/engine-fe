@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { useParams } from "react-router-dom";
 import PlusCircleIcon from "@heroicons/react/solid/PlusCircleIcon";
+import MinusCircleIcon from "@heroicons/react/solid/MinusCircleIcon";
 
 import { CustomerDetails, PageTitle } from "components";
 import { useNotification } from "hooks";
@@ -75,6 +76,7 @@ const ServicePage = () => {
 
 const ServiceItemsFetcher = ({ serviceId }) => {
   const { showErrorNotification } = useNotification();
+  const { mutate } = useSWRConfig();
   const {
     data: serviceItemsData,
     error,
@@ -138,7 +140,9 @@ const ServiceItemsFetcher = ({ serviceId }) => {
       await engineAPI.service_orders.delete({
         urlExtension: `${serviceId}/items/${id}`,
       });
-      revalidate();
+      mutate(`services/${serviceId}/items`, {
+        data: serviceItemsData?.data?.filter(removeItemFromList(id)),
+      });
     } catch (e) {
       showErrorNotification({
         id: "ErrorServiceItemUpdate",
@@ -146,6 +150,9 @@ const ServiceItemsFetcher = ({ serviceId }) => {
       });
     }
   };
+
+  const removeItemFromList = id =>
+    serviceItemsData?.data?.filter(serviceItem => serviceItem.id !== id);
 
   return (
     <ScreenLoader isValidating={isValidating}>
@@ -267,6 +274,15 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
             disabled
             readOnly
           />
+        </div>
+        <div className="flex justify-center items-center">
+          <Button
+            size="small"
+            variant={BUTTON_VARIANTS.GHOST}
+            onClick={onDeleteItem}
+          >
+            <MinusCircleIcon className="text-error-0 text-sm h-7 w-7" />
+          </Button>
         </div>
       </div>
     </div>
