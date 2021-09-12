@@ -33,7 +33,7 @@ const convertFormKeyToAPI = (
 
 const fixPayloadKeys = (
   payload,
-  { fieldTranslator, fieldsToKey = apiFieldsKey } = {}
+  { fieldTranslator = convertFormKeyToAPI, fieldsToKey = apiFieldsKey } = {}
 ) => {
   if (!fieldTranslator) {
     throw new Error("Please specify a fieldTranslator");
