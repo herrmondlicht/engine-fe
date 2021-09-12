@@ -46,7 +46,7 @@ const Input = React.forwardRef(
       ...(uppercase ? ["uppercase"] : []),
     ].join(" ");
     return (
-      <div className="pb-6 relative">
+      <div>
         {label ? (
           <div className="mb-4 ml-1">
             <Label error={error}>{label}</Label>
@@ -60,7 +60,7 @@ const Input = React.forwardRef(
           className={`${inputBaseClass} ${modifierClasses} ${placeholderClass}`}
         />
         {error && (
-          <label className="absolute w-full bottom-0 left-0 font-medium ml-1 mt-1 text-sm text-error-0">
+          <label className="font-medium ml-1 mt-1 text-sm text-error-0">
             {error}
           </label>
         )}

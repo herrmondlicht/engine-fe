@@ -37,7 +37,7 @@ const FormWithButton = ({
       <div className="mt-3">
         <Form errors={errors} {...formMethods} />
       </div>
-      <div className="flex justify-end">
+      <div className="flex justify-end mt-3 md:mt-8">
         <Button
           showLoader={isLoading}
           variant={isValidPreloadData && !isDirty ? "success" : "primary"}

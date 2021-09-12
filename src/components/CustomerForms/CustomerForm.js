@@ -75,7 +75,7 @@ const CustomerForm = ({ loadedCustomer }) => {
 };
 
 const CustomerFormView = ({ register, errors }) => (
-  <div className="flex-col gap-3 md:gap-0">
+  <div className="flex flex-col gap-3 md:gap-8">
     <div className="flex gap-3 md:gap-8 flex-wrap">
       <div className="flex-1" style={{ minWidth: "200px" }}>
         <Input
