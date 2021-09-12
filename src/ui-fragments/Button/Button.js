@@ -4,6 +4,13 @@ import Loader from "react-loader-spinner";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
 import { theme } from "twtheme";
 
+export const BUTTON_VARIANTS = {
+  GHOST: "ghost",
+  PRIMARY: "primary",
+  SUCCESS: "success",
+  ERROR: "error",
+};
+
 const Button = (
   { onClick, children, variant = "primary", size, fw, disabled, showLoader },
   ref
