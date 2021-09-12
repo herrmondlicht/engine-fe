@@ -171,12 +171,12 @@ const ServiceItemsFetcher = ({ serviceId }) => {
             <div className="w-16">
               <Text>Qtd.</Text>
             </div>
-            <div className="flex-1">
+            <div className="flex-1 mr-12">
               <Text>Preço Total</Text>
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-1 w-full">
+        <div className="flex flex-col gap-3 w-full">
           {serviceItemsData?.data?.map(serviceItem => (
             <div key={serviceItem?.id}>
               <ServiceItem
