@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import PlusCircleIcon from "@heroicons/react/solid/PlusCircleIcon";
 import MinusCircleIcon from "@heroicons/react/solid/MinusCircleIcon";
 
-import { CustomerDetails, PageTitle } from "components";
+import { CustomerDetails, PageTitle, FinancialDetails } from "components";
 import { useNotification } from "hooks";
 import {
   Card,
@@ -22,7 +22,7 @@ import {
   toBRL,
   yup,
 } from "utils";
-import { useCustomForm } from "hooks/useCustomForm";
+import { useCustomForm } from "hooks";
 
 const serviceItemSchema = yup.object().shape({
   id: yup.string(),
@@ -57,16 +57,25 @@ const ServicePage = () => {
         message: "Não conseguimos acessar esse serviço ☹️",
       });
     }
-  });
-
+  }, [error, showErrorNotification]);
   return (
     <div className="flex flex-col gap-10 pb-10">
       <CustomerDetails customerCarId={serviceData?.data?.customer_car_id} />
       <Card>
-        <PageTitle title="Peças" description="Serviços" />
+        <PageTitle title="Peças" description="Serviço" />
         <div className="mt-4">
           <ScreenLoader isLoading={isValidating}>
             <ServiceItemsFetcher serviceId={serviceId} />
+          </ScreenLoader>
+        </div>
+      </Card>
+      <Card>
+        <PageTitle title="Detalhes" description="Serviço" />
+        <div className="mt-4">
+          <ScreenLoader isLoading={isValidating}>
+            {serviceData?.data && (
+              <FinancialDetails financialData={serviceData?.data} />
+            )}
           </ScreenLoader>
         </div>
       </Card>
@@ -279,7 +288,7 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
           <Button
             size="small"
             variant={BUTTON_VARIANTS.GHOST}
-            onClick={onDeleteItem}
+            onClick={() => onDeleteItem(serviceItem?.id)}
           >
             <MinusCircleIcon className="text-error-0 text-sm h-7 w-7" />
           </Button>
