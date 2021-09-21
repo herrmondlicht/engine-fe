@@ -1,154 +1,124 @@
-import React from "react";
-import { Grid, TextField, Typography, Divider } from "@material-ui/core";
+import React, { useEffect, useMemo } from "react";
 
-import NumberFormat from "react-number-format";
-import CurrencyInput from "../../Common/CurrencyInput";
+import { Button, Input, Title, TITLE_SIZES } from "ui-fragments";
+import { yup, handleCurrencyFieldChange, toBRL, fromBRL } from "utils";
+import { useCustomForm } from "hooks";
+
+const financialDetailsSchema = yup.object({
+  odometerReading: yup.string().required(),
+  servicePrice: yup.string().required(),
+  observations: yup.string(),
+  discountPrice: yup.string(),
+});
 
 const createFinancialDetails = () =>
-  function FinancialDetails({
-    service_items_price = "",
-    service_price = "",
-    discount_price = "",
-    observations = "",
-    odometer_reading = "",
-    updateServicesValuesOnBlur,
-    updateServiceValuesOnChange,
-    updateObservationOnBlur,
-    updateValueOnBlur,
-  }) {
-    const totalPrice =
-      service_items_price + (service_price || 0) - (discount_price || 0);
+  function FinancialDetails({ financialData, onSaveService }) {
+    const {
+      formMethods: { register, watch, setValue },
+    } = useCustomForm({
+      schema: financialDetailsSchema,
+      preloadedData: financialData,
+    });
 
-    const handleBlur = () => {
-      updateServicesValuesOnBlur({
-        service_price,
-        discount_price,
-      });
-    };
+    const [updatedServicePrice, discountPrice] = watch([
+      "servicePrice",
+      "discountPrice",
+    ]);
+    const servicePriceControl = register("servicePrice");
+    const serviceDiscountControl = register("discountPrice");
+
+    const totalPrice = useMemo(
+      () =>
+        financialData.service_items_price +
+        Number(fromBRL(updatedServicePrice || 0)) -
+        Number(fromBRL(discountPrice || 0)),
+      [discountPrice, financialData.service_items_price, updatedServicePrice]
+    );
+
+    useEffect(() => {
+      setValue(
+        "servicePrice",
+        handleCurrencyFieldChange(
+          Number(financialData.service_price).toFixed(2)
+        )
+      );
+    }, [financialData.service_price, setValue]);
+
+    useEffect(() => {
+      setValue(
+        "discountPrice",
+        handleCurrencyFieldChange(
+          Number(financialData.discount_price).toFixed(2)
+        )
+      );
+    }, [financialData.discount_price, setValue]);
 
     return (
-      <div className="flex-col w-full">
-        <div className="flex w-full">
-          {/* payment */}
-          <div className="flex-col w-1/2">
-            <div className="flex-col">
-              <Grid container item alignItems="center">
-                <Typography variant="body1">Quilometragem</Typography>
-              </Grid>
-              <TextField
-                onChange={e =>
-                  updateServiceValuesOnChange("odometer_reading")(
-                    e.target.value
-                  )
-                }
-                onBlur={e =>
-                  updateValueOnBlur({
-                    key: "odometer_reading",
-                    value: e.target.value,
-                  })
-                }
-                value={odometer_reading}
-                size="small"
-                variant="outlined"
-                fullWidth
-              />
-            </div>
-            <div className="mt-4">
-              <PricesView
-                servicePrice={service_price}
-                setServicePrice={updateServiceValuesOnChange("service_price")}
-                discountPrice={discount_price}
-                setDiscountPrice={updateServiceValuesOnChange("discount_price")}
-                itemsPrice={service_items_price}
-                handleBlur={handleBlur}
-              />
-            </div>
+      <div className="flex flex-col w-full gap-3">
+        <div className="flex w-full flex-col md:flex-row md:divide-x md:gap-8">
+          <div className="flex flex-col w-full flex-1 gap-3">
+            <Input
+              fw
+              label="Quilomentragem"
+              type="number"
+              {...register("odometerReading")}
+            />
+            <Input
+              fw
+              label="Valor Serviço"
+              {...servicePriceControl}
+              onChange={e => {
+                const value = handleCurrencyFieldChange(e.target.value);
+                e.target.value = value;
+                servicePriceControl.onChange(e);
+              }}
+            />
+            <Input
+              fw
+              label="Valor de Peças"
+              value={toBRL(financialData.service_items_price)}
+              disabled
+            />
+            <Input
+              fw
+              label="Desconto"
+              {...serviceDiscountControl}
+              onChange={e => {
+                const value = handleCurrencyFieldChange(e.target.value);
+                e.target.value = value;
+                serviceDiscountControl.onChange(e);
+              }}
+            />
           </div>
-          <div className="mx-10">
-            <Divider orientation="vertical" />
-          </div>
-          <div className="flex items-center justify-center w-1/2">
-            <div className="flex-col">
-              <Typography variant="h4">Total</Typography>
-              <Typography variant="h3">
-                <NumberFormat
-                  value={totalPrice}
-                  displayType="text"
-                  prefix="R$"
-                  thousandSeparator="."
-                  decimalSeparator=","
-                  decimalScale={2}
-                  fixedDecimalScale={2}
-                />
-              </Typography>
+          <div className="flex items-center justify-center w-full md:w-1/2">
+            <div className="hidden md:block">
+              <Title size={TITLE_SIZES.BIG}>Total</Title>
+              <Title size={TITLE_SIZES.HUGE_2x}>{toBRL(totalPrice)}</Title>
+            </div>
+            <div className="block mt-10 md:hidden">
+              <Title size={TITLE_SIZES.MEDIUM}>Total</Title>
+              <Title size={TITLE_SIZES.BIG}>{toBRL(totalPrice)}</Title>
             </div>
           </div>
         </div>
-        <div className="flex mt-6">
-          <TextField
-            onChange={e =>
-              updateServiceValuesOnChange("observations")(e.target.value)
-            }
-            onBlur={e => updateObservationOnBlur(e.target.value)}
-            value={observations}
+        <div className="mt-6 w-full">
+          <Input
             label="Observações"
-            size="small"
-            rows="5"
-            variant="outlined"
-            multiline
-            fullWidth
+            fw
+            as="textarea"
+            rows={5}
+            {...register("observations")}
           />
+          <div className="flex justify-end mt-3">
+            <div className="w-full md:w-60">
+              <Button fw onClick={onSaveService}>
+                Salvar Alterações
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     );
   };
-
-function PricesView({
-  servicePrice,
-  setServicePrice,
-  discountPrice,
-  setDiscountPrice,
-  itemsPrice,
-  handleBlur,
-}) {
-  return (
-    <Grid container item direction="row" spacing={2}>
-      <LabelAndPrice
-        label="Valor do Serviço"
-        onChange={e => setServicePrice(e.target.value)}
-        price={servicePrice}
-        onBlur={handleBlur}
-        value={servicePrice}
-      />
-      <LabelAndPrice
-        label="Valor de Peças"
-        price={itemsPrice}
-        inputProps={{
-          disabled: true,
-        }}
-      />
-      <LabelAndPrice
-        onBlur={handleBlur}
-        label="Desconto"
-        price={discountPrice}
-        onChange={e => setDiscountPrice(e.target.value)}
-        value={discountPrice}
-      />
-    </Grid>
-  );
-}
-
-function LabelAndPrice({ label, price, onChange = () => {}, ...props }) {
-  return (
-    <Grid container item spacing={1} direction="column">
-      <Grid container item alignItems="center">
-        <Typography variant="body1">{label}</Typography>
-      </Grid>
-      <Grid item>
-        <CurrencyInput onChange={onChange} value={price} {...props} />
-      </Grid>
-    </Grid>
-  );
-}
 
 export default createFinancialDetails();
