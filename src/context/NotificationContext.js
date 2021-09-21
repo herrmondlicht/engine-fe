@@ -58,9 +58,9 @@ const NotificationProvider = ({ children }) => {
           className="relative right-0 mt-3 md:mr-5 md:mt-5 flex flex-col gap-5"
           style={{ width: "310px" }}
         >
-          {notifications.map(notification => (
+          {notifications.map((notification, index) => (
             <Alert
-              key={notification.id}
+              key={index}
               {...notification}
               onCloseAction={() => removeNotification(notification.id)}
             />
