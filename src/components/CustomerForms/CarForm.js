@@ -2,7 +2,6 @@ import { NOTIFICATION_DURATION, NOTIFICATION_TYPES } from "context";
 import { useNotification } from "hooks";
 import React from "react";
 import { useMemo } from "react";
-import { useHistory } from "react-router-dom";
 import useSWR from "swr";
 
 import { Card, Input, ScreenLoader } from "ui-fragments";
@@ -12,6 +11,7 @@ import {
   yup,
   APIRoutes,
   convertFormKeyToAPI,
+  getHTTPMethod,
 } from "utils";
 import { FormWithButton } from "./FormWithButton";
 
@@ -24,8 +24,6 @@ const carFormSchema = yup.object().shape({
   color: yup.string(),
   displacement: yup.string(),
 });
-
-const getHTTPMethod = loadedData => (loadedData ? "patch" : "post");
 
 const CarForm = ({ loadedData, onSubmitAction }) => {
   const { showNotification, showErrorNotification } = useNotification();
