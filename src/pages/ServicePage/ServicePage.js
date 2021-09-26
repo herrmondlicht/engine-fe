@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 import { useParams } from "react-router-dom";
 import PlusCircleIcon from "@heroicons/react/solid/PlusCircleIcon";
 import MinusCircleIcon from "@heroicons/react/solid/MinusCircleIcon";
