@@ -70,14 +70,11 @@ const ServicePage = () => {
         </div>
       </Card>
       <Card>
-        <PageTitle title="Detalhes" description="Serviço" />
-        <div className="mt-4">
-          <ScreenLoader isLoading={isValidating}>
-            {serviceData?.data && (
-              <FinancialDetails financialData={serviceData?.data} />
-            )}
-          </ScreenLoader>
-        </div>
+        <ScreenLoader isLoading={isValidating}>
+          {serviceData?.data && (
+            <FinancialDetails financialData={serviceData?.data} />
+          )}
+        </ScreenLoader>
       </Card>
     </div>
   );
