@@ -82,12 +82,11 @@ const ServicePage = () => {
 
 const ServiceItemsFetcher = ({ serviceId }) => {
   const { showErrorNotification } = useNotification();
-  const { mutate } = useSWRConfig();
   const {
     data: serviceItemsData,
     error,
     isValidating,
-    revalidate,
+    mutate,
   } = useSWR(
     `services/${serviceId}/items`,
     serviceId
@@ -129,7 +128,7 @@ const ServiceItemsFetcher = ({ serviceId }) => {
       await engineAPI.service_orders.post({
         urlExtension: `${serviceId}/items`,
       });
-      revalidate();
+      mutate();
     } catch (e) {
       showErrorNotification({
         id: "ErrorServiceItemUpdate",
@@ -146,9 +145,12 @@ const ServiceItemsFetcher = ({ serviceId }) => {
       await engineAPI.service_orders.delete({
         urlExtension: `${serviceId}/items/${id}`,
       });
-      mutate(`services/${serviceId}/items`, {
-        data: serviceItemsData?.data?.filter(removeItemFromList(id)),
-      });
+      mutate(
+        {
+          data: removeItemFromList(id),
+        },
+        false
+      );
     } catch (e) {
       showErrorNotification({
         id: "ErrorServiceItemUpdate",
@@ -158,7 +160,7 @@ const ServiceItemsFetcher = ({ serviceId }) => {
   };
 
   const removeItemFromList = id =>
-    serviceItemsData?.data?.filter(serviceItem => serviceItem.id !== id);
+    serviceItemsData?.data?.filter?.(serviceItem => serviceItem.id !== id);
 
   return (
     <ScreenLoader isValidating={isValidating}>
