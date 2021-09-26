@@ -41,13 +41,15 @@ const createFinancialDetails = () =>
     const updateFinancialDetails = async formData => {
       const method = getHTTPMethod(financialData?.id);
       try {
-        const payload = {
+        const sanitizedForm = {
           ...(financialData ? financialData : {}),
           ...formData,
+          servicePrice: fromBRL(formData.servicePrice),
+          discountPrice: fromBRL(formData.discountPrice),
         };
         const data = await engineAPI.service_orders[method]({
           urlExtension: financialData?.id,
-          data: fixPayloadKeys(payload, {
+          data: fixPayloadKeys(sanitizedForm, {
             fieldTranslator: convertFormKeyToAPI,
           }),
         });
@@ -63,7 +65,6 @@ const createFinancialDetails = () =>
         });
         return data?.data;
       } catch (error) {
-        console.log(error);
         showErrorNotification({
           id: "serviceAddedErro",
           title: "Opa algo deu errado!",
