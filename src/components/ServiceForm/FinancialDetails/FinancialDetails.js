@@ -56,12 +56,11 @@ const createFinancialDetails = () =>
         showNotification({
           id: "serviceAdded",
           duration: NOTIFICATION_DURATION.SHORT,
-          title: financialData
-            ? "Serviço atualizado!"
-            : "Serviço salvo com sucesso!",
-          type: financialData
-            ? NOTIFICATION_TYPES.INFO
-            : NOTIFICATION_TYPES.SUCCESS,
+          title: "Serviço salvo com sucesso!",
+          type: NOTIFICATION_TYPES.SUCCESS,
+          ...(financialData
+            ? { title: "Serviço atualizado!", type: NOTIFICATION_TYPES.INFO }
+            : {}),
         });
         return data?.data;
       } catch (error) {
