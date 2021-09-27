@@ -88,7 +88,11 @@ const ButtonContent = ({ children, showLoader, variant }) => {
           type="TailSpin"
           height={30}
           width={30}
-          color={theme.colors.white}
+          color={
+            variant === BUTTON_VARIANTS.GHOST
+              ? theme.colors.primary[0]
+              : theme.colors.white
+          }
         />
       </div>
       {!showLoader && (
