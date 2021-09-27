@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import useSWR from "swr";
 import { useParams } from "react-router-dom";
 import PlusCircleIcon from "@heroicons/react/solid/PlusCircleIcon";
@@ -40,6 +40,7 @@ const ServicePage = () => {
     data: serviceData,
     isValidating,
     error,
+    mutate,
   } = useSWR(
     `services/${serviceId}`,
     serviceId
@@ -49,6 +50,10 @@ const ServicePage = () => {
           })
       : null
   );
+
+  const mutateServiceData = useCallback(() => {
+    mutate();
+  }, [mutate]);
 
   useEffect(() => {
     if (error) {
@@ -64,8 +69,11 @@ const ServicePage = () => {
       <Card>
         <PageTitle title="Peças" description="Serviço" />
         <div className="mt-4">
-          <ScreenLoader isLoading={isValidating}>
-            <ServiceItemsFetcher serviceId={serviceId} />
+          <ScreenLoader isLoading={!error && !serviceData}>
+            <ServiceItemsFetcher
+              serviceId={serviceId}
+              updateServiceData={mutateServiceData}
+            />
           </ScreenLoader>
         </div>
       </Card>
@@ -80,12 +88,12 @@ const ServicePage = () => {
   );
 };
 
-const ServiceItemsFetcher = ({ serviceId }) => {
+const ServiceItemsFetcher = ({ serviceId, updateServiceData }) => {
   const { showErrorNotification } = useNotification();
+  const [isLoading, setIsLoading] = useState(false);
   const {
     data: serviceItemsData,
     error,
-    isValidating,
     mutate,
   } = useSWR(
     `services/${serviceId}/items`,
@@ -107,12 +115,13 @@ const ServiceItemsFetcher = ({ serviceId }) => {
   }, [error, showErrorNotification]);
 
   const submitServiceItem = useCallback(
-    values => {
+    async values => {
       try {
-        engineAPI.service_orders.patch({
+        await engineAPI.service_orders.patch({
           urlExtension: `${serviceId}/items/${values?.id}`,
           data: fixPayloadKeys(values),
         });
+        updateServiceData();
       } catch (e) {
         showErrorNotification({
           id: "ErrorServiceItemUpdate",
@@ -120,20 +129,23 @@ const ServiceItemsFetcher = ({ serviceId }) => {
         });
       }
     },
-    [serviceId, showErrorNotification]
+    [serviceId, showErrorNotification, updateServiceData]
   );
 
   const addNewItem = async () => {
     try {
+      setIsLoading(true);
       await engineAPI.service_orders.post({
         urlExtension: `${serviceId}/items`,
       });
-      mutate();
+      await mutate();
     } catch (e) {
       showErrorNotification({
         id: "ErrorServiceItemUpdate",
         message: "Item não adicionado",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -151,6 +163,7 @@ const ServiceItemsFetcher = ({ serviceId }) => {
         },
         false
       );
+      updateServiceData();
     } catch (e) {
       showErrorNotification({
         id: "ErrorServiceItemUpdate",
@@ -163,7 +176,7 @@ const ServiceItemsFetcher = ({ serviceId }) => {
     serviceItemsData?.data?.filter?.(serviceItem => serviceItem.id !== id);
 
   return (
-    <ScreenLoader isValidating={isValidating}>
+    <ScreenLoader isLoading={!error && !serviceItemsData}>
       <div className="flex flex-col gap-4">
         <div className="flex gap-2 w-full">
           <div className="flex-1">
@@ -195,7 +208,11 @@ const ServiceItemsFetcher = ({ serviceId }) => {
             </div>
           ))}
           <div className="flex justify-center">
-            <Button variant={BUTTON_VARIANTS.GHOST} onClick={addNewItem}>
+            <Button
+              variant={BUTTON_VARIANTS.GHOST}
+              onClick={addNewItem}
+              showLoader={isLoading}
+            >
               <PlusCircleIcon className="text-black text-sm h-10 w-10" />
             </Button>
           </div>
@@ -206,6 +223,7 @@ const ServiceItemsFetcher = ({ serviceId }) => {
 };
 
 const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     formMethods: { register, watch, setValue, formState },
   } = useCustomForm({ schema: serviceItemSchema, preloadedData: serviceItem });
@@ -216,14 +234,23 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
     "description",
   ]);
 
-  const unitPriceControl = register("unitPrice");
+  const unitPriceControl = register(
+    "unitPrice",
+    handleCurrencyFieldChange(Number(serviceItem.unit_price).toFixed(2))
+  );
+
+  const onDeleteClick = useCallback(async () => {
+    setIsLoading(true);
+    await onDeleteItem(serviceItem?.id);
+    setIsLoading(false);
+  }, [onDeleteItem, serviceItem?.id]);
 
   useEffect(() => {
     setValue(
       "unitPrice",
       handleCurrencyFieldChange(Number(serviceItem.unit_price).toFixed(2))
     );
-  }, [serviceItem.unit_price, setValue]);
+  }, [serviceItem, setValue]);
 
   useEffect(() => {
     if (!isDirty) {
@@ -287,7 +314,8 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
           <Button
             size="small"
             variant={BUTTON_VARIANTS.GHOST}
-            onClick={() => onDeleteItem(serviceItem?.id)}
+            onClick={onDeleteClick}
+            showLoader={isLoading}
           >
             <MinusCircleIcon className="text-error-0 text-sm h-7 w-7" />
           </Button>
