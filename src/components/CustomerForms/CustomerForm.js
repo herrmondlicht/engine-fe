@@ -31,7 +31,6 @@ const CustomerForm = ({ loadedCustomer }) => {
         urlExtension: loadedCustomer?.id,
         data: fixPayloadKeys(data, { fieldTranslator: convertFormKeyToAPI }),
       });
-      // TODO
       showNotification({
         id: "customerAdded",
         duration: NOTIFICATION_DURATION.SHORT,
@@ -106,7 +105,7 @@ const CustomerFormView = ({ register, errors }) => (
           error={errors.phone}
         />
       </div>
-      <div className="flex-1 md:flex-none" style={{ minWidth: "200px" }}>
+      <div className="flex-1" style={{ minWidth: "250px" }}>
         <Input
           fw
           label="Email"
@@ -115,7 +114,7 @@ const CustomerFormView = ({ register, errors }) => (
           error={errors.email}
         />
       </div>
-      <div className="flex-1" style={{ minWidth: "200px" }}>
+      <div className="flex-1" style={{ minWidth: "250px" }}>
         <Input
           fw
           label="Endereço"
