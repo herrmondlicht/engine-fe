@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { Label } from "ui-fragments/Typography";
 import { css } from "@emotion/css";
 import propTypes from "prop-types";
@@ -12,6 +12,7 @@ const inputBaseClass = [
   "focus:bg-white",
   "focus:ring-2",
   "focus:ring-primary-0",
+  "resize-none",
 ].join(" ");
 
 const inputError = ["bg-error-2", "ring-2", "ring-error-0"].join(" ");
@@ -39,8 +40,36 @@ const placeholderClass = css`
   }
 `;
 
-const Input = React.forwardRef(
-  ({ label, fw, placeholder, error, uppercase, ...props }, ref) => {
+const numberArrowClass = css`
+  ::-webkit-outer-spin-button,
+  ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+`;
+
+const textAreaScrollClass = css`
+  textarea::-webkit-scrollbar {
+    width: 1em;
+  }
+
+  textarea::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  }
+
+  textarea::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+  }
+`;
+
+const Input = forwardRef(
+  ({ label, fw, placeholder, error, uppercase, as, ...props }, ref) => {
     const modifierClasses = [
       ...(fw ? ["w-full"] : []),
       ...(error ? [inputError] : []),
@@ -53,13 +82,23 @@ const Input = React.forwardRef(
             <Label error={error}>{label}</Label>
           </div>
         ) : null}
-        <input
-          autoComplete="no"
-          placeholder={placeholder}
-          ref={ref}
-          {...props}
-          className={`${inputBaseClass} ${modifierClasses} ${placeholderClass}`}
-        />
+        {as === "textarea" ? (
+          <textarea
+            autoComplete="no"
+            placeholder={placeholder}
+            ref={ref}
+            {...props}
+            className={`${inputBaseClass} ${modifierClasses} ${placeholderClass} ${textAreaScrollClass}`}
+          />
+        ) : (
+          <input
+            autoComplete="no"
+            placeholder={placeholder}
+            ref={ref}
+            {...props}
+            className={`${inputBaseClass} ${modifierClasses} ${placeholderClass} ${numberArrowClass}`}
+          />
+        )}
         {error && (
           <label className="font-medium ml-1 mt-1 text-sm text-error-0">
             {error}
@@ -77,5 +116,7 @@ Input.propTypes = {
   error: propTypes.string,
   uppercase: propTypes.bool,
 };
+
+Input.displayName = "Input";
 
 export { Input };

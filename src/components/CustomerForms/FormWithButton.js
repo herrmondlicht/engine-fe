@@ -1,5 +1,5 @@
 import { PageTitle } from "components";
-import { useCustomForm } from "hooks/useCustomForm";
+import { useCustomForm } from "hooks";
 import React, { useState } from "react";
 
 import { Button } from "ui-fragments";

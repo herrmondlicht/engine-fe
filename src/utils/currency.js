@@ -4,7 +4,7 @@ export const toBRL = value => {
   if (isNaN(value)) {
     return "-";
   }
-  return Number(value).toLocaleString("pt-br", {
+  return Number(value.toString()).toLocaleString("pt-br", {
     style: "currency",
     currency: "BRL",
   });
@@ -14,11 +14,11 @@ export const fromBRL = value => {
   if (value === undefined || value === null) {
     return "-";
   }
-  return fixDecimalPoint(value);
+  return fixDecimalPoint(value.toString());
 };
 
 export const handleCurrencyFieldChange = value => {
-  const fixedValue = fixDecimalPoint(value).split("");
+  const fixedValue = fixDecimalPoint(value.toString()).split("");
   if (fixedValue[0] === ".") {
     fixedValue.splice(0, 0, "0");
   }
@@ -28,11 +28,13 @@ export const handleCurrencyFieldChange = value => {
   return toBRL(fixedValue.join(""));
 };
 
+export const sanitizeNumber = value => value?.replace(NOT_DIGIT, "");
+
 const fixDecimalPoint = value => {
   if (!value) {
     return "0.00";
   }
-  const sanitizedValueRaw = value.toString().replace(NOT_DIGIT, "");
+  const sanitizedValueRaw = sanitizeNumber(value.toString());
   const valueRawArray = sanitizedValueRaw.split("");
   valueRawArray.splice(-2, 0, ".");
   const valueWithDecimalPoint = valueRawArray.join("");

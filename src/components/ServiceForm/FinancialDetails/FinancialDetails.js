@@ -1,154 +1,174 @@
-import React from "react";
-import { Grid, TextField, Typography, Divider } from "@material-ui/core";
+import { FormWithButton } from "components";
+import React, { useMemo } from "react";
 
-import NumberFormat from "react-number-format";
-import CurrencyInput from "../../Common/CurrencyInput";
+import { Input, Title, TITLE_SIZES } from "ui-fragments";
+import {
+  yup,
+  handleCurrencyFieldChange,
+  toBRL,
+  fromBRL,
+  getHTTPMethod,
+  fixPayloadKeys,
+  engineAPI,
+  convertFormKeyToAPI,
+} from "utils";
+import { useNotification } from "hooks";
+import { NOTIFICATION_DURATION, NOTIFICATION_TYPES } from "context";
+
+const financialDetailsSchema = yup.object({
+  odometerReading: yup.string().required(),
+  servicePrice: yup.string().required(),
+  observations: yup.string(),
+  discountPrice: yup.string(),
+});
 
 const createFinancialDetails = () =>
-  function FinancialDetails({
-    service_items_price = "",
-    service_price = "",
-    discount_price = "",
-    observations = "",
-    odometer_reading = "",
-    updateServicesValuesOnBlur,
-    updateServiceValuesOnChange,
-    updateObservationOnBlur,
-    updateValueOnBlur,
-  }) {
-    const totalPrice =
-      service_items_price + (service_price || 0) - (discount_price || 0);
+  function FinancialDetails({ financialData }) {
+    const { showErrorNotification, showNotification } = useNotification();
 
-    const handleBlur = () => {
-      updateServicesValuesOnBlur({
-        service_price,
-        discount_price,
-      });
+    const financialDataToCurrency = useMemo(() => {
+      return {
+        ...(financialData ? financialData : {}),
+        discount_price: handleCurrencyFieldChange(
+          financialData?.discount_price?.toFixed(2)
+        ),
+        service_price: handleCurrencyFieldChange(
+          financialData?.service_price?.toFixed(2)
+        ),
+      };
+    }, [financialData]);
+
+    const updateFinancialDetails = async formData => {
+      const method = getHTTPMethod(financialData?.id);
+      try {
+        const sanitizedForm = {
+          ...(financialData ? financialData : {}),
+          ...formData,
+          servicePrice: fromBRL(formData.servicePrice),
+          discountPrice: fromBRL(formData.discountPrice),
+        };
+        const data = await engineAPI.service_orders[method]({
+          urlExtension: financialData?.id,
+          data: fixPayloadKeys(sanitizedForm, {
+            fieldTranslator: convertFormKeyToAPI,
+          }),
+        });
+        showNotification({
+          id: "serviceAdded",
+          duration: NOTIFICATION_DURATION.SHORT,
+          title: "Serviço salvo com sucesso!",
+          type: NOTIFICATION_TYPES.SUCCESS,
+          ...(financialData
+            ? { title: "Serviço atualizado!", type: NOTIFICATION_TYPES.INFO }
+            : {}),
+        });
+        return data?.data;
+      } catch (error) {
+        showErrorNotification({
+          id: "serviceAddedErro",
+          title: "Opa algo deu errado!",
+          message: "O serviço não foi salvo. Revise os dados e tente novamente",
+        });
+        return {};
+      }
     };
 
     return (
-      <div className="flex-col w-full">
-        <div className="flex w-full">
-          {/* payment */}
-          <div className="flex-col w-1/2">
-            <div className="flex-col">
-              <Grid container item alignItems="center">
-                <Typography variant="body1">Quilometragem</Typography>
-              </Grid>
-              <TextField
-                onChange={e =>
-                  updateServiceValuesOnChange("odometer_reading")(
-                    e.target.value
-                  )
-                }
-                onBlur={e =>
-                  updateValueOnBlur({
-                    key: "odometer_reading",
-                    value: e.target.value,
-                  })
-                }
-                value={odometer_reading}
-                size="small"
-                variant="outlined"
-                fullWidth
-              />
-            </div>
-            <div className="mt-4">
-              <PricesView
-                servicePrice={service_price}
-                setServicePrice={updateServiceValuesOnChange("service_price")}
-                discountPrice={discount_price}
-                setDiscountPrice={updateServiceValuesOnChange("discount_price")}
-                itemsPrice={service_items_price}
-                handleBlur={handleBlur}
-              />
-            </div>
-          </div>
-          <div className="mx-10">
-            <Divider orientation="vertical" />
-          </div>
-          <div className="flex items-center justify-center w-1/2">
-            <div className="flex-col">
-              <Typography variant="h4">Total</Typography>
-              <Typography variant="h3">
-                <NumberFormat
-                  value={totalPrice}
-                  displayType="text"
-                  prefix="R$"
-                  thousandSeparator="."
-                  decimalSeparator=","
-                  decimalScale={2}
-                  fixedDecimalScale={2}
-                />
-              </Typography>
-            </div>
-          </div>
-        </div>
-        <div className="flex mt-6">
-          <TextField
-            onChange={e =>
-              updateServiceValuesOnChange("observations")(e.target.value)
-            }
-            onBlur={e => updateObservationOnBlur(e.target.value)}
-            value={observations}
-            label="Observações"
-            size="small"
-            rows="5"
-            variant="outlined"
-            multiline
-            fullWidth
+      <FormWithButton
+        Form={props => (
+          <FinancialDetailsView
+            {...props}
+            serviceItemsPrice={financialData.service_items_price}
           />
-        </div>
-      </div>
+        )}
+        buttonConfig={{
+          defaultTitle: "Salvar",
+          titleWhenEditing: "Salvar Alterações",
+        }}
+        description="Serviço"
+        formValidationSchema={financialDetailsSchema}
+        onFormSubmit={updateFinancialDetails}
+        preloadedData={financialDataToCurrency}
+        title="Detalhes"
+      />
     );
   };
 
-function PricesView({
-  servicePrice,
-  setServicePrice,
-  discountPrice,
-  setDiscountPrice,
-  itemsPrice,
-  handleBlur,
-}) {
-  return (
-    <Grid container item direction="row" spacing={2}>
-      <LabelAndPrice
-        label="Valor do Serviço"
-        onChange={e => setServicePrice(e.target.value)}
-        price={servicePrice}
-        onBlur={handleBlur}
-        value={servicePrice}
-      />
-      <LabelAndPrice
-        label="Valor de Peças"
-        price={itemsPrice}
-        inputProps={{
-          disabled: true,
-        }}
-      />
-      <LabelAndPrice
-        onBlur={handleBlur}
-        label="Desconto"
-        price={discountPrice}
-        onChange={e => setDiscountPrice(e.target.value)}
-        value={discountPrice}
-      />
-    </Grid>
-  );
-}
+const FinancialDetailsView = ({ register, watch, serviceItemsPrice }) => {
+  const [updatedServicePrice, discountPrice] = watch([
+    "servicePrice",
+    "discountPrice",
+  ]);
+  const servicePriceControl = register("servicePrice");
+  const serviceDiscountControl = register("discountPrice");
 
-function LabelAndPrice({ label, price, onChange = () => {}, ...props }) {
-  return (
-    <Grid container item spacing={1} direction="column">
-      <Grid container item alignItems="center">
-        <Typography variant="body1">{label}</Typography>
-      </Grid>
-      <Grid item>
-        <CurrencyInput onChange={onChange} value={price} {...props} />
-      </Grid>
-    </Grid>
+  const totalPrice = useMemo(
+    () =>
+      serviceItemsPrice +
+      Number(fromBRL(updatedServicePrice || 0)) -
+      Number(fromBRL(discountPrice || 0)),
+    [discountPrice, serviceItemsPrice, updatedServicePrice]
   );
-}
+
+  return (
+    <div className="flex flex-col w-full gap-3">
+      <div className="flex w-full flex-col md:flex-row md:divide-x md:gap-8">
+        <div className="flex flex-col w-full flex-1 gap-3">
+          <Input
+            fw
+            label="Quilomentragem"
+            type="number"
+            {...register("odometerReading")}
+          />
+          <Input
+            fw
+            label="Valor do Serviço"
+            {...servicePriceControl}
+            onChange={e => {
+              const value = handleCurrencyFieldChange(e.target.value);
+              e.target.value = value;
+              servicePriceControl.onChange(e);
+            }}
+          />
+          <Input
+            fw
+            label="Valor das Peças"
+            value={toBRL(serviceItemsPrice)}
+            disabled
+          />
+          <Input
+            fw
+            label="Desconto"
+            {...serviceDiscountControl}
+            onChange={e => {
+              const value = handleCurrencyFieldChange(e.target.value);
+              e.target.value = value;
+              serviceDiscountControl.onChange(e);
+            }}
+          />
+        </div>
+        <div className="flex items-center justify-center w-full md:w-1/2">
+          <div className="hidden md:block">
+            <Title size={TITLE_SIZES.BIG}>Total</Title>
+            <Title size={TITLE_SIZES.HUGE_2x}>{toBRL(totalPrice)}</Title>
+          </div>
+          <div className="block mt-10 md:hidden">
+            <Title size={TITLE_SIZES.MEDIUM}>Total</Title>
+            <Title size={TITLE_SIZES.BIG}>{toBRL(totalPrice)}</Title>
+          </div>
+        </div>
+      </div>
+      <div className="mt-6 w-full">
+        <Input
+          label="Observações"
+          fw
+          as="textarea"
+          rows={5}
+          {...register("observations")}
+        />
+      </div>
+    </div>
+  );
+};
 
 export default createFinancialDetails();

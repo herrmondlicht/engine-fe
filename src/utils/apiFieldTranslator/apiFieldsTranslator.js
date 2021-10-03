@@ -38,6 +38,7 @@ const fixPayloadKeys = (
   if (!fieldTranslator) {
     throw new Error("Please specify a fieldTranslator");
   }
+  if (!payload) return payload;
   return Object.entries(payload).reduce(
     (prev, [key, value]) => ({
       ...prev,

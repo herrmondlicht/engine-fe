@@ -4,7 +4,7 @@ export const createStorageAPI = (storage = window.sessionStorage) => ({
   removeItem: keyName => storage.removeItem(keyName),
 });
 
-export const storageAPI = createStorageAPI();
+export const storageAPI = createStorageAPI(window.localStorage);
 
 export const STORAGE_KEYS = {
   TOKEN: "token",

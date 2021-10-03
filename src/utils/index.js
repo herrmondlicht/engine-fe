@@ -5,3 +5,4 @@ export * from "./formValidator";
 export * from "./errorMessages";
 export * from "./apiFieldTranslator/apiFieldsTranslator";
 export * from "./currency";
+export * from "./misc";
