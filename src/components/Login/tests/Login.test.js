@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { stub, assert, match } from "sinon";
-import { createLogin } from "../Login";
+import { createLogin } from "../../../pages/LoginPage";
 import { STORAGE_KEYS } from "../../../utils/storage/storageAPI";
 
 let engineAPI = { login: { post: stub() } };

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { storageAPI, STORAGE_KEYS, engineAPI, yup } from "utils";
 import { useLocation, useHistory, Redirect } from "react-router-dom";
-import EngineImage from "./engine_logo.png";
-import LoginForm from "./LoginForm";
+import EngineImage from "../components/Login/engine_logo.png";
+import { LoginForm } from "components";
 import { Card } from "ui-fragments";
 import { useCustomForm, useNotification } from "hooks";
 

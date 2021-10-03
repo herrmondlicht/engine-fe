@@ -4,7 +4,6 @@ export * from "./Login";
 export * from "./ServiceForm";
 export * from "./CustomerDetails";
 export { default as CustomerCarList } from "./CustomerCarList/CustomerCarList";
-export { default as HomePage } from "./HomePage/HomePage";
 export { default as CustomerCarServiceList } from "./CustomerPage/CustomerCarServiceList";
 export { default as SideMenu } from "./SideMenu/SideMenu";
 export { default as ConfirmDeleteModal } from "./Modals/ConfirmDeleteModal";

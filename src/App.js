@@ -3,8 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { CombinedFormsProvider } from "context";
 import { NotificationProvider } from "context/NotificationContext";
-import Login from "./components/Login/Login";
-import HomePage from "./components/HomePage/HomePage";
+import { HomePage, LoginPage } from "pages";
 
 import theme from "./theme";
 
@@ -15,7 +14,7 @@ function App() {
         <Router>
           <Switch>
             <Route path="/login" exact>
-              <Login />
+              <LoginPage />
             </Route>
             <Route path="/">
               <CombinedFormsProvider value={{}}>
