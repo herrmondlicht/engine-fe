@@ -17,7 +17,7 @@ const theme = {
     },
     success: { 0: "#00BA88", 1: "#34EAB9" },
     warning: { 0: "#F4B740", 1: "#FFD789" },
-    error: { 0: "#ED2E7E", 1: "#FF84B7", 2: "#FFF3F8" },
+    error: { 0: "#ED2E7E", 1: "#C30052", 2: "#FFF3F8" },
     text: { 0: "#FFF" },
   },
   fontFamily: {
