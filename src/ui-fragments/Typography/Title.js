@@ -6,13 +6,22 @@ export const TITLE_SIZES = {
   HUGE: "text-5xl",
   BIG: "text-3xl",
   MEDIUM: "text-2xl",
+  SMALL: "text-lg",
 };
 
-const Title = ({ children, size, color }) => {
+export const TITLE_SPACING = {
+  WIDE: "tracking-widest",
+};
+
+const Title = ({ children, size, color, spacing }) => {
   const sizeClass = size || TITLE_SIZES.MEDIUM;
   const colorClass = color || "black";
 
-  return <p className={`${sizeClass} ${colorClass} font-bold`}>{children}</p>;
+  return (
+    <p className={`${sizeClass} ${colorClass} ${spacing} font-bold`}>
+      {children}
+    </p>
+  );
 };
 
 Title.propTypes = {
