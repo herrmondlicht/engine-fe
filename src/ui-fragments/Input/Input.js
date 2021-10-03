@@ -76,7 +76,7 @@ const Input = forwardRef(
       ...(uppercase ? ["uppercase"] : []),
     ].join(" ");
     return (
-      <div>
+      <div className="flex flex-col">
         {label ? (
           <div className="mb-4 ml-1">
             <Label error={error}>{label}</Label>

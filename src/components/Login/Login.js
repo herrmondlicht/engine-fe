@@ -1,49 +1,29 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Grid, makeStyles, Paper } from "@material-ui/core";
-import { storageAPI, STORAGE_KEYS, engineAPI } from "utils";
+import { storageAPI, STORAGE_KEYS, engineAPI, yup } from "utils";
 import { useLocation, useHistory, Redirect } from "react-router-dom";
 import EngineImage from "./engine_logo.png";
 import LoginForm from "./LoginForm";
+import { Card } from "ui-fragments";
+import { useCustomForm, useNotification } from "hooks";
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    height: "100%",
-    width: "100%",
-    position: "absolute",
-  },
-  loginContainer: {
-    width: 350,
-    padding: theme.spacing(3),
-    boxSizing: "border-box",
-  },
-  engineImage: {
-    width: "100%",
-    padding: theme.spacing(2),
-    boxSizing: "border-box",
-  },
-}));
-
-const formErrors = () => ({
-  401: "Email ou senha incorretos",
+const loginFormSchema = yup.object().shape({
+  password: yup.string().required(),
+  username: yup.string().required(),
 });
-
-const getErrorMessage = code => {
-  const errorCodes = formErrors();
-  const errorMessage = errorCodes[code] || "Não foi possível acessar o sistema";
-  return errorMessage;
-};
 
 export const createLogin = (engineAPI, storageAPI) =>
   function Login() {
-    const classes = useStyles();
-    const [userInput, changeInput] = useState({ username: "", password: "" });
-    const [errorMessage, setErrorMessage] = useState(null);
+    const { showErrorNotification } = useNotification();
     const [isLoading, setIsLoading] = useState(false);
+    const {
+      formMethods: { handleSubmit, reset, register },
+      validationMethods: { validate, errors },
+    } = useCustomForm({ schema: loginFormSchema });
     const isMounted = useRef(true);
     const location = useLocation();
     const history = useHistory();
     const token = storageAPI.getItem(STORAGE_KEYS.TOKEN);
-    const { from } = location.state || { from: { pathname: "/customer_car" } };
+    const { from } = location.state || { from: { pathname: "/" } };
 
     useEffect(
       () => () => {
@@ -52,13 +32,29 @@ export const createLogin = (engineAPI, storageAPI) =>
       []
     );
 
-    async function sendForm() {
+    async function sendForm(loginData) {
+      if (!validate(loginData)) {
+        return;
+      }
       try {
         setIsLoading(true);
-        const data = await engineAPI.login.post({ data: userInput });
+        const data = await engineAPI.login.post({ data: loginData });
         loginUser(data.token);
       } catch (e) {
-        setErrorMessage(getErrorMessage(e?.response?.status));
+        // TODO: implement proper error handling
+        if (e?.response?.status === 401) {
+          showErrorNotification({
+            id: "authError",
+            message: "Usuário ou senha incorretos",
+          });
+        } else {
+          showErrorNotification({
+            id: "loginError",
+            message: "Não conseguimos acessar o sistema!",
+          });
+        }
+      } finally {
+        setIsLoading(false);
       }
 
       isMounted.current && setIsLoading(false);
@@ -66,7 +62,7 @@ export const createLogin = (engineAPI, storageAPI) =>
 
     function loginUser(token) {
       storageAPI.setItem(STORAGE_KEYS.TOKEN, token);
-      changeInput({ username: "", password: "" });
+      reset();
       history.replace(from);
     }
 
@@ -75,23 +71,17 @@ export const createLogin = (engineAPI, storageAPI) =>
     }
 
     return (
-      <Grid
-        container
-        justify="center"
-        alignItems="center"
-        className={classes.root}
-      >
-        <Paper className={classes.loginContainer}>
-          <img src={EngineImage} alt="logo" className={classes.engineImage} />
+      <div className="flex w-full h-full justify-center items-center relative">
+        <Card>
+          <img src={EngineImage} alt="logo" className="w-full h-60" />
           <LoginForm
-            errorMessage={errorMessage}
-            changeInput={changeInput}
-            userInput={userInput}
-            sendForm={sendForm}
+            registerInput={register}
+            sendForm={handleSubmit(sendForm)}
             isLoading={isLoading}
+            errors={errors}
           />
-        </Paper>
-      </Grid>
+        </Card>
+      </div>
     );
   };
 
