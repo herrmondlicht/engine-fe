@@ -85,11 +85,11 @@ const createFinancialDetails = () =>
           defaultTitle: "Salvar",
           titleWhenEditing: "Salvar Alterações",
         }}
-        description="Serviço"
+        title="Serviço"
         formValidationSchema={financialDetailsSchema}
         onFormSubmit={updateFinancialDetails}
         preloadedData={financialDataToCurrency}
-        title="Detalhes"
+        description="Detalhes"
       />
     );
   };
