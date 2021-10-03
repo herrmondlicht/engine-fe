@@ -7,7 +7,7 @@ const PageTitle = ({ description, title }) => {
       <Text size={TEXT_SIZES.SMALL} color="text-gray-600">
         {title}
       </Text>
-      <div className="my-3">
+      <div className="mt-3 mb-5">
         <Title>{description}</Title>
       </div>
     </div>

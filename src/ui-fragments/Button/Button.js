@@ -3,6 +3,7 @@ import propTypes from "prop-types";
 import Loader from "react-loader-spinner";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
 import { theme } from "twtheme";
+import { Link } from "react-router-dom";
 
 export const BUTTON_VARIANTS = {
   GHOST: "ghost",
@@ -11,8 +12,23 @@ export const BUTTON_VARIANTS = {
   ERROR: "error",
 };
 
+export const BUTTON_COMPONENT = {
+  BUTTON: "button",
+  LINK: "a",
+};
+
 const Button = (
-  { onClick, children, variant = "primary", size, fw, disabled, showLoader },
+  {
+    onClick,
+    children,
+    variant = "primary",
+    size,
+    fw,
+    disabled,
+    showLoader,
+    as = BUTTON_COMPONENT.BUTTON,
+    href,
+  },
   ref
 ) => {
   const sizeClasses = useMemo(() => {
@@ -43,18 +59,36 @@ const Button = (
   }, [variant]);
 
   return (
-    <button
-      disabled={disabled}
-      ref={ref}
-      onClick={onClick || undefined}
-      className={`${sizeClasses} ${variantClasses} ${
-        fw ? "w-full" : ""
-      } rounded-full text-white font-semibold`}
-    >
-      <ButtonContent showLoader={showLoader} variant={variant}>
-        {children}
-      </ButtonContent>
-    </button>
+    <>
+      {as === BUTTON_COMPONENT.BUTTON && (
+        <button
+          disabled={disabled}
+          ref={ref}
+          onClick={onClick || undefined}
+          className={`${sizeClasses} ${variantClasses} ${
+            fw ? "w-full" : ""
+          } rounded-full text-white font-semibold`}
+        >
+          <ButtonContent showLoader={showLoader} variant={variant}>
+            {children}
+          </ButtonContent>
+        </button>
+      )}
+      {as === BUTTON_COMPONENT.LINK && (
+        <Link
+          disabled={disabled}
+          ref={ref}
+          to={href}
+          className={`${sizeClasses} ${variantClasses} ${
+            fw ? "w-full" : ""
+          } rounded-full text-white font-semibold cursor-pointer`}
+        >
+          <ButtonContent showLoader={showLoader} variant={variant}>
+            {children}
+          </ButtonContent>
+        </Link>
+      )}
+    </>
   );
 };
 
