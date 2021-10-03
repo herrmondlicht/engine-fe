@@ -1,3 +1,4 @@
+import { PageTitle } from "components";
 import { useCustomForm } from "hooks/useCustomForm";
 import React, { useState } from "react";
 
@@ -30,10 +31,7 @@ const FormWithButton = ({
 
   return (
     <form onSubmit={handleSubmit(submit)}>
-      <p className="text-sm text-gray-600">{title}</p>
-      <div className="my-3">
-        <p className="text-2xl font-bold">{description}</p>
-      </div>
+      <PageTitle title={title} description={description} />
       <div className="mt-3">
         <Form errors={errors} {...formMethods} />
       </div>

@@ -33,6 +33,7 @@ module.exports = {
     // temporary
     camelcase: 0,
     "react-hooks/exhaustive-deps": "error",
+    "no-unused-vars": ["warn"],
   },
   settings: {
     react: { version: "detect" },

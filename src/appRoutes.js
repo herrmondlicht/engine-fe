@@ -31,7 +31,7 @@ export const appRoutes = {
   },
   newService: {
     name: "Serviço",
-    path: "services/:service_id",
+    path: "services/:serviceId",
     Component: ServicePage,
     isLocked: true,
   },

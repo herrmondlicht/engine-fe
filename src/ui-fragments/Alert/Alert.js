@@ -1,4 +1,4 @@
-import { XCircleIcon } from "@heroicons/react/solid";
+import XCircleIcon from "@heroicons/react/solid/XCircleIcon";
 import { NOTIFICATION_TYPES } from "context";
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Button } from "ui-fragments/Button";

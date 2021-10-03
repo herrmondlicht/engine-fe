@@ -7,7 +7,7 @@ export const ScreenLoader = ({ children, radius = false, isLoading }) => {
 
   useEffect(() => {
     let timer;
-    if (isLoading === false) {
+    if (!isLoading) {
       timer = setTimeout(() => {
         setShowLoader(false);
       }, 300);
