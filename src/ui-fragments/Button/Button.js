@@ -1,7 +1,8 @@
 import React, { useMemo } from "react";
 import propTypes from "prop-types";
 import Loader from "react-loader-spinner";
-import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
+import CheckCircleIcon from "@heroicons/react/solid/CheckCircleIcon";
+import XCircleIcon from "@heroicons/react/solid/XCircleIcon";
 import { theme } from "twtheme";
 import { Link } from "react-router-dom";
 
