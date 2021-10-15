@@ -52,15 +52,6 @@ const CarForm = ({ loadedData, onSubmitAction }) => {
         data: fixPayloadKeys(payload, { fieldTranslator: convertFormKeyToAPI }),
       });
 
-      showNotification({
-        id: "carAdded",
-        duration: NOTIFICATION_DURATION.SHORT,
-        title: loadedData.cars ? "Veículo atualizado!" : "Veículo adicionado!",
-        type: loadedData.cars
-          ? NOTIFICATION_TYPES.INFO
-          : NOTIFICATION_TYPES.SUCCESS,
-      });
-
       return data?.data;
     } catch (error) {
       console.log(error);
@@ -123,7 +114,7 @@ const CarForm = ({ loadedData, onSubmitAction }) => {
       car_id: id,
     };
     const { id: customerCarId } = await sendNewCustomerCarForm(dataToSubmit);
-    if (onSubmitAction) {
+    if (customerCarId && onSubmitAction) {
       onSubmitAction({
         ...dataToSubmit,
         id: customerCarId,
