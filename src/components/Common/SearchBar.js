@@ -6,7 +6,7 @@ import { Input, Button, BUTTON_VARIANTS } from "ui-fragments";
 const createSearchBar = () =>
   function SearchBar({ setResearch, addAction }) {
     return (
-      <div className="flex flex-col sm:flex-row items-center">
+      <div className="flex flex-col sm:flex-row items-end">
         <div className="w-full sm:w-1/2 flex items-end">
           <div className="w-full">
             <Input
@@ -21,7 +21,7 @@ const createSearchBar = () =>
             <SearchIcon className="text-primary-0 w-7 h-7" />
           </Button>
         </div>
-        <div className="sm:w-1/2 w-full flex justify-center sm:justify-end">
+        <div className="sm:w-1/2 w-full flex justify-center sm:justify-end items-end">
           <Button onClick={addAction}>
             <div className="flex gap-3">
               <AddCircle className="text-white w-5 h-5" />
