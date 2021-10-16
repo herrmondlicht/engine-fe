@@ -1,21 +1,10 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-import {
-  Paper,
-  IconButton,
-  Typography,
-  Divider,
-  TableHead,
-  TableCell,
-  TableRow,
-  Table,
-  TableBody,
-  TableContainer,
-} from "@material-ui/core";
-import { HiTrash as Delete } from "react-icons/hi";
+import Delete from "@heroicons/react/solid/TrashIcon";
 import { useHistory } from "react-router-dom";
 
 import { engineAPI } from "utils";
-import { SearchBar, ConfirmDeleteModal } from "components";
+import { SearchBar, ConfirmDeleteModal, PageTitle } from "components";
+import { Button, BUTTON_VARIANTS, Card } from "ui-fragments";
 
 export const createCustomerCarList = ({ engineAPI }) =>
   function CustomerCarList() {
@@ -89,24 +78,13 @@ export const createCustomerCarList = ({ engineAPI }) =>
 
     return (
       <>
-        <div className="flex w-full h-full overflow-hidden px-4 pb-16">
-          <Paper
-            variant="outlined"
-            className="flex flex-col h-full w-full p-10 overflow-hidden"
-          >
-            <Typography variant="h5">Lista de Clientes</Typography>
-            <Divider variant="fullWidth" />
-            <div className="mt-10">
-              <SearchBar addAction={addNewCustomer} setResearch={setResearch} />
-            </div>
-            <div className="my-4 h-full overflow-auto">
-              <ClientsTable
-                data={filteredData}
-                onDelete={onListRowDeleteClick}
-              />
-            </div>
-          </Paper>
-        </div>
+        <Card className="flex w-full flex-col">
+          <PageTitle title="Clientes" description="Lista de Clientes" />
+          <SearchBar addAction={addNewCustomer} setResearch={setResearch} />
+          <div className="mt-3">
+            <ClientsTable data={filteredData} onDelete={onListRowDeleteClick} />
+          </div>
+        </Card>
         <ConfirmDeleteModal
           onConfirmationClick={deleteClient}
           handleClose={handleModalClose}
@@ -119,56 +97,52 @@ export const createCustomerCarList = ({ engineAPI }) =>
 const ClientsTable = ({ data = [], onDelete }) => {
   const history = useHistory();
   return (
-    <TableContainer>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Placa</TableCell>
-            <TableCell align="right">Modelo</TableCell>
-            <TableCell align="right">Cliente</TableCell>
-            <TableCell align="right">Ano do veículo</TableCell>
-            <TableCell align="right" />
-          </TableRow>
-        </TableHead>
-        <TableBody className="h-full">
-          {data.map(
-            ({
-              cars: car,
-              customers: customer,
-              customer_cars: customerCar,
-            }) => (
-              <TableRow
-                onClick={() =>
-                  history.push(
-                    `/customers/${customer.id}/cars/${customerCar.id}`
-                  )
-                }
-                key={customerCar.id}
-                className="hover:bg-gray-300 cursor-pointer"
-              >
-                <TableCell component="th" scope="row">
-                  {customerCar.license_plate}
-                </TableCell>
-                <TableCell align="right">{car.model}</TableCell>
-                <TableCell align="right">{customer.fullname}</TableCell>
-                <TableCell align="right">{car.manufacture_year}</TableCell>
-                <TableCell align="right">
-                  <IconButton
-                    onClick={e => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      onDelete({ id: customerCar.id });
-                    }}
-                  >
-                    <Delete />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            )
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <table className="h-full w-full table-auto">
+      <thead>
+        <tr>
+          <td>Placa</td>
+          <td>Modelo</td>
+          <td>Cliente</td>
+          <td>Ano do veículo</td>
+          <td />
+        </tr>
+      </thead>
+      <tbody>
+        {data.map(
+          (
+            { cars: car, customers: customer, customer_cars: customerCar },
+            index
+          ) => (
+            <tr
+              onClick={() =>
+                history.push(`/customers/${customer.id}/cars/${customerCar.id}`)
+              }
+              key={customerCar.id}
+              className={`hover:bg-gray-300 cursor-pointer ${
+                index % 2 ? "bg-gray-100" : ""
+              }`}
+            >
+              <td>{customerCar.license_plate}</td>
+              <td>{car.model}</td>
+              <td>{customer.fullname}</td>
+              <td>{car.manufacture_year}</td>
+              <td>
+                <Button
+                  variant={BUTTON_VARIANTS.GHOST}
+                  onClick={e => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    onDelete({ id: customerCar.id });
+                  }}
+                >
+                  <Delete />
+                </Button>
+              </td>
+            </tr>
+          )
+        )}
+      </tbody>
+    </table>
   );
 };
 
