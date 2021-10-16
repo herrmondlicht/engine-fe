@@ -20,7 +20,6 @@ import { storageAPI, STORAGE_KEYS } from "utils";
 
 const useStyles = makeStyles(theme => ({
   sideMenuContainer: {
-    height: "100%",
     width: "100%",
     position: "relative",
     [theme.breakpoints.up("sm")]: {
