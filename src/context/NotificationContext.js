@@ -53,20 +53,22 @@ const NotificationProvider = ({ children }) => {
 
   return (
     <>
-      <div className="absolute w-full h-full flex justify-center md:justify-end">
-        <div
-          className="relative right-0 mt-3 md:mr-5 md:mt-5 flex flex-col gap-5"
-          style={{ width: "310px" }}
-        >
-          {notifications.map((notification, index) => (
-            <Alert
-              key={index}
-              {...notification}
-              onCloseAction={() => removeNotification(notification.id)}
-            />
-          ))}
+      {notifications.length ? (
+        <div className="absolute w-full h-full flex justify-center md:justify-end">
+          <div
+            className="relative right-0 mt-3 md:mr-5 md:mt-5 flex flex-col gap-5"
+            style={{ width: "310px" }}
+          >
+            {notifications.map((notification, index) => (
+              <Alert
+                key={index}
+                {...notification}
+                onCloseAction={() => removeNotification(notification.id)}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      ) : null}
       <Provider
         value={{
           showNotification,
