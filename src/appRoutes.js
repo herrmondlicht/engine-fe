@@ -1,3 +1,4 @@
+import { CustomerCarList } from "components";
 import { RegisterForm, ServicePage } from "pages";
 
 export const appRoutes = {
@@ -11,6 +12,12 @@ export const appRoutes = {
     name: "Serviço",
     path: "services/:serviceId",
     Component: ServicePage,
+    isLocked: true,
+  },
+  allServices: {
+    name: "Clientes",
+    path: "customers",
+    Component: CustomerCarList,
     isLocked: true,
   },
 };
