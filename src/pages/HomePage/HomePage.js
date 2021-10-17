@@ -22,9 +22,7 @@ export const createHomePage = ({ storageAPI }) => {
         data-testid="HomePageContainer"
         className="flex flex-col-reverse w-full h-full md:flex-row"
       >
-        <div className="w-full h-20 md:w-20 md:pl-3">
-          <SideMenu />
-        </div>
+        <SideMenu />
         <div className="w-full h-full md:p-12 md:overflow-auto">
           <Switch>
             {Object.values(routes).map(route => {
