@@ -81,14 +81,14 @@ export const createCustomerCarList = ({ engineAPI }) =>
         <Card className="flex w-full flex-col">
           <PageTitle title="Clientes" description="Lista de Clientes" />
           <SearchBar addAction={addNewCustomer} setResearch={setResearch} />
-          <div className="mt-3">
+          <div className="mt-8">
             <ClientsTable data={filteredData} onDelete={onListRowDeleteClick} />
           </div>
         </Card>
         <ConfirmDeleteModal
-          onConfirmationClick={deleteClient}
           handleClose={handleModalClose}
           isOpen={isDeleteModalOpen}
+          onConfirmationClick={deleteClient}
         />
       </>
     );
@@ -99,7 +99,7 @@ const ClientsTable = ({ data = [], onDelete }) => {
   return (
     <table className="h-full w-full table-auto">
       <thead>
-        <tr>
+        <tr className="my-5">
           <td>Placa</td>
           <td>Modelo</td>
           <td>Cliente</td>
@@ -127,16 +127,18 @@ const ClientsTable = ({ data = [], onDelete }) => {
               <td>{customer.fullname}</td>
               <td>{car.manufacture_year}</td>
               <td>
-                <Button
-                  variant={BUTTON_VARIANTS.GHOST}
-                  onClick={e => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    onDelete({ id: customerCar.id });
-                  }}
-                >
-                  <Delete />
-                </Button>
+                <div className="flex justify-end">
+                  <Button
+                    variant={BUTTON_VARIANTS.GHOST}
+                    onClick={e => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      onDelete({ id: customerCar.id });
+                    }}
+                  >
+                    <Delete className="text-error-1 w-7 h-7" />
+                  </Button>
+                </div>
               </td>
             </tr>
           )
