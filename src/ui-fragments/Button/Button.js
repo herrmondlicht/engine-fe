@@ -29,6 +29,7 @@ const Button = (
     showLoader,
     as = BUTTON_COMPONENT.BUTTON,
     href,
+    showVariantIcon,
   },
   ref
 ) => {
@@ -46,7 +47,7 @@ const Button = (
   const variantClasses = useMemo(() => {
     const variantColor = `${variant}-0`;
     if (variant.startsWith("ghost")) {
-      return [];
+      return ["text-primary-0"];
     }
     return [
       `bg-${variantColor}`,
@@ -70,7 +71,11 @@ const Button = (
             fw ? "w-full" : ""
           } rounded-full text-white font-semibold`}
         >
-          <ButtonContent showLoader={showLoader} variant={variant}>
+          <ButtonContent
+            showLoader={showLoader}
+            variant={variant}
+            showVariantIcon={showVariantIcon}
+          >
             {children}
           </ButtonContent>
         </button>
@@ -93,9 +98,17 @@ const Button = (
   );
 };
 
-const ButtonContent = ({ children, showLoader, variant }) => {
+const ButtonContent = ({
+  children,
+  showLoader,
+  variant,
+  showVariantIcon = true,
+}) => {
   const variantIcon = useMemo(() => {
     const sizeClasses = "h-7 w-7";
+    if (!showVariantIcon) {
+      return null;
+    }
     switch (variant) {
       case "success":
         return <CheckCircleIcon className={sizeClasses} />;
@@ -104,7 +117,7 @@ const ButtonContent = ({ children, showLoader, variant }) => {
       default:
         return null;
     }
-  }, [variant]);
+  }, [showVariantIcon, variant]);
   return (
     <div className="relative w-full h-full flex justify-center items-center">
       <div
@@ -153,5 +166,6 @@ Button.propTypes = {
   fw: propTypes.bool,
   showLoader: propTypes.bool,
   disabled: propTypes.bool,
+  showVariantIcon: propTypes.bool,
 };
 export { ButtonFR as Button };
