@@ -11,6 +11,12 @@ export const BUTTON_VARIANTS = {
   PRIMARY: "primary",
   SUCCESS: "success",
   ERROR: "error",
+  HOLLOW: "hollow",
+};
+
+export const BUTTON_SIZES = {
+  SMALL: "small",
+  BIG: "big",
 };
 
 export const BUTTON_COMPONENT = {
@@ -35,9 +41,9 @@ const Button = (
 ) => {
   const sizeClasses = useMemo(() => {
     switch (size) {
-      case "small":
+      case BUTTON_SIZES.SMALL:
         return ["p-2", "px-4", "text-sm"].join(" ");
-      case "big":
+      case BUTTON_SIZES.BIG:
         return ["p-4", "px-6", "text-lg"].join(" ");
       default:
         return ["p-3", "px-5", "text-md"].join(" ");
@@ -46,18 +52,31 @@ const Button = (
 
   const variantClasses = useMemo(() => {
     const variantColor = `${variant}-0`;
-    if (variant.startsWith("ghost")) {
-      return ["text-primary-0"];
+    switch (variant) {
+      case BUTTON_VARIANTS.GHOST:
+        return ["text-primary-0"];
+      case BUTTON_VARIANTS.HOLLOW:
+        return [
+          "bg-transparent",
+          "ring-2",
+          "ring-primary-0",
+          "text-primary-0",
+          "hover:text-white",
+          "hover:bg-primary-0",
+        ].join(" ");
+      case BUTTON_VARIANTS.PRIMARY:
+      case BUTTON_VARIANTS.SUCCESS:
+      case BUTTON_VARIANTS.ERROR:
+        return [
+          `bg-${variantColor}`,
+          `focus:ring-${variantColor}`,
+          `hover:bg-${variant}-1`,
+          "focus:ring-2",
+          "focus:border-transparent",
+          "border-2",
+          "text-white",
+        ].join(" ");
     }
-    return [
-      `bg-${variantColor}`,
-      "focus:ring-2",
-      "focus:border-transparent",
-      "border-2",
-      `focus:ring-${variantColor}`,
-      `hover:bg-${variant}-1`,
-      "transition duration-300",
-    ].join(" ");
   }, [variant]);
 
   return (
@@ -69,7 +88,7 @@ const Button = (
           onClick={onClick || undefined}
           className={`${sizeClasses} ${variantClasses} ${
             fw ? "w-full" : ""
-          } rounded-full text-white font-semibold`}
+          } rounded-full font-semibold transition duration-300`}
         >
           <ButtonContent
             showLoader={showLoader}
@@ -87,7 +106,7 @@ const Button = (
           to={href}
           className={`${sizeClasses} ${variantClasses} ${
             fw ? "w-full" : ""
-          } rounded-full text-white font-semibold cursor-pointer`}
+          } rounded-full text-white font-semibold cursor-pointer transition duration-300`}
         >
           <ButtonContent showLoader={showLoader} variant={variant}>
             {children}
