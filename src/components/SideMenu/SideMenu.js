@@ -2,46 +2,44 @@ import React from "react";
 
 import Add from "@heroicons/react/solid/PlusIcon";
 import List from "@heroicons/react/solid/ViewListIcon";
-import ExitToApp from "@heroicons/react/solid/LogoutIcon";
-import { useHistory, useLocation } from "react-router-dom";
-import { Button, BUTTON_COMPONENT, BUTTON_VARIANTS } from "ui-fragments";
+import { useHistory } from "react-router-dom";
+import { Button, BUTTON_VARIANTS } from "ui-fragments";
 import { storageAPI, STORAGE_KEYS } from "utils";
+import EngineImage from "assets/engine_logo_no_bg.png";
+import { SideMenuItem } from "./SideMenuItem";
 
 function SideMenu({ storageAPI }) {
   const history = useHistory();
-  const location = useLocation();
-
-  const getIconClasses = link =>
-    `h-7 w-7 ${
-      location.pathname === link ? "text-primary-0" : "text-gray-500"
-    }`;
-
   return (
-    <div className="flex h-full items-center">
-      <div className="flex flex-col gap-3 items-center px-2 py-3 shadow-md rounded-3xl bg-white">
-        <Button
-          variant={BUTTON_VARIANTS.GHOST}
-          as={BUTTON_COMPONENT.LINK}
-          href="/customer_car"
-        >
-          <Add className={getIconClasses("/customer_car")} />
-        </Button>
-        <Button
-          variant={BUTTON_VARIANTS.GHOST}
-          as={BUTTON_COMPONENT.LINK}
-          href="/customers"
-        >
-          <List className={getIconClasses("/customers")} />
-        </Button>
-        <Button
-          variant={BUTTON_VARIANTS.GHOST}
-          onClick={() => {
-            storageAPI.removeItem(STORAGE_KEYS.TOKEN);
-            history.replace("/login");
-          }}
-        >
-          <ExitToApp className="text-error-1 h-7 w-7" />
-        </Button>
+    <div className="flex flex-col w-48 h-full">
+      <div className="flex flex-col h-full gap-3">
+        <div className="my-14 mx-5">
+          <img src={EngineImage} alt="logo" className="w-full" />
+        </div>
+        <SideMenuItem
+          to="/customer_car"
+          title={"Nova OS"}
+          itemIcon={<Add className={"h-5 w-5"} />}
+        />
+        <SideMenuItem
+          to="/customers"
+          title={"Clientes"}
+          itemIcon={<List className={"h-5 w-5"} />}
+        />
+        <div className="flex justify-center my-8 px-6">
+          <Button
+            fw
+            variant={BUTTON_VARIANTS.HOLLOW}
+            size={"small"}
+            onClick={() => {
+              storageAPI.removeItem(STORAGE_KEYS.TOKEN);
+              history.replace("/login");
+            }}
+            showVariantIcon={false}
+          >
+            Sair
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -58,7 +56,7 @@ export const createMenu = ({ storageAPI }) => {
         </div>
       </div>
 
-      <div className="hidden md:block h-full ml-3">
+      <div className="hidden md:block h-full">
         <SideMenu storageAPI={storageAPI} />
       </div>
     </>
