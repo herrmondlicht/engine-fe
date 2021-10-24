@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { storageAPI, STORAGE_KEYS, engineAPI, yup } from "utils";
 import { useLocation, useHistory, Redirect } from "react-router-dom";
-import EngineImage from "../components/Login/engine_logo.png";
+import EngineImage from "../assets/engine_logo.png";
 import { LoginForm } from "components";
 import { Card } from "ui-fragments";
 import { useCustomForm, useNotification } from "hooks";
@@ -23,7 +23,7 @@ export const createLogin = (engineAPI, storageAPI) =>
     const location = useLocation();
     const history = useHistory();
     const token = storageAPI.getItem(STORAGE_KEYS.TOKEN);
-    const { from } = location.state || { from: { pathname: "/" } };
+    const { from } = location.state || { from: { pathname: "/customers" } };
 
     useEffect(
       () => () => {
@@ -73,7 +73,7 @@ export const createLogin = (engineAPI, storageAPI) =>
     return (
       <div className="flex w-full h-full justify-center items-center relative">
         <Card>
-          <img src={EngineImage} alt="logo" className="w-full h-60" />
+          <img src={EngineImage} alt="logo" className="w-80 mb-10" />
           <LoginForm
             registerInput={register}
             sendForm={handleSubmit(sendForm)}
