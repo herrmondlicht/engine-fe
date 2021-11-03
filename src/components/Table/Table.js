@@ -1,42 +1,51 @@
 import React from "react";
+import { useTable } from "react-table";
 
-const Table = ({ columns, data }) => {
+const Table = ({ columns, data, onRowClick }) => {
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable({
+      columns,
+      data,
+    });
   return (
-    <table className="h-full w-full table-auto">
+    <table {...getTableProps()} className="h-full w-full table-auto">
       <thead>
-        <tr className="my-5">
-          <td>Placa</td>
-          <td>Modelo</td>
-          <td>Cliente</td>
-          <td>Ano do veículo</td>
-          <td />
-        </tr>
+        {headerGroups.map((headerGroup, index) => (
+          <tr key={index} {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map(column => (
+              <th
+                className="py-5 text-left"
+                key={column.id}
+                {...column.getHeaderProps()}
+              >
+                {column.render("Header")}
+              </th>
+            ))}
+          </tr>
+        ))}
       </thead>
-      <tbody>
-        {data.map(
-          (
-            { cars: car, customers: customer, customer_cars: customerCar },
-            index
-          ) => (
+      <tbody {...getTableBodyProps()}>
+        {rows.map((row, i) => {
+          prepareRow(row);
+          return (
             <tr
-              onClick={() =>
-                history.push(`/customers/${customer.id}/cars/${customerCar.id}`)
-              }
-              key={customerCar.id}
+              key={i}
+              {...row.getRowProps()}
               className={`hover:bg-gray-300 cursor-pointer ${
-                index % 2 ? "bg-gray-100" : ""
+                i % 2 ? "bg-gray-100" : ""
               }`}
+              onClick={() => onRowClick?.(row.original)}
             >
-              <td>{customerCar.license_plate}</td>
-              <td>{car.model}</td>
-              <td>{customer.fullname}</td>
-              <td>{car.manufacture_year}</td>
-              <td>
-                <div className="flex justify-end"></div>
-              </td>
+              {row.cells.map((cell, j) => {
+                return (
+                  <td key={j} {...cell.getCellProps()} className="py-1">
+                    {cell.render("Cell")}
+                  </td>
+                );
+              })}
             </tr>
-          )
-        )}
+          );
+        })}
       </tbody>
     </table>
   );
