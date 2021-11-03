@@ -3,7 +3,7 @@ import Delete from "@heroicons/react/solid/TrashIcon";
 import { useHistory } from "react-router-dom";
 
 import { engineAPI } from "utils";
-import { SearchBar, ConfirmDeleteModal, PageTitle } from "components";
+import { SearchBar, ConfirmDeleteModal, PageTitle, Table } from "components";
 import { Button, BUTTON_VARIANTS, Card } from "ui-fragments";
 
 export const createCustomerCarList = ({ engineAPI }) =>
@@ -45,6 +45,7 @@ export const createCustomerCarList = ({ engineAPI }) =>
     }, [idPendingDelete, handleModalClose]);
 
     const onListRowDeleteClick = useCallback(({ id }) => {
+      console.log(id);
       setIdPendingDelete(id);
       setIsDeleteModalOpen(true);
     }, []);
@@ -96,55 +97,60 @@ export const createCustomerCarList = ({ engineAPI }) =>
 
 const ClientsTable = ({ data = [], onDelete }) => {
   const history = useHistory();
-  return (
-    <table className="h-full w-full table-auto">
-      <thead>
-        <tr className="my-5">
-          <td>Placa</td>
-          <td>Modelo</td>
-          <td>Cliente</td>
-          <td>Ano do veículo</td>
-          <td />
-        </tr>
-      </thead>
-      <tbody>
-        {data.map(
-          (
-            { cars: car, customers: customer, customer_cars: customerCar },
-            index
-          ) => (
-            <tr
-              onClick={() =>
-                history.push(`/customers/${customer.id}/cars/${customerCar.id}`)
-              }
-              key={customerCar.id}
-              className={`hover:bg-gray-300 cursor-pointer ${
-                index % 2 ? "bg-gray-100" : ""
-              }`}
+  const columns = useMemo(
+    () => [
+      {
+        Header: "Placa",
+        accessor: row => {
+          return row?.customer_cars?.license_plate;
+        },
+      },
+      {
+        Header: "Modelo",
+        accessor: row => {
+          return row?.cars?.model;
+        },
+      },
+      {
+        Header: "Cliente",
+        accessor: row => {
+          return row?.customers?.fullname;
+        },
+      },
+      {
+        Header: "Ano do Veículo",
+        accessor: row => {
+          return row?.cars?.manufacture_year;
+        },
+      },
+      {
+        Header: "Ações",
+        id: "actions",
+        Cell: ({ row }) => (
+          <div className="flex justify-end">
+            <Button
+              variant={BUTTON_VARIANTS.GHOST}
+              onClick={e => {
+                e.stopPropagation();
+                e.preventDefault();
+                console.log(row);
+                onDelete({ id: row?.original?.customer_cars?.id });
+              }}
             >
-              <td>{customerCar.license_plate}</td>
-              <td>{car.model}</td>
-              <td>{customer.fullname}</td>
-              <td>{car.manufacture_year}</td>
-              <td>
-                <div className="flex justify-end">
-                  <Button
-                    variant={BUTTON_VARIANTS.GHOST}
-                    onClick={e => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      onDelete({ id: customerCar.id });
-                    }}
-                  >
-                    <Delete className="text-error-1 w-7 h-7" />
-                  </Button>
-                </div>
-              </td>
-            </tr>
-          )
-        )}
-      </tbody>
-    </table>
+              <Delete className="text-error-1 w-7 h-7" />
+            </Button>
+          </div>
+        ),
+      },
+    ],
+    [onDelete]
+  );
+  return (
+    <Table
+      data={data}
+      columns={columns}
+      onRowClick={row => history.push(`/customers/${row?.customers.id}`)}
+    />
   );
 };
 
