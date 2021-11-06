@@ -1,7 +1,7 @@
 const NOT_DIGIT = /\D/g;
 
 export const toBRL = value => {
-  if (isNaN(value)) {
+  if (isNaN(value) || value === null) {
     return "-";
   }
   return Number(value.toString()).toLocaleString("pt-br", {
@@ -18,7 +18,7 @@ export const fromBRL = value => {
 };
 
 export const handleCurrencyFieldChange = value => {
-  const fixedValue = fixDecimalPoint(value.toString()).split("");
+  const fixedValue = fixDecimalPoint(value?.toString()).split("");
   if (fixedValue[0] === ".") {
     fixedValue.splice(0, 0, "0");
   }
