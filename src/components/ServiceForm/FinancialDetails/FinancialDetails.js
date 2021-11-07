@@ -89,6 +89,7 @@ const createFinancialDetails = () =>
         buttonConfig={{
           defaultTitle: "Salvar",
           titleWhenEditing: "Salvar Alterações",
+          ignoreVariantChanges: true,
         }}
         title="Serviço"
         formValidationSchema={financialDetailsSchema}
