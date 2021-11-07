@@ -1,3 +1,4 @@
+import { NoDataMessage } from "components";
 import React from "react";
 import { useTable } from "react-table";
 
@@ -7,6 +8,11 @@ const Table = ({ columns, data, onRowClick }) => {
       columns,
       data,
     });
+
+  if (data?.length === 0) {
+    return <NoDataMessage />;
+  }
+
   return (
     <div className="w-full overflow-auto">
       <table {...getTableProps()} className="h-full w-full table-auto">
