@@ -4,7 +4,12 @@ import { useParams } from "react-router-dom";
 import PlusCircleIcon from "@heroicons/react/solid/PlusCircleIcon";
 import MinusCircleIcon from "@heroicons/react/solid/MinusCircleIcon";
 
-import { CustomerDetails, PageTitle, FinancialDetails } from "components";
+import {
+  CustomerDetails,
+  PageTitle,
+  FinancialDetails,
+  NoDataMessage,
+} from "components";
 import { useNotification } from "hooks";
 import {
   Card,
@@ -13,6 +18,7 @@ import {
   Text,
   Button,
   BUTTON_VARIANTS,
+  BUTTON_SIZES,
 } from "ui-fragments";
 import {
   engineAPI,
@@ -182,23 +188,11 @@ const ServiceItemsFetcher = ({ serviceId, updateServiceData }) => {
     <ScreenLoader isLoading={!error && !serviceItemsData}>
       <div className="flex flex-col gap-4">
         <div className="flex gap-2 w-full">
-          <div className="flex-1">
-            <Text>Descrição</Text>
-          </div>
-          <div
-            className="flex gap-2 flex-grow md:flex-grow-0"
-            style={{ flexBasis: "400px" }}
-          >
-            <div className="flex-1">
-              <Text>Preço Unit.</Text>
-            </div>
-            <div className="w-16">
-              <Text>Qtd.</Text>
-            </div>
-            <div className="flex-1 mr-12">
-              <Text>Preço Total</Text>
-            </div>
-          </div>
+          {serviceItemsData?.data?.length === 0 ? (
+            <NoDataMessage />
+          ) : (
+            <ServiceItemsHeader />
+          )}
         </div>
         <div className="flex flex-col gap-3 w-full">
           {serviceItemsData?.data?.map(serviceItem => (
@@ -212,11 +206,14 @@ const ServiceItemsFetcher = ({ serviceId, updateServiceData }) => {
           ))}
           <div className="flex justify-center">
             <Button
-              variant={BUTTON_VARIANTS.GHOST}
+              size={BUTTON_SIZES.SMALL}
               onClick={addNewItem}
               showLoader={isLoading}
             >
-              <PlusCircleIcon className="text-black text-sm h-10 w-10" />
+              <div className="flex gap-3 items-center">
+                <PlusCircleIcon className="text-white text-sm h-7 w-7" />
+                <Text>Adicionar Peça</Text>
+              </div>
             </Button>
           </div>
         </div>
@@ -224,6 +221,28 @@ const ServiceItemsFetcher = ({ serviceId, updateServiceData }) => {
     </ScreenLoader>
   );
 };
+
+const ServiceItemsHeader = () => (
+  <>
+    <div className="flex-1">
+      <Text>Descrição</Text>
+    </div>
+    <div
+      className="flex gap-2 flex-grow md:flex-grow-0"
+      style={{ flexBasis: "400px" }}
+    >
+      <div className="flex-1">
+        <Text>Preço Unit.</Text>
+      </div>
+      <div className="w-16">
+        <Text>Qtd.</Text>
+      </div>
+      <div className="flex-1 mr-12">
+        <Text>Preço Total</Text>
+      </div>
+    </div>
+  </>
+);
 
 const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
   const [isLoading, setIsLoading] = useState(false);
