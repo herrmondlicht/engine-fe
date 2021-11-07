@@ -11,7 +11,7 @@ export const useNotification = () => {
     useContext(NotificationContext);
 
   const showErrorNotification = useCallback(
-    ({ id, title, message }) =>
+    ({ id, title, message } = {}) =>
       showNotification({
         duration: NOTIFICATION_DURATION.LONG,
         type: NOTIFICATION_TYPES.ERROR,
