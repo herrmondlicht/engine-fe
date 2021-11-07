@@ -45,7 +45,6 @@ export const createCustomerCarList = ({ engineAPI }) =>
     }, [idPendingDelete, handleModalClose]);
 
     const onListRowDeleteClick = useCallback(({ id }) => {
-      console.log(id);
       setIdPendingDelete(id);
       setIsDeleteModalOpen(true);
     }, []);
@@ -133,7 +132,6 @@ const ClientsTable = ({ data = [], onDelete }) => {
               onClick={e => {
                 e.stopPropagation();
                 e.preventDefault();
-                console.log(row);
                 onDelete({ id: row?.original?.customer_cars?.id });
               }}
             >
@@ -149,7 +147,7 @@ const ClientsTable = ({ data = [], onDelete }) => {
     <Table
       data={data}
       columns={columns}
-      onRowClick={row => history.push(`/customers/${row?.customers.id}`)}
+      onRowClick={row => history.push(`/customers/${row?.customer_cars.id}`)}
     />
   );
 };
