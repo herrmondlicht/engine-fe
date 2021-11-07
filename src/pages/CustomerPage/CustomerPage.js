@@ -24,7 +24,7 @@ import {
 import { useNotification } from "hooks";
 import { engineAPI, fixPayloadKeys, toBRL } from "utils";
 
-const ClientPage = () => {
+const CustomerPage = () => {
   const { customer_car_id } = useParams();
   const { showErrorNotification } = useNotification();
   const [serviceDeleteId, setServiceIdDelete] = useState(null);
@@ -248,4 +248,4 @@ const NotesModal = ({ notes, setNote }) => {
   );
 };
 
-export default ClientPage;
+export default CustomerPage;

@@ -1,5 +1,5 @@
 import { CustomerCarList } from "components";
-import { RegisterForm, ServicePage, ClientPage } from "pages";
+import { RegisterForm, ServicePage, CustomerPage } from "pages";
 
 export const appRoutes = {
   newClient: {
@@ -24,7 +24,7 @@ export const appRoutes = {
   clientServices: {
     name: "Cliente",
     path: "customers/:customer_car_id",
-    Component: ClientPage,
+    Component: CustomerPage,
     isLocked: true,
   },
 };
