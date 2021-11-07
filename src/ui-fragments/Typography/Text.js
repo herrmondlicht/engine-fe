@@ -7,11 +7,20 @@ export const TEXT_SIZES = {
   SMALL: "text-sm",
 };
 
-const Text = ({ children, size, color }) => {
+export const TEXT_ALIGN = {
+  LEFT: "text-left",
+  RIGHT: "text-right",
+  CENTER: "text-center",
+};
+
+const Text = ({ children, size, color, align }) => {
   const sizeClass = TEXT_SIZES[size] || TEXT_SIZES.MEDIUM;
   const colorClass = color || "black";
+  const alignment = align || "text-left";
 
-  return <p className={`${sizeClass} ${colorClass}`}>{children}</p>;
+  return (
+    <p className={`${sizeClass} ${colorClass} ${alignment}`}>{children}</p>
+  );
 };
 
 Text.propTypes = {

@@ -9,6 +9,7 @@ import {
   Label,
   ScreenLoader,
   Text,
+  TEXT_ALIGN,
   Title,
   TITLE_SIZES,
   TITLE_SPACING,
@@ -141,7 +142,7 @@ const LineInfo = ({ title, description }) => {
     <div className="flex flex-col md:flex-row gap-3">
       <Label>{title}</Label>
       <div className="flex flex-1 md:justify-end">
-        <Text>{description || "-"}</Text>
+        <Text align={TEXT_ALIGN.RIGHT}>{description || "-"}</Text>
       </div>
     </div>
   );
