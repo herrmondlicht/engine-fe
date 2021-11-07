@@ -14,16 +14,19 @@ import {
 } from "utils";
 import { useNotification } from "hooks";
 import { NOTIFICATION_DURATION, NOTIFICATION_TYPES } from "context";
+import { useHistory, useLocation } from "react-router";
 
 const financialDetailsSchema = yup.object({
-  odometerReading: yup.string().required(),
-  servicePrice: yup.string().required(),
-  observations: yup.string(),
-  discountPrice: yup.string(),
+  odometerReading: yup.string().nullable(),
+  servicePrice: yup.string().nullable(),
+  observations: yup.string().nullable(),
+  discountPrice: yup.string().nullable(),
 });
 
 const createFinancialDetails = () =>
   function FinancialDetails({ financialData }) {
+    const location = useLocation();
+    const history = useHistory();
     const { showErrorNotification, showNotification } = useNotification();
 
     const financialDataToCurrency = useMemo(() => {
@@ -47,7 +50,7 @@ const createFinancialDetails = () =>
           servicePrice: fromBRL(formData.servicePrice),
           discountPrice: fromBRL(formData.discountPrice),
         };
-        const data = await engineAPI.service_orders[method]({
+        await engineAPI.service_orders[method]({
           urlExtension: financialData?.id,
           data: fixPayloadKeys(sanitizedForm, {
             fieldTranslator: convertFormKeyToAPI,
@@ -62,14 +65,16 @@ const createFinancialDetails = () =>
             ? { title: "Serviço atualizado!", type: NOTIFICATION_TYPES.INFO }
             : {}),
         });
-        return data?.data;
+        if (location.state?.redirect) {
+          history.push(location.state.redirect);
+        }
       } catch (error) {
+        console.log(error);
         showErrorNotification({
           id: "serviceAddedErro",
           title: "Opa algo deu errado!",
           message: "O serviço não foi salvo. Revise os dados e tente novamente",
         });
-        return {};
       }
     };
 
@@ -84,6 +89,7 @@ const createFinancialDetails = () =>
         buttonConfig={{
           defaultTitle: "Salvar",
           titleWhenEditing: "Salvar Alterações",
+          ignoreVariantChanges: true,
         }}
         title="Serviço"
         formValidationSchema={financialDetailsSchema}
@@ -94,7 +100,12 @@ const createFinancialDetails = () =>
     );
   };
 
-const FinancialDetailsView = ({ register, watch, serviceItemsPrice }) => {
+const FinancialDetailsView = ({
+  register,
+  watch,
+  serviceItemsPrice,
+  errors,
+}) => {
   const [updatedServicePrice, discountPrice] = watch([
     "servicePrice",
     "discountPrice",
@@ -119,6 +130,7 @@ const FinancialDetailsView = ({ register, watch, serviceItemsPrice }) => {
             label="Quilomentragem"
             type="number"
             {...register("odometerReading")}
+            error={errors.odometerReading}
           />
           <Input
             fw
@@ -129,12 +141,14 @@ const FinancialDetailsView = ({ register, watch, serviceItemsPrice }) => {
               e.target.value = value;
               servicePriceControl.onChange(e);
             }}
+            error={errors.servicePrice}
           />
           <Input
             fw
             label="Valor das Peças"
             value={toBRL(serviceItemsPrice)}
             disabled
+            error={errors.serviceItemsPrice}
           />
           <Input
             fw
@@ -145,6 +159,7 @@ const FinancialDetailsView = ({ register, watch, serviceItemsPrice }) => {
               e.target.value = value;
               serviceDiscountControl.onChange(e);
             }}
+            error={errors.discountPrice}
           />
         </div>
         <div className="flex items-center justify-center w-full md:w-1/2">
@@ -165,6 +180,7 @@ const FinancialDetailsView = ({ register, watch, serviceItemsPrice }) => {
           as="textarea"
           rows={5}
           {...register("observations")}
+          error={errors.observations}
         />
       </div>
     </div>
