@@ -52,7 +52,7 @@ export const createCustomerCarList = ({ engineAPI }) =>
     const addNewCustomer = useCallback(
       e => {
         e.preventDefault();
-        history.push("/customers/new");
+        history.push("/customer_car");
       },
       [history]
     );
