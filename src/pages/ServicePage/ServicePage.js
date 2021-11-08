@@ -54,21 +54,19 @@ const ServicePage = () => {
           engineAPI.service_orders.get({
             urlExtension: serviceId,
           })
-      : null
+      : null,
+    {
+      onError: () =>
+        showErrorNotification({
+          id: "services",
+          message: "Não conseguimos acessar esse serviço ☹️",
+        }),
+    }
   );
 
   const mutateServiceData = useCallback(() => {
     mutate();
   }, [mutate]);
-
-  useEffect(() => {
-    if (error) {
-      showErrorNotification({
-        id: "services",
-        message: "Não conseguimos acessar esse serviço ☹️",
-      });
-    }
-  }, [error, showErrorNotification]);
   return (
     <div className="flex flex-col gap-10 pb-10">
       <Card>
@@ -112,16 +110,14 @@ const ServiceItemsFetcher = ({ serviceId, updateServiceData }) => {
             urlExtension: `${serviceId}/items`,
           })
       : null,
-    { dedupingInterval: 3000 }
-  );
-
-  useEffect(() => {
-    if (error) {
-      showErrorNotification({
-        message: "Não conseguimos carregar os items desse serviço",
-      });
+    {
+      dedupingInterval: 3000,
+      onError: () =>
+        showErrorNotification({
+          message: "Não conseguimos carregar os items desse serviço",
+        }),
     }
-  }, [error, showErrorNotification]);
+  );
 
   const submitServiceItem = useCallback(
     async values => {
