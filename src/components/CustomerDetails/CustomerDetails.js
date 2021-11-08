@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import useSWR from "swr";
 
 import { useNotification } from "hooks";
