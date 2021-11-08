@@ -28,17 +28,16 @@ const CustomerDetails = ({ customerCarId }) => {
           engineAPI.customer_cars.get({
             urlExtension: `${customerCarId}?include=customers,cars`,
           })
-      : null
-  );
-
-  useEffect(() => {
-    if (error) {
-      showErrorNotification({
-        id: "customerDetails",
-        message: "Não conseguimos acessar os detalhes do cliente ☹️",
-      });
+      : null,
+    {
+      onError: () =>
+        showErrorNotification({
+          id: "customerDetails",
+          message: "Não conseguimos acessar os detalhes do cliente ☹️",
+        }),
+      shouldRetryOnError: false,
     }
-  });
+  );
 
   return (
     <ScreenLoader isLoading={!customerData && !error}>

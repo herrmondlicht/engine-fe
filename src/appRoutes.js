@@ -1,5 +1,9 @@
-import { CustomerCarList } from "components";
-import { RegisterForm, ServicePage, CustomerPage } from "pages";
+import {
+  RegisterForm,
+  ServicePage,
+  CustomerPage,
+  CustomerListPage,
+} from "pages";
 
 export const appRoutes = {
   newClient: {
@@ -17,7 +21,7 @@ export const appRoutes = {
   allCustomers: {
     name: "Clientes",
     path: "customers",
-    Component: CustomerCarList,
+    Component: CustomerListPage,
     exact: true,
     isLocked: true,
   },
