@@ -7,6 +7,7 @@ import { useHistory, useParams } from "react-router";
 import useSWR from "swr";
 
 import {
+  AddServiceButton,
   ConfirmDeleteModal,
   CustomerDetails,
   PageTitle,
@@ -14,7 +15,6 @@ import {
 } from "components";
 import {
   Button,
-  BUTTON_SIZES,
   BUTTON_VARIANTS,
   Card,
   Modal,
@@ -22,10 +22,11 @@ import {
   Text,
 } from "ui-fragments";
 import { useLoader, useNotification } from "hooks";
-import { engineAPI, fixPayloadKeys, toBRL } from "utils";
+import { engineAPI, toBRL } from "utils";
 
 const CustomerPage = () => {
   const { customer_car_id } = useParams();
+  const history = useHistory();
   const { showErrorNotification } = useNotification();
   const [serviceDeleteId, setServiceIdDelete] = useState(null);
   const [notesModalData, setNotesModalData] = useState(null);
@@ -69,7 +70,17 @@ const CustomerPage = () => {
             />
           }
           <div className="flex w-full justify-center items-center mt-3">
-            <AddServiceButton customerCarId={customer_car_id} />
+            <AddServiceButton
+              customerCarId={customer_car_id}
+              onServiceAdd={data =>
+                history.push(`/services/${data.id}`, {
+                  redirect: `/customers/${customer_car_id}`,
+                })
+              }
+            >
+              <PlusCircleIcon className="text-white text-sm h-7 w-7" />
+              <Text>Nova Ordem de Serviço</Text>
+            </AddServiceButton>
           </div>
         </ScreenLoader>
       </Card>
@@ -162,43 +173,6 @@ const ClientServiceTable = ({ data = [], onDelete, onNotesClick }) => {
         })
       }
     />
-  );
-};
-
-const AddServiceButton = ({ customerCarId }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const { push } = useHistory();
-  const { showErrorNotification } = useNotification();
-  const onButtonClick = async e => {
-    e.preventDefault();
-    try {
-      setIsLoading(true);
-      const { data } = await engineAPI.service_orders.post({
-        data: fixPayloadKeys({ customerCarId }),
-      });
-      if (!data?.id) throw new Error("No service ID found");
-      push(`/services/${data.id}`, {
-        redirect: `/customers/${customerCarId}`,
-      });
-    } catch (e) {
-      showErrorNotification({
-        message: "Nāo consegui adicionar o serviço ",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  return (
-    <Button
-      size={BUTTON_SIZES.SMALL}
-      showLoader={isLoading}
-      onClick={onButtonClick}
-    >
-      <div className="flex items-center gap-3">
-        <PlusCircleIcon className="text-white text-sm h-7 w-7" />
-        <Text>Nova Ordem de Serviço</Text>
-      </div>
-    </Button>
   );
 };
 
