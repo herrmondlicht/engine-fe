@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { CombinedFormsProvider } from "context";
-import { NotificationProvider } from "context/NotificationContext";
+import { NotificationProvider } from "context";
 import { HomePage, LoginPage } from "pages";
 
 function App() {
@@ -13,9 +12,7 @@ function App() {
             <LoginPage />
           </Route>
           <Route path="/">
-            <CombinedFormsProvider value={{}}>
-              <HomePage />
-            </CombinedFormsProvider>
+            <HomePage />
           </Route>
         </Switch>
       </Router>
