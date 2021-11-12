@@ -21,7 +21,7 @@ import {
   ScreenLoader,
   Text,
 } from "ui-fragments";
-import { useNotification } from "hooks";
+import { useLoader, useNotification } from "hooks";
 import { engineAPI, fixPayloadKeys, toBRL } from "utils";
 
 const CustomerPage = () => {
@@ -204,7 +204,7 @@ const AddServiceButton = ({ customerCarId }) => {
 
 const DeleteServiceModal = ({ serviceId, setServiceId }) => {
   const { showErrorNotification } = useNotification();
-  const [isLoading, setIsLoading] = useState();
+  const [isLoading, setIsLoading] = useLoader();
   const deleteService = async () => {
     setIsLoading(true);
     try {

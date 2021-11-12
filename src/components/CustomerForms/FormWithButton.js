@@ -1,6 +1,6 @@
 import { PageTitle } from "components";
-import { useCustomForm } from "hooks";
-import React, { useMemo, useState } from "react";
+import { useCustomForm, useLoader } from "hooks";
+import React, { useMemo } from "react";
 
 import { Button } from "ui-fragments";
 
@@ -17,7 +17,7 @@ const FormWithButton = ({
     formMethods: { handleSubmit, formState, reset, ...formMethods },
     validationMethods: { errors, validate },
   } = useCustomForm({ schema: formValidationSchema, preloadedData });
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useLoader(false);
   const isValidPreloadData = Object.values(preloadedData ?? {}).length > 0;
 
   const { isDirty } = formState;

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import useSWR from "swr";
 import { useParams } from "react-router-dom";
 import PlusCircleIcon from "@heroicons/react/solid/PlusCircleIcon";
@@ -10,7 +10,7 @@ import {
   FinancialDetails,
   NoDataMessage,
 } from "components";
-import { useNotification } from "hooks";
+import { useLoader, useNotification } from "hooks";
 import {
   Card,
   Input,
@@ -97,7 +97,7 @@ const ServicePage = () => {
 
 const ServiceItemsFetcher = ({ serviceId, updateServiceData }) => {
   const { showErrorNotification } = useNotification();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useLoader(false);
   const {
     data: serviceItemsData,
     error,
@@ -241,7 +241,7 @@ const ServiceItemsHeader = () => (
 );
 
 const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useLoader(false);
   const {
     formMethods: { register, watch, setValue, formState },
   } = useCustomForm({ schema: serviceItemSchema, preloadedData: serviceItem });
@@ -261,7 +261,7 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
     setIsLoading(true);
     await onDeleteItem(serviceItem?.id);
     setIsLoading(false);
-  }, [onDeleteItem, serviceItem?.id]);
+  }, [onDeleteItem, serviceItem?.id, setIsLoading]);
 
   useEffect(() => {
     setValue(

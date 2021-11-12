@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { storageAPI, STORAGE_KEYS, engineAPI, yup } from "utils";
 import { useLocation, useHistory, Redirect } from "react-router-dom";
 import EngineImage from "../assets/engine_logo.png";
 import { LoginForm } from "components";
 import { Card } from "ui-fragments";
-import { useCustomForm, useNotification } from "hooks";
+import { useCustomForm, useLoader, useNotification } from "hooks";
 
 const loginFormSchema = yup.object().shape({
   password: yup.string().required(),
@@ -14,7 +14,7 @@ const loginFormSchema = yup.object().shape({
 export const createLogin = (engineAPI, storageAPI) =>
   function Login() {
     const { showErrorNotification } = useNotification();
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useLoader(false);
     const {
       formMethods: { handleSubmit, reset, register },
       validationMethods: { validate, errors },

@@ -6,8 +6,8 @@ import {
   NOTIFICATION_DURATION,
   NOTIFICATION_TYPES,
 } from "context";
-import { useCombinedForms, useNotification } from "hooks";
-import { useCallback, useEffect, useState } from "react";
+import { useCombinedForms, useLoader, useNotification } from "hooks";
+import { useCallback, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { ScreenLoader } from "ui-fragments";
 import { engineAPI } from "utils";
@@ -19,7 +19,7 @@ const RegisterForm = () => {
     combinedForms: { customer_cars, customers, cars },
   } = useCombinedForms();
   const { showNotification } = useNotification();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useLoader(false);
   const { customer_car_id } = useParams();
   const history = useHistory();
 
@@ -47,7 +47,7 @@ const RegisterForm = () => {
     } else {
       clear();
     }
-  }, [customer_car_id, changeForm, showNotification, clear]);
+  }, [customer_car_id, setIsLoading, changeForm, showNotification, clear]);
 
   useEffect(() => {
     loadCustomerCarIfParam();
