@@ -1,15 +1,21 @@
-import React from "react";
-import { CustomerForm } from "components";
-import { CarForm } from "components/CustomerForms/CarForm";
+import React, { useCallback, useEffect, useState } from "react";
+import { useHistory, useParams, useLocation } from "react-router-dom";
+
+import { CustomerForm, CarForm, AddServiceButton } from "components";
 import {
-  AVAILABLE_FORMS,
   NOTIFICATION_DURATION,
   NOTIFICATION_TYPES,
+  AVAILABLE_FORMS,
+  CombinedFormsProvider,
 } from "context";
 import { useCombinedForms, useLoader, useNotification } from "hooks";
-import { useCallback, useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import { ScreenLoader } from "ui-fragments";
+import {
+  Button,
+  BUTTON_VARIANTS,
+  Modal,
+  ScreenLoader,
+  Text,
+} from "ui-fragments";
 import { engineAPI } from "utils";
 
 const RegisterForm = () => {
@@ -20,8 +26,22 @@ const RegisterForm = () => {
   } = useCombinedForms();
   const { showNotification } = useNotification();
   const [isLoading, setIsLoading] = useLoader(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { customer_car_id } = useParams();
   const history = useHistory();
+  const location = useLocation();
+
+  const onSubmitLastForm = useCallback(
+    ({ id }) => {
+      if (location.state?.redirect) {
+        history.push(location.state?.redirect);
+      } else {
+        history.replace(`/customer_car/${id}`);
+        setIsModalOpen(true);
+      }
+    },
+    [history, location.state]
+  );
 
   const loadCustomerCarIfParam = useCallback(async () => {
     if (customer_car_id) {
@@ -72,13 +92,58 @@ const RegisterForm = () => {
           <ScreenLoader isLoading={isLoading} radius>
             <CarForm
               loadedData={{ cars, customer_cars, customers }}
-              onSubmitAction={({ id }) => history.push(`/customer_car/${id}`)}
+              onSubmitAction={onSubmitLastForm}
             />
           </ScreenLoader>
         </div>
       )}
+      <CreateServiceModal
+        isOpen={isModalOpen}
+        handleClose={() => setIsModalOpen(false)}
+        customerCarId={customer_cars?.id}
+      />
     </div>
   );
 };
 
-export default RegisterForm;
+const CreateServiceModal = ({ handleClose, customerCarId, isOpen }) => {
+  const history = useHistory();
+  return (
+    <Modal isOpen={isOpen} handleClose={handleClose} title="Cliente Adicionado">
+      <div>
+        <div className="my-5">
+          <Text>
+            Você pode adicionar uma ordem de serviço para esse cliente
+          </Text>
+        </div>
+        <div className="mt-4 flex gap-3 justify-end">
+          <Button
+            variant={BUTTON_VARIANTS.GHOST}
+            onClick={handleClose}
+            showVariantIcon={false}
+          >
+            Cancelar
+          </Button>
+          <AddServiceButton
+            customerCarId={customerCarId}
+            onServiceAdd={data =>
+              history.push(`/services/${data.id}`, {
+                redirect: `/customers/${customerCarId}`,
+              })
+            }
+          >
+            <Text>Adicionar Também o Serviço</Text>
+          </AddServiceButton>
+        </div>
+      </div>
+    </Modal>
+  );
+};
+
+const RegisterFormWithContext = () => (
+  <CombinedFormsProvider value={{}}>
+    <RegisterForm />
+  </CombinedFormsProvider>
+);
+
+export default RegisterFormWithContext;
