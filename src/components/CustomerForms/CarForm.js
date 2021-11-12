@@ -1,6 +1,6 @@
 import { NOTIFICATION_DURATION, NOTIFICATION_TYPES } from "context";
 import { useNotification } from "hooks";
-import React from "react";
+import React, { useState } from "react";
 import { useMemo } from "react";
 import useSWR from "swr";
 
@@ -28,9 +28,11 @@ const carFormSchema = yup.object().shape({
 const CarForm = ({ loadedData, onSubmitAction }) => {
   const { showNotification, showErrorNotification } = useNotification();
   const { cars, customer_cars, customers } = loadedData;
+  const [customerCarData, setCustomerCarData] = useState(customer_cars);
+
   const formDefaultData = {
     ...cars,
-    ...customer_cars,
+    ...customerCarData,
   };
   const { data: carsData, isValidating } = useSWR(
     APIRoutes.cars.url,
@@ -42,7 +44,7 @@ const CarForm = ({ loadedData, onSubmitAction }) => {
   const sendNewCarForm = async ({ model, make, manufactureYear, fuel }) => {
     try {
       const payload = {
-        ...(loadedData.cars ? loadedData.cars : {}),
+        ...(cars ? cars : {}),
         model,
         make,
         manufactureYear,
@@ -70,10 +72,10 @@ const CarForm = ({ loadedData, onSubmitAction }) => {
     licensePlate,
     car_id,
   }) => {
-    const method = getHTTPMethod(loadedData?.customer_cars?.id);
+    const method = getHTTPMethod(customerCarData?.id);
     try {
       const payload = {
-        ...(loadedData.customer_cars ? loadedData.customer_cars : {}),
+        ...(customerCarData ? customerCarData : {}),
         color,
         displacement,
         licensePlate,
@@ -81,17 +83,18 @@ const CarForm = ({ loadedData, onSubmitAction }) => {
         customer_id: customers.id,
       };
       const data = await engineAPI.customer_cars[method]({
-        urlExtension: loadedData?.customer_cars?.id,
+        urlExtension: customerCarData?.id,
         data: fixPayloadKeys(payload, { fieldTranslator: convertFormKeyToAPI }),
       });
       showNotification({
         id: "carAdded",
         duration: NOTIFICATION_DURATION.SHORT,
-        title: loadedData.cars ? "Veículo atualizado!" : "Veículo adicionado!",
-        type: loadedData.cars
+        title: customerCarData ? "Veículo atualizado!" : "Veículo adicionado!",
+        type: customerCarData
           ? NOTIFICATION_TYPES.INFO
           : NOTIFICATION_TYPES.SUCCESS,
       });
+      setCustomerCarData(data?.data);
       return data?.data;
     } catch (error) {
       console.log(error);
