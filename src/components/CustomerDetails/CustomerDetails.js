@@ -14,6 +14,7 @@ import {
   TITLE_SIZES,
   TITLE_SPACING,
 } from "ui-fragments";
+import { useLocation } from "react-router";
 
 const CustomerDetails = ({ customerCarId }) => {
   const { showErrorNotification } = useNotification();
@@ -57,6 +58,7 @@ const DisplayCustomerDetails = ({
     customer_cars: customerCars = {},
   } = {},
 }) => {
+  const location = useLocation();
   const customerSanitized = useMemo(() => {
     return fixPayloadKeys(customers, {
       fieldTranslator: convertAPIkeyToForm,
@@ -127,7 +129,10 @@ const DisplayCustomerDetails = ({
       <div className="mt-5 flex justify-end">
         <Button
           as={BUTTON_COMPONENT.LINK}
-          href={`/customer_car/${customerCarSanitized.id}`}
+          href={{
+            pathname: `/customer_car/${customerCarSanitized.id}`,
+            state: { redirect: location.pathname },
+          }}
         >
           Editar informações
         </Button>
