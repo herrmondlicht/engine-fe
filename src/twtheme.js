@@ -1,4 +1,4 @@
-const colors = require("tailwindcss/colors");
+import colors from "tailwindcss/colors";
 
 const theme = {
   minHeight: {
@@ -38,6 +38,4 @@ const theme = {
   },
 };
 
-module.exports = {
-  theme,
-};
+export { theme };
