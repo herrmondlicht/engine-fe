@@ -3,7 +3,7 @@ import propTypes from "prop-types";
 import Loader from "react-loader-spinner";
 import CheckCircleIcon from "@heroicons/react/solid/CheckCircleIcon";
 import XCircleIcon from "@heroicons/react/solid/XCircleIcon";
-import { theme } from "twtheme";
+import theme from "twtheme";
 import { Link } from "react-router-dom";
 
 export const BUTTON_VARIANTS = {

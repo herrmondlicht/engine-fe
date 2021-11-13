@@ -1,4 +1,4 @@
-const { theme } = require("./src/twtheme");
+const theme = require("./src/twtheme/twtheme");
 
 module.exports = {
   theme,
