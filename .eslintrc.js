@@ -27,8 +27,10 @@ module.exports = {
   ignorePatterns: [
     "temp.js",
     "**/*.test.js",
-    "**/src/twtheme.js",
+    "**/src/theme.js",
+    "**/generate-tailwind-theme.js",
     "**/tailwind.config.js",
+    "**/craco.config.js",
   ],
   rules: {
     "react/prop-types": 0,
