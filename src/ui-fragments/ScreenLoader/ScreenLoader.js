@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Loader from "react-loader-spinner";
-import theme from "twtheme";
+import theme from "theme";
 
 export const ScreenLoader = ({ children, radius = false, isLoading }) => {
   const [showLoader, setShowLoader] = useState(isLoading);
