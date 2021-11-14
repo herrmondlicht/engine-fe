@@ -27,7 +27,8 @@ module.exports = {
   ignorePatterns: [
     "temp.js",
     "**/*.test.js",
-    "**/src/twtheme/twtheme.js",
+    "**/src/theme.js",
+    "**/generate-tailwind-theme.js",
     "**/tailwind.config.js",
   ],
   rules: {
