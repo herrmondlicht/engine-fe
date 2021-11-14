@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import "./twoutput.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
+// eslint-disable-next-line no-undef
 require("dotenv").config();
 
 ReactDOM.render(<App />, document.getElementById("root"));

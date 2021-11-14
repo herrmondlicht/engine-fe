@@ -30,6 +30,7 @@ module.exports = {
     "**/src/theme.js",
     "**/generate-tailwind-theme.js",
     "**/tailwind.config.js",
+    "**/craco.config.js",
   ],
   rules: {
     "react/prop-types": 0,
