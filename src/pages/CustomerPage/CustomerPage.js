@@ -48,15 +48,11 @@ const CustomerPage = () => {
       <Card>
         <PageTitle description="Serviços" />
         <ScreenLoader isLoading={!clientServices?.data || isValidating}>
-          {
-            <CustomerServiceTable
-              data={clientServices?.data}
-              onDelete={({ id }) => setServiceIdDelete(id)}
-              onNotesClick={({ observations }) =>
-                setNotesModalData(observations)
-              }
-            />
-          }
+          <CustomerServiceTable
+            data={clientServices?.data}
+            onDelete={({ id }) => setServiceIdDelete(id)}
+            onNotesClick={({ observations }) => setNotesModalData(observations)}
+          />
           <div className="flex w-full justify-center items-center mt-3">
             <AddServiceButton
               customerCarId={customer_car_id}
