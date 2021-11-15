@@ -6,10 +6,10 @@ const Table = ({ columns, data, onRowClick }) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
       columns,
-      data,
+      data: data || [],
     });
 
-  if (data?.length === 0) {
+  if (data && data.length === 0) {
     return <NoDataMessage />;
   }
 
