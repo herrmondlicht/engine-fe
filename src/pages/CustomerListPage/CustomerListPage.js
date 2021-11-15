@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-import Delete from "@heroicons/react/solid/TrashIcon";
 import { useHistory } from "react-router-dom";
 
 import { engineAPI } from "utils";
-import { SearchBar, ConfirmDeleteModal, PageTitle, Table } from "components";
-import { Button, BUTTON_VARIANTS, Card } from "ui-fragments";
+import { SearchBar, ConfirmDeleteModal, PageTitle } from "components";
+import { Card, ScreenLoader } from "ui-fragments";
+import { CustomersTable } from "./CustomersTable";
 
 export const createCustomerCarList = ({ engineAPI }) =>
   function CustomerCarList() {
     const history = useHistory();
-    const [dataArray, setData] = useState([]);
+    const [dataArray, setData] = useState();
     const [research, setResearch] = useState("");
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [idPendingDelete, setIdPendingDelete] = useState(null);
@@ -59,7 +59,7 @@ export const createCustomerCarList = ({ engineAPI }) =>
 
     const filteredData = useMemo(
       () =>
-        dataArray.filter(
+        dataArray?.filter(
           data =>
             data.customer_cars.license_plate
               .toLowerCase()
@@ -81,9 +81,14 @@ export const createCustomerCarList = ({ engineAPI }) =>
         <Card className="flex w-full flex-col">
           <PageTitle title="Clientes" description="Lista de Clientes" />
           <SearchBar addAction={addNewCustomer} setResearch={setResearch} />
-          <div className="mt-8">
-            <ClientsTable data={filteredData} onDelete={onListRowDeleteClick} />
-          </div>
+          <ScreenLoader isLoading={!dataArray}>
+            <div className="mt-8">
+              <CustomersTable
+                data={filteredData}
+                onDelete={onListRowDeleteClick}
+              />
+            </div>
+          </ScreenLoader>
         </Card>
         <ConfirmDeleteModal
           handleClose={handleModalClose}
@@ -93,63 +98,5 @@ export const createCustomerCarList = ({ engineAPI }) =>
       </>
     );
   };
-
-const ClientsTable = ({ data = [], onDelete }) => {
-  const history = useHistory();
-  const columns = useMemo(
-    () => [
-      {
-        Header: "Placa",
-        accessor: row => {
-          return row?.customer_cars?.license_plate;
-        },
-      },
-      {
-        Header: "Modelo",
-        accessor: row => {
-          return row?.cars?.model;
-        },
-      },
-      {
-        Header: "Cliente",
-        accessor: row => {
-          return row?.customers?.fullname;
-        },
-      },
-      {
-        Header: "Ano do Veículo",
-        accessor: row => {
-          return row?.cars?.manufacture_year;
-        },
-      },
-      {
-        Header: "Ações",
-        id: "actions",
-        Cell: ({ row }) => (
-          <div className="flex justify-end">
-            <Button
-              variant={BUTTON_VARIANTS.GHOST}
-              onClick={e => {
-                e.stopPropagation();
-                e.preventDefault();
-                onDelete({ id: row?.original?.customer_cars?.id });
-              }}
-            >
-              <Delete className="text-error-1 w-7 h-7" />
-            </Button>
-          </div>
-        ),
-      },
-    ],
-    [onDelete]
-  );
-  return (
-    <Table
-      data={data}
-      columns={columns}
-      onRowClick={row => history.push(`/customers/${row?.customer_cars.id}`)}
-    />
-  );
-};
 
 export default createCustomerCarList({ engineAPI });
