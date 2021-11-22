@@ -27,7 +27,7 @@ const CustomerServiceTable = ({ data = [], onDelete, onNotesClick }) => {
       {
         Header: "Desconto",
         accessor: row => {
-          return toBRL(row?.discount ?? 0);
+          return toBRL(row?.discount_price ?? 0);
         },
       },
       {
