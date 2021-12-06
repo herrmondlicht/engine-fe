@@ -12,11 +12,12 @@ export const appRoutes = {
     Component: RegisterForm,
     isLocked: true,
   },
-  newService: {
+  service: {
     name: "Serviço",
     path: "services/:serviceId",
     Component: ServicePage,
     isLocked: true,
+    allowGoBack: true,
   },
   allCustomers: {
     name: "Clientes",
@@ -30,5 +31,6 @@ export const appRoutes = {
     path: "customers/:customer_car_id",
     Component: CustomerPage,
     isLocked: true,
+    allowGoBack: true,
   },
 };

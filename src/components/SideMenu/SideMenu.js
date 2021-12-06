@@ -2,7 +2,7 @@ import React from "react";
 
 import Add from "@heroicons/react/solid/PlusIcon";
 import List from "@heroicons/react/solid/ViewListIcon";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Button, BUTTON_VARIANTS } from "ui-fragments";
 import { storageAPI, STORAGE_KEYS } from "utils";
 import EngineImage from "assets/engine_logo_no_bg.png";
@@ -14,7 +14,9 @@ function SideMenu({ storageAPI }) {
     <div className="flex flex-col w-48 h-full">
       <div className="flex flex-col h-full gap-3">
         <div className="my-14 mx-5">
-          <img src={EngineImage} alt="logo" className="w-full" />
+          <Link to={"/"}>
+            <img src={EngineImage} alt="logo" className="w-full" />
+          </Link>
         </div>
         <SideMenuItem
           to="/customer_car"

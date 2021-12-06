@@ -14,6 +14,7 @@ const Modal = ({ handleClose, isOpen, children, title, style = {} }) => {
       style={{
         overlay: {
           background: "rgba(0,0,0,0.5)",
+          zIndex: 100,
         },
       }}
     >
