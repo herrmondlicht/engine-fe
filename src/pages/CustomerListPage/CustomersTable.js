@@ -58,7 +58,11 @@ const CustomersTable = ({ data, onDelete }) => {
     <Table
       data={data}
       columns={columns}
-      onRowClick={row => history.push(`/customers/${row?.customer_cars.id}`)}
+      onRowClick={row =>
+        history.push(`/customers/${row?.customer_cars.id}`, {
+          redirect: "/customers",
+        })
+      }
     />
   );
 };
