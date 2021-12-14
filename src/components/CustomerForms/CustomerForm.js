@@ -61,10 +61,10 @@ const CustomerForm = ({ loadedCustomer }) => {
         Form={CustomerFormView}
         buttonConfig={{
           titleWhenEditing: "Salvar Alterações",
-          defaultTitle: "Registrar Usuário",
+          defaultTitle: "Registrar Cliente",
         }}
         title="Nova OS"
-        description="Dados do Usuário"
+        description="Dados do Cliente"
         formValidationSchema={schema}
         onFormSubmit={sendForm}
         preloadedData={loadedCustomer}
