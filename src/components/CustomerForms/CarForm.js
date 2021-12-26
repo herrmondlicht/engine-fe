@@ -22,7 +22,6 @@ const carFormSchema = yup.object().shape({
   fuel: yup.string().required().required(),
   licensePlate: yup.string().required(),
   color: yup.string(),
-  displacement: yup.string(),
 });
 
 const CarForm = ({ loadedData, onSubmitAction }) => {
@@ -66,18 +65,12 @@ const CarForm = ({ loadedData, onSubmitAction }) => {
     }
   };
 
-  const sendNewCustomerCarForm = async ({
-    color,
-    displacement,
-    licensePlate,
-    car_id,
-  }) => {
+  const sendNewCustomerCarForm = async ({ color, licensePlate, car_id }) => {
     const method = getHTTPMethod(customerCarData?.id);
     try {
       const payload = {
         ...(customerCarData ? customerCarData : {}),
         color,
-        displacement,
         licensePlate,
         car_id,
         customer_id: customers.id,
@@ -232,15 +225,6 @@ const CarFormView = ({
           placeholder="Combustível"
           {...register("fuel")}
           error={errors.fuel}
-        />
-      </div>
-      <div className="flex-1" style={{ minWidth: "200px" }}>
-        <Input
-          fw
-          label="Cilindradas"
-          placeholder="Cilindradas"
-          {...register("displacement")}
-          error={errors.displacement}
         />
       </div>
       <div className="flex-1" style={{ minWidth: "200px" }}>

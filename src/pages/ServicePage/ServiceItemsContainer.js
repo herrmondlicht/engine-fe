@@ -56,6 +56,9 @@ const ServiceItemsContainer = ({ serviceId, updateServiceData }) => {
       setIsLoading(true);
       await engineAPI.service_orders.post({
         urlExtension: `${serviceId}/items`,
+        data: {
+          quantity: 1,
+        },
       });
       await mutate();
     } catch (e) {
