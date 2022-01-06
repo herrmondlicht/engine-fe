@@ -3,7 +3,7 @@ import { storageAPI as _storage, STORAGE_KEYS, APIRoutes } from "utils";
 
 export const requestMaker =
   ({ method, url, isLocked }, { storage = window.localStorage } = {}) =>
-  async ({ data, params = {}, urlExtension } = {}) => {
+  async ({ data, params = {}, urlExtension, options } = {}) => {
     const { query } = params;
     if (query) {
       params.query = JSON.stringify(query);
@@ -16,10 +16,12 @@ export const requestMaker =
       const response = await axios({
         headers,
         method,
+        // eslint-disable-next-line no-undef
         baseURL: process.env.REACT_APP_API_SERVICE,
         url: `${url}${urlExtension ? `/${urlExtension}` : ""}`,
         data,
         params,
+        ...options,
       });
       return response?.data;
     } catch (err) {
