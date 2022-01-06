@@ -12,6 +12,7 @@ const FormWithButton = ({
   description,
   Form,
   buttonConfig: { titleWhenEditing, defaultTitle, ignoreVariantChanges },
+  secondaryButton,
 }) => {
   const {
     formMethods: { handleSubmit, formState, reset, ...formMethods },
@@ -40,7 +41,8 @@ const FormWithButton = ({
       <div className="mt-3">
         <Form errors={errors} {...formMethods} />
       </div>
-      <div className="flex justify-end mt-3 md:mt-8">
+      <div className="flex gap-3 justify-end mt-3 md:mt-8">
+        {secondaryButton}
         <Button
           showLoader={isLoading}
           variant={

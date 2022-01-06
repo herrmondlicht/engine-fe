@@ -1,7 +1,13 @@
 import { FormWithButton } from "components";
 import React, { useMemo } from "react";
 
-import { Input, Title, TITLE_SIZES } from "ui-fragments";
+import {
+  Button,
+  BUTTON_VARIANTS,
+  Input,
+  Title,
+  TITLE_SIZES,
+} from "ui-fragments";
 import {
   yup,
   handleCurrencyFieldChange,
@@ -12,7 +18,7 @@ import {
   engineAPI,
   convertFormKeyToAPI,
 } from "utils";
-import { useNotification } from "hooks";
+import { useNotification, usePrintServiceOrder } from "hooks";
 import { NOTIFICATION_DURATION, NOTIFICATION_TYPES } from "context";
 import { useHistory, useLocation } from "react-router";
 
@@ -28,6 +34,8 @@ const createFinancialDetails = () =>
     const location = useLocation();
     const history = useHistory();
     const { showErrorNotification, showNotification } = useNotification();
+
+    const { print, isValidating } = usePrintServiceOrder(financialData.id);
 
     const financialDataToCurrency = useMemo(() => {
       return {
@@ -96,6 +104,18 @@ const createFinancialDetails = () =>
         onFormSubmit={updateFinancialDetails}
         preloadedData={financialDataToCurrency}
         description="Detalhes"
+        secondaryButton={
+          <Button
+            showLoader={isValidating}
+            variant={BUTTON_VARIANTS.SECONDARY}
+            onClick={async e => {
+              e.preventDefault();
+              print();
+            }}
+          >
+            Imprimir
+          </Button>
+        }
       />
     );
   };
