@@ -12,6 +12,7 @@ export const BUTTON_VARIANTS = {
   SUCCESS: "success",
   ERROR: "error",
   HOLLOW: "hollow",
+  SECONDARY: "secondary",
 };
 
 export const BUTTON_SIZES = {
@@ -65,6 +66,7 @@ const Button = (
           "hover:bg-primary-0",
         ].join(" ");
       case BUTTON_VARIANTS.PRIMARY:
+      case BUTTON_VARIANTS.SECONDARY:
       case BUTTON_VARIANTS.SUCCESS:
       case BUTTON_VARIANTS.ERROR:
         return [
