@@ -29,14 +29,14 @@ const RegisterForm = () => {
 
   const onSubmitLastForm = useCallback(
     ({ id }) => {
-      if (location.state?.redirect) {
+      if (location.state?.redirect && customer_car_id) {
         history.push(location.state?.redirect);
       } else {
         history.replace(`/customer_car/${id}`);
         setIsModalOpen(true);
       }
     },
-    [history, location.state]
+    [customer_car_id, history, location.state?.redirect]
   );
 
   const loadCustomerCarIfParam = useCallback(async () => {
