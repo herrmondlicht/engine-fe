@@ -52,7 +52,12 @@ const Button = (
   }, [size]);
 
   const variantClasses = useMemo(() => {
-    const variantColor = `${variant}-0`;
+    const defaultClasses = [
+      "focus:ring-2",
+      "focus:border-transparent",
+      "border-2",
+      "text-white",
+    ];
     switch (variant) {
       case BUTTON_VARIANTS.GHOST:
         return ["text-primary-0"];
@@ -66,17 +71,32 @@ const Button = (
           "hover:bg-primary-0",
         ].join(" ");
       case BUTTON_VARIANTS.PRIMARY:
+        return [
+          `bg-primary-0`,
+          `focus:ring-primary-0`,
+          `hover:bg-primary-1`,
+          ...defaultClasses,
+        ].join(" ");
       case BUTTON_VARIANTS.SECONDARY:
+        return [
+          `bg-secondary-0`,
+          `focus:ring-secondary-0`,
+          `hover:bg-secondary-1`,
+          ...defaultClasses,
+        ].join(" ");
       case BUTTON_VARIANTS.SUCCESS:
+        return [
+          `bg-success-0`,
+          `focus:ring-success-0`,
+          `hover:bg-success-1`,
+          ...defaultClasses,
+        ].join(" ");
       case BUTTON_VARIANTS.ERROR:
         return [
-          `bg-${variantColor}`,
-          `focus:ring-${variantColor}`,
-          `hover:bg-${variant}-1`,
-          "focus:ring-2",
-          "focus:border-transparent",
-          "border-2",
-          "text-white",
+          `bg-error-0`,
+          `focus:ring-error-0`,
+          `hover:bg-error-1`,
+          ...defaultClasses,
         ].join(" ");
     }
   }, [variant]);
