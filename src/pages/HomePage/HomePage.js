@@ -1,5 +1,11 @@
 import React from "react";
-import { Route, useRouteMatch, Switch, useHistory } from "react-router-dom";
+import {
+  Route,
+  useRouteMatch,
+  Switch,
+  useHistory,
+  Redirect,
+} from "react-router-dom";
 
 import { SideMenu, AuthorizedRoute } from "components";
 import { appRoutes } from "appRoutes";
@@ -30,6 +36,9 @@ export const createHomePage = ({ storageAPI }) => {
           </div>
           <div className="mt-10">
             <Switch>
+              <Route exact path="/">
+                <Redirect to="/customers" />
+              </Route>
               {Object.values(routes).map(route => {
                 if (route.isLocked) {
                   return (
