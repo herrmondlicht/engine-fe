@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Fragment/Input Renders the input 1`] = `
+<input
+  autocomplete="no"
+  class="p-4 bg-gray-100 placeholder-gray-400 rounded-2xl text-gray-800 focus:bg-white focus:ring-2 focus:ring-primary-0 resize-none  css-1bya8sb css-9bnagd"
+/>
+`;
+
+exports[`Fragment/Input Renders the input as textarea 1`] = `
+<textarea
+  autocomplete="no"
+  class="p-4 bg-gray-100 placeholder-gray-400 rounded-2xl text-gray-800 focus:bg-white focus:ring-2 focus:ring-primary-0 resize-none  css-1bya8sb css-3cn25m"
+/>
+`;
+
+exports[`Fragment/Input Show error indicators 1`] = `
+<input
+  autocomplete="no"
+  class="p-4 bg-gray-100 placeholder-gray-400 rounded-2xl text-gray-800 focus:bg-white focus:ring-2 focus:ring-primary-0 resize-none bg-error-2 ring-2 ring-error-0 css-1bya8sb css-9bnagd"
+/>
+`;
