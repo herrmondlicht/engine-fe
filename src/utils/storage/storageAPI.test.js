@@ -1,5 +1,5 @@
 import { stub } from "sinon";
-import { storageAPI } from "./storageAPI";
+import { createStorageAPI } from "./storageAPI";
 
 describe("Storage API test", () => {
   describe("get method", () => {
@@ -10,7 +10,7 @@ describe("Storage API test", () => {
         getItem: stub().withArgs(tokenKey).returns(tokenValue),
       };
 
-      const storageAPInstance = storageAPI(storage);
+      const storageAPInstance = createStorageAPI(storage);
       const actualValue = storageAPInstance.getItem(tokenKey);
 
       expect(actualValue).toBe(tokenValue);
@@ -26,7 +26,7 @@ describe("Storage API test", () => {
       };
       storage.setItem.withArgs(tokenKey, tokenValue).returns(tokenValue);
 
-      const storageAPInstance = storageAPI(storage);
+      const storageAPInstance = createStorageAPI(storage);
       const actualValue = storageAPInstance.setItem(tokenKey, tokenValue);
       expect(actualValue).toBe(tokenValue);
     });
@@ -40,7 +40,7 @@ describe("Storage API test", () => {
       };
       storage.removeItem.withArgs(tokenKey).returns(undefined);
 
-      const storageAPInstance = storageAPI(storage);
+      const storageAPInstance = createStorageAPI(storage);
       const actualValue = storageAPInstance.removeItem(tokenKey);
 
       expect(actualValue).toBe(undefined);
