@@ -30,11 +30,14 @@ export const createHomePage = ({ storageAPI }) => {
         className="flex flex-col-reverse w-full h-full md:flex-row"
       >
         <SideMenu />
-        <div className="w-full h-full md:px-12 md:pb-6 md:overflow-auto relative">
-          <div className="w-full sticky top-0 z-20" style={{ height: "70px" }}>
+        <div className="w-full h-full md:pb-6 md:overflow-auto relative">
+          <div
+            className="w-full sticky top-0 z-20 px-2 md:px-10"
+            style={{ height: "70px" }}
+          >
             <HeaderImplementation />
           </div>
-          <div className="mt-10">
+          <div className="mt-10 md:px-10">
             <Switch>
               <Route exact path="/">
                 <Redirect to="/customers" />
