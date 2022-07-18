@@ -104,12 +104,17 @@ const ServiceItemsContainer = ({ serviceId, updateServiceData }) => {
           {serviceItemsData?.data?.length === 0 ? (
             <NoDataMessage />
           ) : (
-            <ServiceItemsHeader />
+            <div className="hidden md:flex gap-2 w-full">
+              <ServiceItemsHeader />
+            </div>
           )}
         </div>
         <div className="flex flex-col gap-3 w-full">
           {serviceItemsData?.data?.map(serviceItem => (
-            <div key={serviceItem?.id}>
+            <div
+              className="p-2 md:p-0 rounded-lg md:border-0 border border-solid border-slate-300"
+              key={serviceItem?.id}
+            >
               <ServiceItem
                 serviceItem={serviceItem}
                 onSubmitChanges={submitServiceItem}

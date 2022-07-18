@@ -21,7 +21,7 @@ const Table = ({ columns, data, onRowClick }) => {
             <tr key={index} {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
                 <th
-                  className="py-5 text-left"
+                  className="py-5 px-2 text-left"
                   key={column.id}
                   {...column.getHeaderProps()}
                 >
@@ -45,7 +45,7 @@ const Table = ({ columns, data, onRowClick }) => {
               >
                 {row.cells.map((cell, j) => {
                   return (
-                    <td key={j} {...cell.getCellProps()} className="py-1">
+                    <td key={j} {...cell.getCellProps()} className="p-2">
                       {cell.render("Cell")}
                     </td>
                   );
