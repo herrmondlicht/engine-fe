@@ -104,7 +104,9 @@ const ServiceItemsContainer = ({ serviceId, updateServiceData }) => {
           {serviceItemsData?.data?.length === 0 ? (
             <NoDataMessage />
           ) : (
-            <ServiceItemsHeader />
+            <div className="hidden md:flex gap-2 w-full">
+              <ServiceItemsHeader />
+            </div>
           )}
         </div>
         <div className="flex flex-col gap-3 w-full">

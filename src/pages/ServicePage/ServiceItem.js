@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from "react";
 import MinusCircleIcon from "@heroicons/react/solid/MinusCircleIcon";
 
 import { useLoader } from "hooks";
-import { Input, Button, BUTTON_VARIANTS } from "ui-fragments";
+import { Input, Button, BUTTON_VARIANTS, Label, Text } from "ui-fragments";
 import { fromBRL, handleCurrencyFieldChange, toBRL, yup } from "utils";
 import { useCustomForm } from "hooks";
 
@@ -74,14 +74,16 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
     <div className="flex gap-2 flex-1 flex-wrap">
       <div className="flex flex-grow min-w-[250px]">
         <div className="flex-1">
+          <ServiceItemLabel text="Descrição" />
           <Input fw {...register("description")} />
         </div>
       </div>
       <div
-        className="flex gap-2 flex-grow md:flex-grow-0 flex-wrap md:flex-nowrap"
+        className="flex gap-2 flex-col md:flex-grow-0 md:flex-row"
         style={{ flexBasis: "400px" }}
       >
-        <div className="flex w-full md:w-max-content md:flex-1">
+        <div className="flex flex-col w-full md:w-max-content md:flex-1">
+          <ServiceItemLabel text="Preço Unit." />
           <Input
             fw
             {...unitPriceControl}
@@ -92,10 +94,12 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
             }}
           />
         </div>
-        <div className="w-16">
+        <div className="flex-1 md:w-16">
+          <ServiceItemLabel text="Qtd." />
           <Input fw {...register("quantity")} />
         </div>
-        <div className="flex flex-1 min-w-[117px] md:min-w-0">
+        <div className="flex flex-col flex-1">
+          <ServiceItemLabel text="Preço Total" />
           <Input
             fw
             value={toBRL(Number(quantity) * Number(fromBRL(unitPrice)))}
@@ -110,12 +114,23 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
             onClick={onDeleteClick}
             showLoader={isLoading}
           >
-            <MinusCircleIcon className="text-error-0 text-sm h-7 w-7" />
+            <div className="flex justify-center items-center">
+              <MinusCircleIcon className="text-error-0 text-sm h-7 w-7" />
+              <div className="flex justify-center items-center md:hidden ml-2">
+                <Text color="text-error-0">Excluir</Text>
+              </div>
+            </div>
           </Button>
         </div>
       </div>
     </div>
   );
 };
+
+const ServiceItemLabel = ({ text }) => (
+  <div className="flex-1 mb-1 ml-1 md:hidden">
+    <Label>{text}</Label>
+  </div>
+);
 
 export { ServiceItem };
