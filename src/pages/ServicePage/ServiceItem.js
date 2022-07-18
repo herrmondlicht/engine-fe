@@ -72,16 +72,16 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
 
   return (
     <div className="flex gap-2 flex-1 flex-wrap">
-      <div className="flex flex-grow" style={{ minWidth: "250px" }}>
+      <div className="flex flex-grow min-w-[250px]">
         <div className="flex-1">
           <Input fw {...register("description")} />
         </div>
       </div>
       <div
-        className="flex gap-2 flex-grow md:flex-grow-0"
+        className="flex gap-2 flex-grow md:flex-grow-0 flex-wrap md:flex-nowrap"
         style={{ flexBasis: "400px" }}
       >
-        <div className="flex flex-1">
+        <div className="flex w-full md:w-max-content md:flex-1">
           <Input
             fw
             {...unitPriceControl}
@@ -95,7 +95,7 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
         <div className="w-16">
           <Input fw {...register("quantity")} />
         </div>
-        <div className="flex flex-1">
+        <div className="flex flex-1 min-w-[117px] md:min-w-0">
           <Input
             fw
             value={toBRL(Number(quantity) * Number(fromBRL(unitPrice)))}

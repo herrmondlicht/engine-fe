@@ -37,7 +37,7 @@ export const createHomePage = ({ storageAPI }) => {
           >
             <HeaderImplementation />
           </div>
-          <div className="mt-10 md:px-10">
+          <div className="mt-14 md:mt-10 px-2 md:px-10">
             <Switch>
               <Route exact path="/">
                 <Redirect to="/customers" />

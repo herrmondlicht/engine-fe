@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import useSWR from "swr";
+import EditIcon from "@heroicons/react/solid/PencilIcon";
 
 import { useNotification } from "hooks";
 import { convertAPIkeyToForm, engineAPI, fixPayloadKeys } from "utils";
@@ -126,7 +127,7 @@ const DisplayCustomerDetails = ({
           </div>
         </div>
       </div>
-      <div className="mt-5 flex justify-end">
+      <div className="mt-5 flex justify-center md:justify-end">
         <Button
           as={BUTTON_COMPONENT.LINK}
           href={{
@@ -134,7 +135,10 @@ const DisplayCustomerDetails = ({
             state: { redirect: location.pathname },
           }}
         >
-          Editar informações
+          <div className="flex gap-3 items-center">
+            <EditIcon className="text-white text-sm h-7 w-7" />
+            <Text>Editar informações</Text>
+          </div>
         </Button>
       </div>
     </div>
