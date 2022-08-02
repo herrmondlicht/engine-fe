@@ -58,7 +58,7 @@ export const createMenu = ({ storageAPI }) => {
         </div>
       </div>
 
-      <div className="hidden md:block h-full">
+      <div className="hidden xl:block h-full">
         <SideMenu storageAPI={storageAPI} />
       </div>
     </>
