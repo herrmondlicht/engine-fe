@@ -69,11 +69,12 @@ const textAreaScrollClass = css`
 `;
 
 const Input = forwardRef(
-  ({ label, fw, placeholder, error, uppercase, as, ...props }, ref) => {
+  ({ label, fw, placeholder, error, uppercase, as, center, ...props }, ref) => {
     const modifierClasses = [
       ...(fw ? ["w-full"] : []),
       ...(error ? [inputError] : []),
       ...(uppercase ? ["uppercase"] : []),
+      ...(center ? ["text-center"] : []),
     ].join(" ");
     return (
       <div className="flex flex-col">
