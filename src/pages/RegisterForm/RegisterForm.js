@@ -16,7 +16,7 @@ import { CreateServiceModal } from "./CreateServiceModal";
 
 const RegisterForm = () => {
   const {
-    changeForm,
+    setDefaultForms,
     clear,
     combinedForms: { customer_cars, customers, cars },
   } = useCombinedForms();
@@ -46,9 +46,11 @@ const RegisterForm = () => {
         const { data } = await engineAPI.customer_cars.get({
           urlExtension: `${customer_car_id}?include=cars,customers`,
         });
-        changeForm(AVAILABLE_FORMS.CAR, data?.cars);
-        changeForm(AVAILABLE_FORMS.CUSTOMER_CAR, data?.customer_cars);
-        changeForm(AVAILABLE_FORMS.CUSTOMER, data?.customers);
+        setDefaultForms({
+          [AVAILABLE_FORMS.CAR]: data?.cars,
+          [AVAILABLE_FORMS.CUSTOMER_CAR]: data?.customer_cars,
+          [AVAILABLE_FORMS.CUSTOMER]: data?.customers,
+        });
       } catch (e) {
         showNotification({
           id: "customerCarLoadError",
@@ -63,7 +65,7 @@ const RegisterForm = () => {
     } else {
       clear();
     }
-  }, [customer_car_id, setIsLoading, changeForm, showNotification, clear]);
+  }, [customer_car_id, setIsLoading, setDefaultForms, showNotification, clear]);
 
   useEffect(() => {
     loadCustomerCarIfParam();
