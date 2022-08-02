@@ -17,6 +17,7 @@ export const BUTTON_VARIANTS = {
 
 export const BUTTON_SIZES = {
   SMALL: "small",
+  NO_PADDING: "no-padding",
   BIG: "big",
 };
 
@@ -44,6 +45,8 @@ const Button = (
     switch (size) {
       case BUTTON_SIZES.SMALL:
         return ["p-2", "px-4", "text-sm"].join(" ");
+      case BUTTON_SIZES.NO_PADDING:
+        return ["p-0", "text-sm"];
       case BUTTON_SIZES.BIG:
         return ["p-4", "px-6", "text-lg"].join(" ");
       default:
