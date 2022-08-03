@@ -18,6 +18,7 @@ const defaultContext = {
   combinedForms: defaultCombinedForms,
   changeForm: (formName, newObject) => {},
   clear: () => {},
+  setDefaultForm: defaultForms => {},
 };
 
 const CombinedFormContext = React.createContext(defaultContext);
@@ -49,6 +50,7 @@ const CombinedFormsProvider = ({ children }) => {
         combinedForms: forms,
         clear,
         changeForm,
+        setDefaultForms: setForms,
       }}
     >
       {children}

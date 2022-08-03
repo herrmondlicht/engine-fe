@@ -20,7 +20,6 @@ const FormWithButton = ({
   } = useCustomForm({ schema: formValidationSchema, preloadedData });
   const [isLoading, setIsLoading] = useLoader(false);
   const isValidPreloadData = Object.values(preloadedData ?? {}).length > 0;
-
   const { isDirty } = formState;
   const submit = async data => {
     if (!validate(data)) return;
@@ -39,7 +38,7 @@ const FormWithButton = ({
     <form onSubmit={handleSubmit(submit)}>
       <PageTitle title={title} description={description} />
       <div className="mt-3">
-        <Form errors={errors} {...formMethods} />
+        <Form errors={errors} reset={reset} {...formMethods} />
       </div>
       <div className="flex gap-3 justify-end mt-3 md:mt-8">
         {secondaryButton}
