@@ -1,8 +1,16 @@
 import React, { useCallback, useEffect } from "react";
 import MinusCircleIcon from "@heroicons/react/solid/MinusCircleIcon";
+import PlusCircleIcon from "@heroicons/react/solid/PlusCircleIcon";
 
 import { useLoader } from "hooks";
-import { Input, Button, BUTTON_VARIANTS, Label, Text } from "ui-fragments";
+import {
+  Input,
+  Button,
+  BUTTON_VARIANTS,
+  Label,
+  Text,
+  BUTTON_SIZES,
+} from "ui-fragments";
 import { fromBRL, handleCurrencyFieldChange, toBRL, yup } from "utils";
 import { useCustomForm } from "hooks";
 
@@ -18,7 +26,7 @@ const serviceItemSchema = yup.object().shape({
 const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
   const [isLoading, setIsLoading] = useLoader(false);
   const {
-    formMethods: { register, watch, setValue, formState },
+    formMethods: { register, watch, setValue, formState, getValues },
   } = useCustomForm({ schema: serviceItemSchema, preloadedData: serviceItem });
   const isDirty = formState.isDirty;
   const [quantity, unitPrice, description] = watch([
@@ -71,17 +79,14 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
   ]);
 
   return (
-    <div className="flex gap-2 flex-1 flex-wrap">
-      <div className="flex flex-grow min-w-[250px]">
+    <div className="flex flex-col md:flex-row gap-2 flex-1">
+      <div className="flex flex-1">
         <div className="flex-1">
           <ServiceItemLabel text="Descrição" />
           <Input fw {...register("description")} />
         </div>
       </div>
-      <div
-        className="flex gap-2 flex-col md:flex-grow-0 md:flex-row"
-        style={{ flexBasis: "400px" }}
-      >
+      <div className="flex flex-1 gap-2 flex-col md:flex-row">
         <div className="flex flex-col w-full md:w-max-content md:flex-1">
           <ServiceItemLabel text="Preço Unit." />
           <Input
@@ -94,9 +99,12 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
             }}
           />
         </div>
-        <div className="flex-1 md:w-16">
-          <ServiceItemLabel text="Qtd." />
-          <Input fw {...register("quantity")} />
+        <div className="flex-1 md:w-32">
+          <ServiceItemQuantityCounter
+            getValues={getValues}
+            setValue={setValue}
+            register={register}
+          />
         </div>
         <div className="flex flex-col flex-1">
           <ServiceItemLabel text="Preço Total" />
@@ -124,6 +132,42 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
         </div>
       </div>
     </div>
+  );
+};
+
+const ServiceItemQuantityCounter = ({ getValues, setValue, register }) => {
+  const quantityControl = register("quantity");
+  const onClickPlus = () => {
+    const quantity = getValues("quantity");
+    setValue("quantity", quantity + 1);
+    // quantityControl.onChange({ target: { value: quantity + 1 } });
+  };
+
+  const onClickMinus = () => {
+    const quantity = getValues("quantity");
+    if (quantity > 0) setValue("quantity", quantity - 1);
+  };
+  return (
+    <>
+      <ServiceItemLabel text="Qtd." />
+      <div className="flex flex-row gap-1 justify-center items-center">
+        <Button
+          variant={BUTTON_VARIANTS.GHOST}
+          size={BUTTON_SIZES.NO_PADDING}
+          onClick={onClickMinus}
+        >
+          <MinusCircleIcon className="text-secondary-0 text-sm h-10 w-10 md:h-8 md:w-8" />
+        </Button>
+        <Input fw {...quantityControl} center />
+        <Button
+          variant={BUTTON_VARIANTS.GHOST}
+          size={BUTTON_SIZES.NO_PADDING}
+          onClick={onClickPlus}
+        >
+          <PlusCircleIcon className="text-secondary-0 text-sm h-10 w-10 md:h-8 md:w-8" />
+        </Button>
+      </div>
+    </>
   );
 };
 

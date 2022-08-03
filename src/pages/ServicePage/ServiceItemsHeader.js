@@ -6,17 +6,14 @@ const ServiceItemsHeader = () => (
     <div className="flex-1">
       <Text>Descrição</Text>
     </div>
-    <div
-      className="flex gap-2 flex-grow md:flex-grow-0"
-      style={{ flexBasis: "400px" }}
-    >
+    <div className="flex gap-2 flex-1">
       <div className="flex-1">
         <Text>Preço Unit.</Text>
       </div>
-      <div className="w-16">
+      <div className="w-24">
         <Text>Qtd.</Text>
       </div>
-      <div className="flex-1 mr-12">
+      <div className="flex-1">
         <Text>Preço Total</Text>
       </div>
     </div>
