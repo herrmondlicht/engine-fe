@@ -26,9 +26,14 @@ const serviceItemSchema = yup.object().shape({
 const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
   const [isLoading, setIsLoading] = useLoader(false);
   const {
-    formMethods: { register, watch, setValue, formState, getValues },
+    formMethods: {
+      register,
+      watch,
+      setValue,
+      formState: { isDirty },
+      getValues,
+    },
   } = useCustomForm({ schema: serviceItemSchema, preloadedData: serviceItem });
-  const isDirty = formState.isDirty;
   const [quantity, unitPrice, description] = watch([
     "quantity",
     "unitPrice",
@@ -139,13 +144,12 @@ const ServiceItemQuantityCounter = ({ getValues, setValue, register }) => {
   const quantityControl = register("quantity");
   const onClickPlus = () => {
     const quantity = getValues("quantity");
-    setValue("quantity", quantity + 1);
-    // quantityControl.onChange({ target: { value: quantity + 1 } });
+    setValue("quantity", quantity + 1, { shouldDirty: true });
   };
 
   const onClickMinus = () => {
     const quantity = getValues("quantity");
-    if (quantity > 0) setValue("quantity", quantity - 1);
+    if (quantity > 0) setValue("quantity", quantity - 1, { shouldDirty: true });
   };
   return (
     <>
