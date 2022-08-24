@@ -56,7 +56,10 @@ const ServicePage = () => {
       <Card>
         <ScreenLoader isLoading={isValidating}>
           {serviceData?.data && (
-            <FinancialDetails financialData={serviceData?.data} />
+            <FinancialDetails
+              updateServiceData={mutateServiceData}
+              financialData={serviceData?.data}
+            />
           )}
         </ScreenLoader>
       </Card>
