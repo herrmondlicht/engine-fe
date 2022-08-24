@@ -30,7 +30,7 @@ const financialDetailsSchema = yup.object({
 });
 
 const createFinancialDetails = () =>
-  function FinancialDetails({ financialData }) {
+  function FinancialDetails({ financialData, updateServiceData }) {
     const location = useLocation();
     const history = useHistory();
     const { showErrorNotification, showNotification } = useNotification();
@@ -64,6 +64,7 @@ const createFinancialDetails = () =>
             fieldTranslator: convertFormKeyToAPI,
           }),
         });
+        updateServiceData();
         showNotification({
           id: "serviceAdded",
           duration: NOTIFICATION_DURATION.SHORT,
