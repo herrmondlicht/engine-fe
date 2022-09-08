@@ -5,7 +5,7 @@ export const apiFieldsKey = {
   carId: "car_id",
   customerId: "customer_id",
   serviceOrderId: "service_order_id",
-  serviceIypeId: "service_type_id",
+  serviceTypeId: "service_type_id",
   unitPrice: "unit_price",
   customerCarId: "customer_car_id",
   orderStatus: "order_status",
