@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import MinusCircleIcon from "@heroicons/react/solid/MinusCircleIcon";
 import PlusCircleIcon from "@heroicons/react/solid/PlusCircleIcon";
 
@@ -18,13 +18,14 @@ const serviceItemSchema = yup.object().shape({
   id: yup.string(),
   description: yup.string().required(),
   serviceOrderId: yup.string(),
-  serviceIypeId: yup.string(),
+  serviceTypeId: yup.string(),
   quantity: yup.string().required(),
   unitPrice: yup.string().required(),
 });
 
 const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
   const [isLoading, setIsLoading] = useLoader(false);
+  const currentTimer = useRef();
   const {
     formMethods: {
       register,
@@ -32,6 +33,7 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
       setValue,
       formState: { isDirty },
       getValues,
+      reset,
     },
   } = useCustomForm({ schema: serviceItemSchema, preloadedData: serviceItem });
   const [quantity, unitPrice, description] = watch([
@@ -62,17 +64,19 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
     if (!isDirty) {
       return;
     }
-    const updateDeduper = setTimeout(() => {
+    clearTimeout(currentTimer.current);
+    currentTimer.current = setTimeout(() => {
       onSubmitChanges({
         id: serviceItem.id,
-        quantity,
+        quantity: quantity || "0",
         unitPrice: fromBRL(unitPrice),
         description,
       });
     }, 1000);
 
     return () => {
-      clearTimeout(updateDeduper);
+      clearTimeout(currentTimer.current);
+      reset(undefined, { keepValues: true });
     };
   }, [
     quantity,
@@ -81,6 +85,7 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
     onSubmitChanges,
     isDirty,
     serviceItem.id,
+    reset,
   ]);
 
   return (
