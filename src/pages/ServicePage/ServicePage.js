@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useContext } from "react";
 import useSWR from "swr";
 import { useParams } from "react-router-dom";
 
@@ -7,10 +7,15 @@ import { useNotification } from "hooks";
 import { Card, ScreenLoader } from "ui-fragments";
 import { engineAPI } from "utils";
 import { ServiceItemsContainer } from "./ServiceItemsContainer";
+import {
+  ServiceItemPriceContext,
+  ServiceItemPriceProvider,
+} from "./ServiceItemPriceContext";
 
 const ServicePage = () => {
   const { showErrorNotification } = useNotification();
   const { serviceId } = useParams();
+  const { updateItemsPrice, itemsPrice } = useContext(ServiceItemPriceContext);
   const {
     data: serviceData,
     isValidating,
@@ -32,10 +37,6 @@ const ServicePage = () => {
         }),
     }
   );
-
-  const mutateServiceData = useCallback(() => {
-    mutate();
-  }, [mutate]);
   return (
     <div className="flex flex-col gap-10 pb-10">
       <Card>
@@ -48,7 +49,7 @@ const ServicePage = () => {
           <ScreenLoader isLoading={!error && !serviceData}>
             <ServiceItemsContainer
               serviceId={serviceId}
-              updateServiceData={mutateServiceData}
+              updateItemsPrice={updateItemsPrice}
             />
           </ScreenLoader>
         </div>
@@ -57,8 +58,9 @@ const ServicePage = () => {
         <ScreenLoader isLoading={isValidating}>
           {serviceData?.data && (
             <FinancialDetails
-              updateServiceData={mutateServiceData}
+              updateServiceData={mutate}
               financialData={serviceData?.data}
+              serviceItemsPrice={itemsPrice}
             />
           )}
         </ScreenLoader>
@@ -67,4 +69,8 @@ const ServicePage = () => {
   );
 };
 
-export default ServicePage;
+export default () => (
+  <ServiceItemPriceProvider>
+    <ServicePage />
+  </ServiceItemPriceProvider>
+);
