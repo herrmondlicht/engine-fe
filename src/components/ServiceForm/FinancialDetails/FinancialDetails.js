@@ -20,7 +20,6 @@ import {
 } from "utils";
 import { useNotification, usePrintServiceOrder } from "hooks";
 import { NOTIFICATION_DURATION, NOTIFICATION_TYPES } from "context";
-import { useHistory, useLocation } from "react-router";
 
 const financialDetailsSchema = yup.object({
   odometerReading: yup.string().nullable(),
@@ -30,9 +29,11 @@ const financialDetailsSchema = yup.object({
 });
 
 const createFinancialDetails = () =>
-  function FinancialDetails({ financialData, updateServiceData }) {
-    const location = useLocation();
-    const history = useHistory();
+  function FinancialDetails({
+    financialData,
+    updateServiceData,
+    serviceItemsPrice,
+  }) {
     const { showErrorNotification, showNotification } = useNotification();
 
     const { print, isValidating } = usePrintServiceOrder(financialData.id);
@@ -74,11 +75,7 @@ const createFinancialDetails = () =>
             ? { title: "Serviço atualizado!", type: NOTIFICATION_TYPES.INFO }
             : {}),
         });
-        if (location.state?.redirect) {
-          history.push(location.state.redirect);
-        }
       } catch (error) {
-        console.log(error);
         showErrorNotification({
           id: "serviceAddedErro",
           title: "Opa algo deu errado!",
@@ -92,7 +89,7 @@ const createFinancialDetails = () =>
         Form={props => (
           <FinancialDetailsView
             {...props}
-            serviceItemsPrice={financialData.service_items_price}
+            serviceItemsPrice={serviceItemsPrice}
           />
         )}
         buttonConfig={{
