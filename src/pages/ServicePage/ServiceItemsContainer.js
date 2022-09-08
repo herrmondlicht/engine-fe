@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import useSWR from "swr";
 import PlusCircleIcon from "@heroicons/react/solid/PlusCircleIcon";
 
@@ -9,7 +9,7 @@ import { engineAPI, fixPayloadKeys } from "utils";
 import { ServiceItemsHeader } from "./ServiceItemsHeader";
 import { ServiceItem } from "./ServiceItem";
 
-const ServiceItemsContainer = ({ serviceId, updateServiceData }) => {
+const ServiceItemsContainer = ({ serviceId, updateItemsPrice }) => {
   const { showErrorNotification } = useNotification();
   const [isLoading, setIsLoading] = useLoader(false);
   const {
@@ -33,6 +33,17 @@ const ServiceItemsContainer = ({ serviceId, updateServiceData }) => {
     }
   );
 
+  const getMutatedItemsArray = useCallback((values, serviceItemsData = []) => {
+    const updatedServiceItemsArray = serviceItemsData?.map(item => {
+      if (item.id === values?.id) {
+        return { ...item, ...fixPayloadKeys(values) };
+      }
+      return item;
+    });
+
+    return updatedServiceItemsArray;
+  }, []);
+
   const submitServiceItem = useCallback(
     async values => {
       try {
@@ -40,7 +51,11 @@ const ServiceItemsContainer = ({ serviceId, updateServiceData }) => {
           urlExtension: `${serviceId}/items/${values?.id}`,
           data: fixPayloadKeys(values),
         });
-        updateServiceData();
+        const updatedItemsArray = getMutatedItemsArray(
+          values,
+          serviceItemsData?.data
+        );
+        mutate({ data: updatedItemsArray }, false);
       } catch (e) {
         showErrorNotification({
           id: "ErrorServiceItemUpdate",
@@ -48,7 +63,13 @@ const ServiceItemsContainer = ({ serviceId, updateServiceData }) => {
         });
       }
     },
-    [serviceId, showErrorNotification, updateServiceData]
+    [
+      getMutatedItemsArray,
+      mutate,
+      serviceId,
+      serviceItemsData?.data,
+      showErrorNotification,
+    ]
   );
 
   const addNewItem = async () => {
@@ -85,7 +106,6 @@ const ServiceItemsContainer = ({ serviceId, updateServiceData }) => {
         },
         false
       );
-      updateServiceData();
     } catch (e) {
       showErrorNotification({
         id: "ErrorServiceItemUpdate",
@@ -96,6 +116,10 @@ const ServiceItemsContainer = ({ serviceId, updateServiceData }) => {
 
   const removeItemFromList = id =>
     serviceItemsData?.data?.filter?.(serviceItem => serviceItem.id !== id);
+
+  useEffect(() => {
+    updateItemsPrice(serviceItemsData?.data);
+  }, [serviceItemsData, updateItemsPrice]);
 
   return (
     <ScreenLoader isLoading={!error && !serviceItemsData}>
