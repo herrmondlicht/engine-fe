@@ -40,11 +40,17 @@ const ServicePage = () => {
   return (
     <div className="flex flex-col gap-10 pb-10">
       <Card>
-        <PageTitle description="Dados do Cliente" title="Serviço" />
+        <PageTitle
+          description="Dados do Cliente"
+          title={`Serviço nº ${serviceData?.data?.id}`}
+        />
         <CustomerDetails customerCarId={serviceData?.data?.customer_car_id} />
       </Card>
       <Card>
-        <PageTitle description="Peças" title="Serviço" />
+        <PageTitle
+          description="Peças"
+          title={`Serviço nº ${serviceData?.data?.id}`}
+        />
         <div className="mt-4">
           <ScreenLoader isLoading={!error && !serviceData}>
             <ServiceItemsContainer

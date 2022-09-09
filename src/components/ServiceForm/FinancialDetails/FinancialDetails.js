@@ -97,7 +97,7 @@ const createFinancialDetails = () =>
           titleWhenEditing: "Salvar Alterações",
           ignoreVariantChanges: true,
         }}
-        title="Serviço"
+        title={`Serviço nº ${financialData?.id}`}
         formValidationSchema={financialDetailsSchema}
         onFormSubmit={updateFinancialDetails}
         preloadedData={financialDataToCurrency}
