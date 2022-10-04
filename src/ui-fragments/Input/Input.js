@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { Label } from "ui-fragments/Typography";
+import { Label } from "ui-fragments/Typography/Label";
 import { css } from "@emotion/css";
 import propTypes from "prop-types";
 
