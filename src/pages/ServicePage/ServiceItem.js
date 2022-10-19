@@ -73,11 +73,6 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
         description,
       });
     }, 1000);
-
-    return () => {
-      clearTimeout(currentTimer.current);
-      reset(undefined, { keepValues: true });
-    };
   }, [
     quantity,
     unitPrice,
