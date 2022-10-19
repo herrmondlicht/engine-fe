@@ -1,5 +1,5 @@
 import { FormWithButton } from "components";
-import React, { useMemo } from "react";
+import React, { useMemo, useContext } from "react";
 
 import {
   Button,
@@ -20,6 +20,7 @@ import {
 } from "utils";
 import { useNotification, usePrintServiceOrder } from "hooks";
 import { NOTIFICATION_DURATION, NOTIFICATION_TYPES } from "context";
+import { ServiceItemPriceContext } from "pages/ServicePage/ServiceItemPriceContext";
 
 const financialDetailsSchema = yup.object({
   odometerReading: yup.string().nullable(),
@@ -29,11 +30,8 @@ const financialDetailsSchema = yup.object({
 });
 
 const createFinancialDetails = () =>
-  function FinancialDetails({
-    financialData,
-    updateServiceData,
-    serviceItemsPrice,
-  }) {
+  function FinancialDetails({ financialData, updateServiceData }) {
+    const { itemsPrice } = useContext(ServiceItemPriceContext);
     const { showErrorNotification, showNotification } = useNotification();
 
     const { print, isValidating } = usePrintServiceOrder(financialData.id);
@@ -87,10 +85,7 @@ const createFinancialDetails = () =>
     return (
       <FormWithButton
         Form={props => (
-          <FinancialDetailsView
-            {...props}
-            serviceItemsPrice={serviceItemsPrice}
-          />
+          <FinancialDetailsView {...props} serviceItemsPrice={itemsPrice} />
         )}
         buttonConfig={{
           defaultTitle: "Salvar",

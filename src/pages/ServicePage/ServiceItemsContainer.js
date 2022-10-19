@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import useSWR from "swr";
 import PlusCircleIcon from "@heroicons/react/solid/PlusCircleIcon";
 
@@ -8,12 +8,14 @@ import { ScreenLoader, Text, Button, BUTTON_SIZES } from "ui-fragments";
 import { engineAPI, fixPayloadKeys } from "utils";
 import { ServiceItemsHeader } from "./ServiceItemsHeader";
 import { ServiceItem } from "./ServiceItem";
+import { ServiceItemPriceContext } from "./ServiceItemPriceContext";
 
-const ServiceItemsContainer = ({ serviceId, updateItemsPrice }) => {
+const ServiceItemsContainer = ({ serviceId }) => {
+  const { updateItemsPrice } = useContext(ServiceItemPriceContext);
   const { showErrorNotification } = useNotification();
   const [isLoading, setIsLoading] = useLoader(false);
   const {
-    data: serviceItemsData,
+    data: serviceItemsData = {},
     error,
     mutate,
   } = useSWR(
@@ -67,7 +69,7 @@ const ServiceItemsContainer = ({ serviceId, updateItemsPrice }) => {
       getMutatedItemsArray,
       mutate,
       serviceId,
-      serviceItemsData?.data,
+      serviceItemsData.data,
       showErrorNotification,
     ]
   );
@@ -119,7 +121,7 @@ const ServiceItemsContainer = ({ serviceId, updateItemsPrice }) => {
 
   useEffect(() => {
     updateItemsPrice(serviceItemsData?.data);
-  }, [serviceItemsData, updateItemsPrice]);
+  }, [serviceItemsData.data, updateItemsPrice]);
 
   return (
     <ScreenLoader isLoading={!error && !serviceItemsData}>

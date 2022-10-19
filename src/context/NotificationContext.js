@@ -54,7 +54,7 @@ const NotificationProvider = ({ children }) => {
   return (
     <>
       {notifications.length ? (
-        <div className="absolute w-full h-full flex justify-center md:justify-end">
+        <div className="fixed z-30 h-screen w-screen flex justify-center md:justify-end">
           <div
             className="relative right-0 mt-3 md:mr-5 md:mt-5 flex flex-col gap-5"
             style={{ width: "310px" }}

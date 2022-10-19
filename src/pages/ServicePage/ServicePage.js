@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import useSWR from "swr";
 import { useParams } from "react-router-dom";
 
@@ -7,15 +7,10 @@ import { useNotification } from "hooks";
 import { Card, ScreenLoader } from "ui-fragments";
 import { engineAPI } from "utils";
 import { ServiceItemsContainer } from "./ServiceItemsContainer";
-import {
-  ServiceItemPriceContext,
-  ServiceItemPriceProvider,
-} from "./ServiceItemPriceContext";
 
 const ServicePage = () => {
   const { showErrorNotification } = useNotification();
   const { serviceId } = useParams();
-  const { updateItemsPrice, itemsPrice } = useContext(ServiceItemPriceContext);
   const {
     data: serviceData,
     isValidating,
@@ -53,10 +48,7 @@ const ServicePage = () => {
         />
         <div className="mt-4">
           <ScreenLoader isLoading={!error && !serviceData}>
-            <ServiceItemsContainer
-              serviceId={serviceId}
-              updateItemsPrice={updateItemsPrice}
-            />
+            <ServiceItemsContainer serviceId={serviceId} />
           </ScreenLoader>
         </div>
       </Card>
@@ -66,7 +58,6 @@ const ServicePage = () => {
             <FinancialDetails
               updateServiceData={mutate}
               financialData={serviceData?.data}
-              serviceItemsPrice={itemsPrice}
             />
           )}
         </ScreenLoader>
@@ -75,8 +66,4 @@ const ServicePage = () => {
   );
 };
 
-export default () => (
-  <ServiceItemPriceProvider>
-    <ServicePage />
-  </ServiceItemPriceProvider>
-);
+export default ServicePage;
