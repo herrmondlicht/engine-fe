@@ -1,25 +1,30 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { stub, assert } from "sinon";
-import { Alert } from "./Alert";
+import { Notification } from "./Notification";
 jest.useFakeTimers();
 
-describe("Alert", () => {
-  it("Renders an alert with title and message", () => {
+describe("Notification", () => {
+  it("Renders an Notification with title and message", () => {
     const MESSAGE = "No Vacation";
     const TITLE = "Vacation";
 
-    render(<Alert duration={5000} message={MESSAGE} title={TITLE} />);
+    render(<Notification duration={5000} message={MESSAGE} title={TITLE} />);
     jest.advanceTimersByTime(1000);
     expect(screen.getByText(MESSAGE));
     expect(screen.getByText(TITLE));
   });
 
-  it("Renders an alert with a removal button", () => {
+  it("Renders a Notification with a removal button", () => {
     const MESSAGE = "No Vacation";
     const TITLE = "Vacation";
 
     render(
-      <Alert duration={5000} isRemovable message={MESSAGE} title={TITLE} />
+      <Notification
+        duration={5000}
+        isRemovable
+        message={MESSAGE}
+        title={TITLE}
+      />
     );
     expect(screen.getByRole("button")).toBeDefined();
   });
@@ -30,7 +35,7 @@ describe("Alert", () => {
     const onCloseActionStub = stub();
 
     render(
-      <Alert
+      <Notification
         duration={5000}
         isRemovable
         onCloseAction={onCloseActionStub}
@@ -51,7 +56,7 @@ describe("Alert", () => {
     const onCloseActionStub = stub();
 
     render(
-      <Alert
+      <Notification
         duration={5000}
         isRemovable
         onCloseAction={onCloseActionStub}
