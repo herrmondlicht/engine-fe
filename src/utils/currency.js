@@ -11,7 +11,7 @@ export const toBRL = value => {
 };
 
 export const fromBRL = value => {
-  if (value === undefined || value === null) {
+  if (["-", null, undefined].includes(value) || typeof value === "object") {
     return "-";
   }
   return fixDecimalPoint(value.toString());
@@ -35,9 +35,14 @@ const fixDecimalPoint = value => {
     return "0.00";
   }
   const sanitizedValueRaw = sanitizeNumber(value.toString());
-  const valueRawArray = sanitizedValueRaw.split("");
+  const valueWithDecimalPoint = addDecimalPoint(sanitizedValueRaw);
+
+  return valueWithDecimalPoint;
+};
+
+const addDecimalPoint = sanitizedValue => {
+  const valueRawArray = sanitizedValue.split("");
   valueRawArray.splice(-2, 0, ".");
   const valueWithDecimalPoint = valueRawArray.join("");
-
   return valueWithDecimalPoint;
 };

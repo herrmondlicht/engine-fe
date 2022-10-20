@@ -1,10 +1,12 @@
 import React from "react";
 import RawModal from "react-modal";
-import { Card, Title } from "ui-fragments";
+import { Card } from "ui-fragments/Card";
+import { Title } from "ui-fragments/Typography/Title";
 
-RawModal.setAppElement("#root");
+// eslint-disable-next-line no-undef
+if (process.env.NODE_ENV !== "test") RawModal.setAppElement("#root");
 
-const Modal = ({ handleClose, isOpen, children, title, style = {} }) => {
+const Modal = ({ handleClose, isOpen, children, title }) => {
   return (
     <RawModal
       isOpen={isOpen}

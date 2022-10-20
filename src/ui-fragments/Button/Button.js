@@ -108,7 +108,7 @@ const Button = (
     <>
       {as === BUTTON_COMPONENT.BUTTON && (
         <button
-          disabled={disabled}
+          disabled={disabled || showLoader}
           ref={ref}
           onClick={onClick || undefined}
           className={`${sizeClasses} ${variantClasses} ${

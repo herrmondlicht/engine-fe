@@ -3,7 +3,7 @@ import { NOTIFICATION_TYPES } from "context";
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Button } from "ui-fragments/Button";
 
-const Alert = ({
+const Notification = ({
   type,
   title,
   message,
@@ -79,4 +79,4 @@ const Alert = ({
   );
 };
 
-export { Alert };
+export { Notification };

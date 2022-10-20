@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { Alert } from "ui-fragments";
+import { Notification } from "ui-fragments";
 
 export const NOTIFICATION_TYPES = {
   WARNING: "WARNING",
@@ -60,7 +60,7 @@ const NotificationProvider = ({ children }) => {
             style={{ width: "310px" }}
           >
             {notifications.map((notification, index) => (
-              <Alert
+              <Notification
                 key={index}
                 {...notification}
                 onCloseAction={() => removeNotification(notification.id)}
