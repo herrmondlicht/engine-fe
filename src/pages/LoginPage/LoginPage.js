@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { storageAPI, STORAGE_KEYS, engineAPI, yup } from "utils";
 import { useLocation, useHistory, Redirect } from "react-router-dom";
-import EngineImage from "../assets/engine_logo.png";
+import EngineImage from "assets/engine_logo.png";
 import { LoginForm } from "components";
 import { Card } from "ui-fragments";
 import { useCustomForm, useLoader, useNotification } from "hooks";
@@ -71,7 +71,10 @@ export const createLogin = (engineAPI, storageAPI) =>
     }
 
     return (
-      <div className="flex w-full h-full justify-center items-center relative">
+      <div
+        data-testid="LoginPage"
+        className="flex w-full h-full justify-center items-center relative"
+      >
         <Card>
           <img src={EngineImage} alt="logo" className="w-80 mb-10" />
           <LoginForm

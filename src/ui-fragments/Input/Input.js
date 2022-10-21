@@ -76,17 +76,21 @@ const Input = forwardRef(
       ...(uppercase ? ["uppercase"] : []),
       ...(center ? ["text-center"] : []),
     ].join(" ");
+    const labelId = label && props.name ? `${props.name}-label` : null;
     return (
       <div className="flex flex-col">
         {label ? (
           <div className="mb-4 ml-1">
-            <Label error={error}>{label}</Label>
+            <Label labelId={labelId} error={error}>
+              {label}
+            </Label>
           </div>
         ) : null}
         {as === "textarea" ? (
           <textarea
             autoComplete="no"
             placeholder={placeholder}
+            aria-labelledby={labelId}
             ref={ref}
             {...props}
             className={`${inputBaseClass} ${modifierClasses} ${placeholderClass} ${textAreaScrollClass}`}
@@ -95,6 +99,7 @@ const Input = forwardRef(
           <input
             autoComplete="no"
             placeholder={placeholder}
+            aria-labelledby={labelId}
             ref={ref}
             {...props}
             className={`${inputBaseClass} ${modifierClasses} ${placeholderClass} ${numberArrowClass}`}
