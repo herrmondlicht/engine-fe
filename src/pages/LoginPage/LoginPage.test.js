@@ -1,5 +1,6 @@
 import React from "react";
 import { stub, assert } from "sinon";
+import { createMemoryHistory } from "history";
 import {
   fireEvent,
   render,
@@ -7,7 +8,7 @@ import {
   waitFor,
   within,
 } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route, Router } from "react-router-dom";
 import { createLogin } from "./LoginPage";
 import { STORAGE_KEYS } from "utils";
 
@@ -57,7 +58,8 @@ describe("Login Page", () => {
     within(inputPassword.parentElement).findByText("Campo obrigatório");
   });
 
-  it("should call api post method with correct data", async () => {
+  it("should call api post method with correct data when login button is clicked", async () => {
+    const history = createMemoryHistory();
     const engineAPIStub = {
       login: { post: stub().resolves({ token: "abce" }) },
     };
@@ -73,7 +75,16 @@ describe("Login Page", () => {
       },
     };
 
-    render(<LoginPage />, { wrapper: BrowserRouter });
+    render(
+      <Router history={history}>
+        <Route
+          path="/customers"
+          exact
+          component={() => <div>Loaded correct screen</div>}
+        />
+        <LoginPage />
+      </Router>
+    );
     const inputUser = screen.getByLabelText("Usuário");
     const inputPassword = screen.getByLabelText("Senha");
 
@@ -89,5 +100,7 @@ describe("Login Page", () => {
         "abce"
       );
     });
+
+    expect(screen.getByText("Loaded correct screen"));
   });
 });
