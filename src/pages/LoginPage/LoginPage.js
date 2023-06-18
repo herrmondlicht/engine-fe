@@ -23,7 +23,7 @@ export const createLogin = (engineAPI, storageAPI) =>
     const location = useLocation();
     const history = useHistory();
     const token = storageAPI.getItem(STORAGE_KEYS.TOKEN);
-    const { from } = location.state || { from: { pathname: "/customers" } };
+    const { from } = location.state || { from: { pathname: "/" } };
 
     useEffect(
       () => () => {

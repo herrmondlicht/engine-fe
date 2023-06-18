@@ -78,7 +78,7 @@ describe("Login Page", () => {
     render(
       <Router history={history}>
         <Route
-          path="/customers"
+          path="/"
           exact
           component={() => <div>Loaded correct screen</div>}
         />

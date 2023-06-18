@@ -5,6 +5,7 @@ export const TEXT_SIZES = {
   BIG: "text-lg",
   MEDIUM: "text-base",
   SMALL: "text-sm",
+  VERY_SMALL: "text-xs",
 };
 
 export const TEXT_ALIGN = {
@@ -14,7 +15,7 @@ export const TEXT_ALIGN = {
 };
 
 const Text = ({ children, size, color, align }) => {
-  const sizeClass = TEXT_SIZES[size] || TEXT_SIZES.MEDIUM;
+  const sizeClass = size || TEXT_SIZES.MEDIUM;
   const colorClass = color || "black";
   const alignment = align || "text-left";
 

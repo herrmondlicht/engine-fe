@@ -7,15 +7,14 @@ import { convertAPIkeyToForm, engineAPI, fixPayloadKeys } from "utils";
 import {
   Button,
   BUTTON_COMPONENT,
-  Label,
   ScreenLoader,
   Text,
-  TEXT_ALIGN,
   Title,
   TITLE_SIZES,
   TITLE_SPACING,
 } from "ui-fragments";
 import { useLocation } from "react-router";
+import { LineInfo } from "components/Common";
 
 const CustomerDetails = ({ customerCarId }) => {
   const { showErrorNotification } = useNotification();
@@ -140,17 +139,6 @@ const DisplayCustomerDetails = ({
             <Text>Editar informações</Text>
           </div>
         </Button>
-      </div>
-    </div>
-  );
-};
-
-const LineInfo = ({ title, description }) => {
-  return (
-    <div className="flex flex-col md:flex-row gap-3">
-      <Label>{title}</Label>
-      <div className="flex flex-1 md:justify-end">
-        <Text align={TEXT_ALIGN.RIGHT}>{description || "-"}</Text>
       </div>
     </div>
   );
