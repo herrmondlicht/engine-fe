@@ -3,6 +3,7 @@ import {
   ServicePage,
   CustomerPage,
   CustomerListPage,
+  Dashboard,
 } from "pages";
 
 export const appRoutes = {
@@ -32,5 +33,11 @@ export const appRoutes = {
     Component: CustomerPage,
     isLocked: true,
     allowGoBack: true,
+  },
+  dashboard: {
+    name: "Dashboard",
+    path: "",
+    Component: Dashboard,
+    isLocked: true,
   },
 };
