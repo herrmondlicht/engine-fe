@@ -22,38 +22,40 @@ const Dashboard = () => {
   );
 
   const orderedReportData = useMemo(
-    () => reportsData?.data?.reverse() || [],
-    [reportsData?.data]
+    () => (reportsData?.data ? [...reportsData.data].reverse() : []),
+    [reportsData]
   );
 
+  if (!reportsData?.data || isValidating) {
+    return <ScreenLoader isLoading={true} />;
+  }
+
   return (
-    <ScreenLoader isLoading={!reportsData?.data || isValidating}>
-      <div className="flex gap-8 flex-wrap">
-        {orderedReportData.map((report, index) => (
-          <div
-            key={index}
-            style={{ minWidth: "300px" }}
-            className="w-full sm:w-auto"
-          >
-            <Card className="min-w-fit">
-              <PageTitle
-                description={`${getMonthName(report?.month)} ${report?.year}`}
+    <div className="flex gap-8 flex-wrap">
+      {orderedReportData.map((report, index) => (
+        <div
+          key={index}
+          style={{ minWidth: "300px" }}
+          className="w-full sm:w-auto"
+        >
+          <Card className="min-w-fit">
+            <PageTitle
+              description={`${getMonthName(report?.month)} ${report?.year}`}
+            />
+            <div className="flex flex-col gap-3 justify-center mt-3 text-green-700">
+              <LineInfo
+                title="Total M. Obra"
+                description={toBRL(report?.service_price)}
               />
-              <div className="flex flex-col gap-3 justify-center mt-3 text-green-700">
-                <LineInfo
-                  title="Total M. Obra"
-                  description={toBRL(report?.service_price)}
-                />
-                <LineInfo
-                  title="Total de Peças"
-                  description={toBRL(report?.service_items_price)}
-                />
-              </div>
-            </Card>
-          </div>
-        ))}
-      </div>
-    </ScreenLoader>
+              <LineInfo
+                title="Total de Peças"
+                description={toBRL(report?.service_items_price)}
+              />
+            </div>
+          </Card>
+        </div>
+      ))}
+    </div>
   );
 };
 

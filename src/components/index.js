@@ -6,6 +6,6 @@ export * from "./CustomerDetails";
 export * from "./Table";
 export * from "./Header";
 export * from "./AddServiceButton/AddServiceButton";
-export { default as SideMenu } from "./SideMenu/SideMenu";
+export * from "./Menu";
 export { default as ConfirmDeleteModal } from "./Modals/ConfirmDeleteModal";
 export { default as AuthorizedRoute } from "./AuthorizedRoute";

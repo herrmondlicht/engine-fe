@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, useRouteMatch, Switch, useHistory } from "react-router-dom";
 
-import { SideMenu, AuthorizedRoute } from "components";
+import { AuthorizedRoute, BottomMenu } from "components";
 import { appRoutes } from "appRoutes";
 import { storageAPI, STORAGE_KEYS } from "utils";
 import HeaderImplementation from "./HeaderImplementation";
@@ -21,9 +21,8 @@ export const createHomePage = ({ storageAPI }) => {
     return (
       <div
         data-testid="HomePageContainer"
-        className="flex flex-col-reverse w-full h-full md:flex-row"
+        className="flex w-full h-full md:flex-row"
       >
-        <SideMenu />
         <div className="w-full h-full md:pb-6 md:overflow-auto relative">
           <div
             className="w-full sticky top-0 z-20 px-2 md:px-10"
@@ -31,7 +30,7 @@ export const createHomePage = ({ storageAPI }) => {
           >
             <HeaderImplementation />
           </div>
-          <div className="mt-14 md:mt-10 px-2 pb-10 md:px-10">
+          <div className="mt-10 md:mt-10 px-2 pb-20 md:px-10">
             <Switch>
               {Object.values(routes).map(route => {
                 if (route.isLocked) {
@@ -55,6 +54,7 @@ export const createHomePage = ({ storageAPI }) => {
               })}
             </Switch>
           </div>
+          <BottomMenu />
         </div>
       </div>
     );
