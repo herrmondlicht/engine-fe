@@ -35,14 +35,23 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
       getValues,
       reset,
     },
-  } = useCustomForm({ schema: serviceItemSchema, preloadedData: serviceItem });
+  } = useCustomForm({
+    schema: serviceItemSchema,
+    preloadedData: {
+      ...serviceItem,
+      unit_price: handleCurrencyFieldChange(
+        Number(serviceItem.unit_price).toFixed(2)
+      ),
+    },
+  });
   const [quantity, unitPrice, description] = watch([
     "quantity",
     "unitPrice",
     "description",
   ]);
 
-  const unitPriceControl = register(
+  // eslint-disable-next-line no-unused-vars
+  const { onBlur, ...unitPriceControl } = register(
     "unitPrice",
     handleCurrencyFieldChange(Number(serviceItem.unit_price).toFixed(2))
   );
@@ -54,17 +63,11 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
   }, [onDeleteItem, serviceItem?.id, setIsLoading]);
 
   useEffect(() => {
-    setValue(
-      "unitPrice",
-      handleCurrencyFieldChange(Number(serviceItem.unit_price).toFixed(2))
-    );
-  }, [serviceItem, setValue]);
-
-  useEffect(() => {
     if (!isDirty) {
       return;
     }
     clearTimeout(currentTimer.current);
+    reset(undefined, { keepValues: true });
     currentTimer.current = setTimeout(() => {
       onSubmitChanges({
         id: serviceItem.id,
@@ -88,7 +91,7 @@ const ServiceItem = ({ serviceItem, onSubmitChanges, onDeleteItem }) => {
       <div className="flex flex-1">
         <div className="flex-1">
           <ServiceItemLabel text="Descrição" />
-          <Input fw {...register("description")} />
+          <Input fw {...register("description")} onBlur={() => {}} />
         </div>
       </div>
       <div className="flex flex-1 gap-2 flex-col md:flex-row">

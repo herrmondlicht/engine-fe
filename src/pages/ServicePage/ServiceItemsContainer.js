@@ -27,7 +27,7 @@ const ServiceItemsContainer = ({ serviceId }) => {
           })
       : null,
     {
-      dedupingInterval: 3000,
+      dedupingInterval: 1000,
       onError: () =>
         showErrorNotification({
           message: "Não conseguimos carregar os items desse serviço",
@@ -57,7 +57,7 @@ const ServiceItemsContainer = ({ serviceId }) => {
           values,
           serviceItemsData?.data
         );
-        mutate({ data: updatedItemsArray }, false);
+        mutate({ data: updatedItemsArray }, { revalidate: false });
       } catch (e) {
         showErrorNotification({
           id: "ErrorServiceItemUpdate",
