@@ -12,6 +12,7 @@ import {
   APIRoutes,
   convertFormKeyToAPI,
   getHTTPMethod,
+  ERROR_CODES,
 } from "utils";
 import { FormWithButton } from "./FormWithButton";
 
@@ -55,7 +56,6 @@ const CarForm = ({ loadedData, onSubmitAction }) => {
 
       return data?.data;
     } catch (error) {
-      console.log(error);
       showErrorNotification({
         id: "carAddedError",
         title: "Opa algo deu errado!",
@@ -90,7 +90,14 @@ const CarForm = ({ loadedData, onSubmitAction }) => {
       setCustomerCarData(data?.data);
       return data?.data;
     } catch (error) {
-      console.log(error);
+      if (error.code === ERROR_CODES.DUP00001) {
+        showErrorNotification({
+          id: "carAddedError",
+          title: "Veículo já cadastrado",
+          message: "Revise os dados e tente novamente",
+        });
+        return {};
+      }
       showErrorNotification({
         id: "carAddedError",
         title: "Opa algo deu errado!",
@@ -184,7 +191,7 @@ const CarFormView = ({
           label="Marca"
           placeholder="Marca"
           {...register("make")}
-          error={errors.model}
+          error={errors.make}
           list="carMakes"
         />
 
