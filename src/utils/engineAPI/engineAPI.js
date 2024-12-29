@@ -1,5 +1,10 @@
 import * as axios from "axios";
-import { storageAPI as _storage, STORAGE_KEYS, APIRoutes } from "utils";
+import {
+  storageAPI as _storage,
+  STORAGE_KEYS,
+  APIRoutes,
+  ERROR_CODES,
+} from "utils";
 
 export const requestMaker =
   ({ method, url, isLocked }, { storage = window.localStorage } = {}) =>
@@ -25,10 +30,14 @@ export const requestMaker =
       });
       return response?.data;
     } catch (err) {
-      if (err?.response?.status === 401 && isLocked) {
+      const data = err?.response?.data;
+      if (data?.code === ERROR_CODES.AUTH00001) {
         storage.removeItem(STORAGE_KEYS.TOKEN);
         window.location.assign("/login");
       } else {
+        if (data) {
+          throw data;
+        }
         throw err;
       }
     }
