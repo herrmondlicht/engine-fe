@@ -5,3 +5,4 @@ export { default as Dashboard } from "./Dashboard/Dashboard";
 export { default as CustomerListPage } from "./CustomerListPage/CustomerListPage";
 export { default as HomePage } from "./HomePage/HomePage";
 export { default as LoginPage } from "./LoginPage/LoginPage";
+export { default as CameraPage } from "./CameraPage/CameraPage";

@@ -23,6 +23,10 @@ const APIRoutes = {
     url: "/service_orders_pdf",
     isLocked: true,
   },
+  service_order_images: {
+    url: "/service_order_images",
+    isLocked: true,
+  },
   reports: {
     url: "/service_orders/reports",
     isLocked: true,
