@@ -35,16 +35,16 @@ export const appRoutes = {
     isLocked: true,
     allowGoBack: true,
   },
-  dashboard: {
-    name: "Dashboard",
-    path: "",
-    Component: Dashboard,
-    isLocked: true,
-  },
   camera: {
     name: "Câmera",
     path: "camera",
     Component: CameraPage,
+    isLocked: true,
+  },
+  dashboard: {
+    name: "Dashboard",
+    path: "",
+    Component: Dashboard,
     isLocked: true,
   },
 };

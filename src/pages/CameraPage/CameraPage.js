@@ -11,7 +11,14 @@ const getCameraStream = async () => {
   if (!navigator.mediaDevices?.getUserMedia) {
     throw new Error("navigator.mediaDevices.getUserMedia não suportado");
   }
-  return navigator.mediaDevices.getUserMedia({ video: true });
+  return navigator.mediaDevices.getUserMedia({
+    video: {
+      facingMode: "environment",
+      width: { ideal: 1080 },
+      height: { ideal: 1920 },
+      aspectRatio: { ideal: 0.5625 }, // 9:16 aspect ratio
+    },
+  });
 };
 
 const CameraPage = () => {
@@ -19,6 +26,7 @@ const CameraPage = () => {
   const canvasRef = useRef(null);
   const history = useHistory();
   const { data: stream, error } = useSWR("cameraStream", getCameraStream);
+  console.log("loaded", "true");
 
   useEffect(() => {
     if (stream && videoRef.current) {
@@ -77,13 +85,15 @@ const CameraPage = () => {
           Não foi possível acessar a câmera do dispositivo.
         </p>
       )}
-      <video
-        ref={videoRef}
-        autoPlay
-        playsInline
-        className="w-full rounded-md"
-      />
-      <canvas ref={canvasRef} className="w-full rounded-md" />
+      <div className="w-full max-w-[1080px] mx-auto">
+        <video
+          ref={videoRef}
+          autoPlay
+          playsInline
+          className="w-full rounded-md"
+        />
+        <canvas ref={canvasRef} className="hidden" />
+      </div>
       <Button variant={BUTTON_VARIANTS.PRIMARY} onClick={handleTakePhoto} fw>
         Tirar Foto
       </Button>
