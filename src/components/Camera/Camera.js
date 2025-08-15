@@ -1,10 +1,6 @@
-import React, { useRef, useEffect, useCallback, useState } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import useSWR from "swr";
-import { useHistory } from "react-router-dom";
-
 import { Button, BUTTON_VARIANTS, ScreenLoader } from "ui-fragments";
-import { engineAPI } from "utils";
-import { useNotification } from "hooks";
 import CameraIcon from "@heroicons/react/solid/CameraIcon";
 
 const getCameraStream = async () => {
@@ -21,12 +17,11 @@ const getCameraStream = async () => {
   });
 };
 
-const CameraPage = () => {
+const Camera = ({ onCapture, onCancel, isLoading }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-  const history = useHistory();
   const { data: stream, error } = useSWR("cameraStream", getCameraStream);
-  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     if (stream && videoRef.current) {
       videoRef.current.srcObject = stream;
@@ -38,9 +33,7 @@ const CameraPage = () => {
     };
   }, [stream]);
 
-  const { showSuccessNotification, showErrorNotification } = useNotification();
-
-  const handleTakePhoto = useCallback(async () => {
+  const handleTakePhoto = useCallback(() => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
     if (!video || !canvas) {
@@ -50,35 +43,12 @@ const CameraPage = () => {
     canvas.height = video.videoHeight;
     const context = canvas.getContext("2d");
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    try {
-      const dataUrl = canvas.toDataURL("image/jpeg");
-      const base64Image = dataUrl.split(",")[1];
-      setIsLoading(true);
-      const { serviceOrder } = await engineAPI.service_order_images.post({
-        data: { image: base64Image },
-      });
-      showSuccessNotification({
-        id: "photoTaken",
-        title: "Foto enviada!",
-      });
-      if (serviceOrder?.id) {
-        history.push(`/services/${serviceOrder.id}`);
-      }
-    } catch (err) {
-      showErrorNotification({
-        id: "photoTakenError",
-        title: "Não foi possível enviar a foto",
-      });
-    } finally {
-      setIsLoading(false);
+    const dataUrl = canvas.toDataURL("image/jpeg");
+    const base64Image = dataUrl.split(",")[1];
+    if (onCapture) {
+      onCapture(base64Image);
     }
-  }, [history, showErrorNotification, showSuccessNotification]);
-
-  const handleCancel = useCallback(() => {
-    console.log("handleCancel");
-    history.replace("/");
-  }, [history]);
+  }, [onCapture]);
 
   if (!stream && !error) {
     return <ScreenLoader isLoading={true} />;
@@ -111,7 +81,7 @@ const CameraPage = () => {
           <Button
             variant={BUTTON_VARIANTS.ERROR}
             showVariantIcon={false}
-            onClick={handleCancel}
+            onClick={onCancel}
             className="w-32"
           >
             Cancelar
@@ -132,4 +102,4 @@ const CameraPage = () => {
   );
 };
 
-export default CameraPage;
+export default Camera;
