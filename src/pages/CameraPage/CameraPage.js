@@ -1,11 +1,11 @@
-import React, { useRef, useEffect, useCallback } from "react";
+import React, { useRef, useEffect, useCallback, useState } from "react";
 import useSWR from "swr";
 import { useHistory } from "react-router-dom";
 
-import { PageTitle } from "components";
-import { Card, Button, BUTTON_VARIANTS, ScreenLoader } from "ui-fragments";
+import { Button, BUTTON_VARIANTS, ScreenLoader } from "ui-fragments";
 import { engineAPI } from "utils";
 import { useNotification } from "hooks";
+import CameraIcon from "@heroicons/react/solid/CameraIcon";
 
 const getCameraStream = async () => {
   if (!navigator.mediaDevices?.getUserMedia) {
@@ -26,8 +26,7 @@ const CameraPage = () => {
   const canvasRef = useRef(null);
   const history = useHistory();
   const { data: stream, error } = useSWR("cameraStream", getCameraStream);
-  console.log("loaded", "true");
-
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     if (stream && videoRef.current) {
       videoRef.current.srcObject = stream;
@@ -55,6 +54,7 @@ const CameraPage = () => {
     try {
       const dataUrl = canvas.toDataURL("image/jpeg");
       const base64Image = dataUrl.split(",")[1];
+      setIsLoading(true);
       const { serviceOrder } = await engineAPI.service_order_images.post({
         data: { image: base64Image },
       });
@@ -70,34 +70,65 @@ const CameraPage = () => {
         id: "photoTakenError",
         title: "Não foi possível enviar a foto",
       });
+    } finally {
+      setIsLoading(false);
     }
   }, [history, showErrorNotification, showSuccessNotification]);
+
+  const handleCancel = useCallback(() => {
+    console.log("handleCancel");
+    history.replace("/");
+  }, [history]);
 
   if (!stream && !error) {
     return <ScreenLoader isLoading={true} />;
   }
 
   return (
-    <Card className="flex flex-col gap-4">
-      <PageTitle title="Câmera" description="Tire uma foto da lista de peças" />
+    <div className="fixed inset-0 bg-black z-50">
       {error && (
-        <p className="text-error-0">
-          Não foi possível acessar a câmera do dispositivo.
-        </p>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <p className="text-error-0 text-center p-4 bg-white rounded-md">
+            Não foi possível acessar a câmera do dispositivo.
+          </p>
+        </div>
       )}
-      <div className="w-full max-w-[1080px] mx-auto">
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <ScreenLoader isLoading={true} />
+        </div>
+      )}
+      <div className="relative h-full">
         <video
           ref={videoRef}
           autoPlay
           playsInline
-          className="w-full rounded-md"
+          className="w-full h-full object-cover"
         />
         <canvas ref={canvasRef} className="hidden" />
+
+        <div className="absolute bottom-0 left-0 right-0 p-4 flex justify-center gap-4 bg-gradient-to-t from-black/50 to-transparent z-10">
+          <Button
+            variant={BUTTON_VARIANTS.ERROR}
+            showVariantIcon={false}
+            onClick={handleCancel}
+            className="w-32"
+          >
+            Cancelar
+          </Button>
+          <Button
+            variant={BUTTON_VARIANTS.PRIMARY}
+            onClick={handleTakePhoto}
+            className="w-32"
+          >
+            <span className="flex items-center gap-2">
+              <CameraIcon className="h-5 w-5" />
+              Tirar Foto
+            </span>
+          </Button>
+        </div>
       </div>
-      <Button variant={BUTTON_VARIANTS.PRIMARY} onClick={handleTakePhoto} fw>
-        Tirar Foto
-      </Button>
-    </Card>
+    </div>
   );
 };
 
