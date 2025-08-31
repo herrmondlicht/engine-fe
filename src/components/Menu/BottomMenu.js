@@ -2,6 +2,7 @@ import React from "react";
 
 import List from "@heroicons/react/solid/ViewListIcon";
 import Dashboard from "@heroicons/react/solid/ChartBarIcon";
+import Camera from "@heroicons/react/solid/CameraIcon";
 import {
   Button,
   BUTTON_COMPONENT,
@@ -35,6 +36,17 @@ function BottomMenu() {
         <div className="flex flex-col justify-center items-center">
           <List height={20} width={20} />
           <Text size={TEXT_SIZES.VERY_SMALL}>Ordens de Serviço</Text>
+        </div>
+      </Button>
+      <Button
+        as={BUTTON_COMPONENT.LINK}
+        size={BUTTON_SIZES.SMALL}
+        variant={BUTTON_VARIANTS.GHOST}
+        href={"/camera"}
+      >
+        <div className="flex flex-col justify-center items-center">
+          <Camera height={20} width={20} />
+          <Text size={TEXT_SIZES.VERY_SMALL}>Câmera</Text>
         </div>
       </Button>
     </div>

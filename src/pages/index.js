@@ -1,3 +1,4 @@
+export { default as CameraPage } from "./CameraPage/CameraPage";
 export { default as RegisterForm } from "./RegisterForm/RegisterForm";
 export { default as ServicePage } from "./ServicePage/ServicePage";
 export { default as CustomerPage } from "./CustomerPage/CustomerPage";

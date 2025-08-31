@@ -4,6 +4,7 @@ import {
   CustomerPage,
   CustomerListPage,
   Dashboard,
+  CameraPage,
 } from "pages";
 
 export const appRoutes = {
@@ -33,6 +34,12 @@ export const appRoutes = {
     Component: CustomerPage,
     isLocked: true,
     allowGoBack: true,
+  },
+  camera: {
+    name: "Câmera",
+    path: "camera",
+    Component: CameraPage,
+    isLocked: true,
   },
   dashboard: {
     name: "Dashboard",
