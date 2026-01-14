@@ -1,4 +1,4 @@
-import * as axios from "axios";
+import axios from "axios";
 import {
   storageAPI as _storage,
   STORAGE_KEYS,

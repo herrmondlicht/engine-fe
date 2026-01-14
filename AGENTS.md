@@ -2,23 +2,25 @@
 
 ## Project Structure & Module Organization
 
-- `src/` holds the app code: `pages/` for routed views, `components/` and `ui-fragments/` for shared UI, `hooks/` and `context/` for state, `utils/` for helpers, and `assets/` for static media.
+- `src/App.js` and `src/appRoutes.js` are the app shell and routing; entrypoint is `src/index.js`.
+- `src/pages/` contains routed views; `components/` and `ui-fragments/` hold shared UI; `hooks/` and `context/` manage state; `utils/` and `assets/` store helpers and static media.
+- `src/theme.js` holds design tokens; `src/index.css` wires base styles.
 - `public/` serves static files; `build/` is generated output.
-- Testing files live alongside code as `*.test.js`; snapshot artifacts live in `__snapshots__/`.
+- Tests live alongside code as `*.test.js`; snapshots live in `__snapshots__/`.
 
 ## Build, Test, and Development Commands
 
 - `npm start` (or `yarn start`): run the app locally via CRACO at http://localhost:3000.
 - `npm run build`: production bundle into `build/` using `craco.config.js` overrides.
-- `npm test`: Jest in watch mode with React Testing Library setup (`src/setupTests.js`).
-- `npm run lint`: ESLint with project rules; auto-fixes common issues.
+- `npm test`: CRACO/Jest in watch mode with React Testing Library setup (`src/setupTests.js`).
+- `npm run lint`: ESLint for `src/` (auto-fixes common issues).
+- `npm run prepare`: install Husky hooks locally.
 
 ## Coding Style & Naming Conventions
 
 - JavaScript/React with 2-space indentation, trailing commas per Prettier (enforced via lint-staged on commit).
-- Prefer functional components and React Hooks; place component files in `PascalCase` (e.g., `Card.js`), utilities in `camelCase`.
-- Prefer functional programming approach.
-- Tailwind is enabled through PostCSS 7 compat; keep design tokens in `tailwind.config.js` and `theme.js`. Use CSS-in-JS (`@emotion`) only when utility classes are insufficient.
+- Prefer functional components and React Hooks; component files in `PascalCase` (e.g., `Card.js`), utilities in `camelCase`.
+- Tailwind is enabled through PostCSS 7 compat; keep design tokens in `tailwind.config.js` and `src/theme.js`. Use `@emotion` only when utility classes are insufficient.
 - Keep module paths aligned with `jsconfig.json` base paths; avoid deep relative imports when an alias exists.
 
 ## Testing Guidelines
