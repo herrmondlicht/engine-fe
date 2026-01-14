@@ -4,3 +4,6 @@ export * from "./useNotification";
 export * from "./useCustomForms/useCustomForm";
 export * from "./useLoader";
 export * from "./usePrintServiceOrder";
+export * from "./useCustomerFormSubmit";
+export * from "./useCarFormSubmit";
+export * from "./useRegisterFormLoader";

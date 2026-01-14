@@ -2,28 +2,20 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useHistory, useParams, useLocation } from "react-router-dom";
 
 import { CustomerForm, CarForm } from "components";
-import {
-  NOTIFICATION_DURATION,
-  NOTIFICATION_TYPES,
-  AVAILABLE_FORMS,
-  CombinedFormsProvider,
-} from "context";
-import { useCombinedForms, useLoader, useNotification } from "hooks";
+import { CombinedFormsProvider } from "context";
+import { useCombinedForms, useRegisterFormLoader } from "hooks";
 import { ScreenLoader } from "ui-fragments";
-import { engineAPI } from "utils";
 
 import { CreateServiceModal } from "./CreateServiceModal";
 
 const RegisterForm = () => {
+  const { customer_car_id } = useParams();
   const {
-    setDefaultForms,
     clear,
     combinedForms: { customer_cars, customers, cars },
   } = useCombinedForms();
-  const { showNotification } = useNotification();
-  const [isLoading, setIsLoading] = useLoader(false);
+  const { isLoading, loadCustomerCar } = useRegisterFormLoader(customer_car_id);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { customer_car_id } = useParams();
   const history = useHistory();
   const location = useLocation();
 
@@ -39,37 +31,9 @@ const RegisterForm = () => {
     [customer_car_id, history, location.state?.redirect]
   );
 
-  const loadCustomerCarIfParam = useCallback(async () => {
-    if (customer_car_id) {
-      try {
-        setIsLoading(true);
-        const { data } = await engineAPI.customer_cars.get({
-          urlExtension: `${customer_car_id}?include=cars,customers`,
-        });
-        setDefaultForms({
-          [AVAILABLE_FORMS.CAR]: data?.cars,
-          [AVAILABLE_FORMS.CUSTOMER_CAR]: data?.customer_cars,
-          [AVAILABLE_FORMS.CUSTOMER]: data?.customers,
-        });
-      } catch (e) {
-        showNotification({
-          id: "customerCarLoadError",
-          duration: NOTIFICATION_DURATION.LONG,
-          type: NOTIFICATION_TYPES.ERROR,
-          title: "Opa, algo deu errado!",
-          message: "Não foi possível carregar os dados desse cliente",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
-      clear();
-    }
-  }, [customer_car_id, setIsLoading, setDefaultForms, showNotification, clear]);
-
   useEffect(() => {
-    loadCustomerCarIfParam();
-  }, [loadCustomerCarIfParam]);
+    loadCustomerCar();
+  }, [loadCustomerCar]);
 
   useEffect(
     () => () => {
