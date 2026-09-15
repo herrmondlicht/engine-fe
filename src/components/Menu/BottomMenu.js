@@ -10,6 +10,7 @@ import {
   BUTTON_VARIANTS,
   Text,
   TEXT_SIZES,
+  TEXT_ALIGN,
 } from "ui-fragments";
 
 function BottomMenu() {
@@ -35,7 +36,9 @@ function BottomMenu() {
       >
         <div className="flex flex-col justify-center items-center">
           <List height={20} width={20} />
-          <Text size={TEXT_SIZES.VERY_SMALL}>Ordens de Serviço</Text>
+          <Text align={TEXT_ALIGN.CENTER} size={TEXT_SIZES.VERY_SMALL}>
+            Ordens de Serviço
+          </Text>
         </div>
       </Button>
       <Button
