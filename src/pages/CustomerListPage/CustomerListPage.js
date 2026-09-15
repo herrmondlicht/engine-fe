@@ -17,7 +17,11 @@ export const createCustomerCarList = ({ engineAPI }) =>
     const getListData = useCallback(async () => {
       try {
         const response = await engineAPI.customer_cars.get({
-          urlExtension: "?include=cars,customers",
+          params: {
+            include: "cars,customers",
+            orderBy: "id",
+            order: "desc",
+          },
         });
         setData(response.data);
       } catch (e) {

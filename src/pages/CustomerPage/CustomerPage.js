@@ -28,6 +28,10 @@ const CustomerPage = () => {
     () =>
       engineAPI.customer_cars.get({
         urlExtension: `${customer_car_id}/services`,
+        params: {
+          orderBy: "id",
+          order: "desc",
+        },
       }),
     {
       onError: () =>
