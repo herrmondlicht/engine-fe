@@ -4,7 +4,7 @@ import {
   CustomerPage,
   CustomerListPage,
   Dashboard,
-  CameraPage,
+  ServiceItemsImagePage,
 } from "pages";
 
 export const appRoutes = {
@@ -38,7 +38,7 @@ export const appRoutes = {
   camera: {
     name: "Câmera",
     path: "camera",
-    Component: CameraPage,
+    Component: ServiceItemsImagePage,
     isLocked: true,
   },
   dashboard: {

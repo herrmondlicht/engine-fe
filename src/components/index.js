@@ -7,5 +7,6 @@ export * from "./Table";
 export * from "./Header";
 export * from "./AddServiceButton/AddServiceButton";
 export * from "./Menu";
+export * from "./Camera";
 export { default as ConfirmDeleteModal } from "./Modals/ConfirmDeleteModal";
 export { default as AuthorizedRoute } from "./AuthorizedRoute";
