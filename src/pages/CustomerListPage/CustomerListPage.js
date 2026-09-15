@@ -5,10 +5,12 @@ import { engineAPI } from "utils";
 import { SearchBar, ConfirmDeleteModal, PageTitle } from "components";
 import { Card, ScreenLoader } from "ui-fragments";
 import { CustomersTable } from "./CustomersTable";
-import { LatestServiceOrders } from "./LatestServiceOrders";
+import { createLatestServiceOrders } from "./LatestServiceOrders";
 
-export const createCustomerCarList = ({ engineAPI }) =>
-  function CustomerCarList() {
+export const createCustomerCarList = ({ engineAPI }) => {
+  const LatestServiceOrders = createLatestServiceOrders({ engineAPI });
+
+  return function CustomerCarList() {
     const history = useHistory();
     const [dataArray, setData] = useState();
     const [research, setResearch] = useState("");
@@ -83,7 +85,7 @@ export const createCustomerCarList = ({ engineAPI }) =>
 
     return (
       <>
-        <LatestServiceOrders engineAPI={engineAPI} />
+        <LatestServiceOrders />
         <Card className="flex w-full flex-col">
           <PageTitle title="Clientes" description="Lista de Clientes" />
           <SearchBar addAction={addNewCustomer} setResearch={setResearch} />
@@ -104,5 +106,6 @@ export const createCustomerCarList = ({ engineAPI }) =>
       </>
     );
   };
+};
 
 export default createCustomerCarList({ engineAPI });
