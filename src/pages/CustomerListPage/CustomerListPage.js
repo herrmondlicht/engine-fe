@@ -5,6 +5,7 @@ import { engineAPI } from "utils";
 import { SearchBar, ConfirmDeleteModal, PageTitle } from "components";
 import { Card, ScreenLoader } from "ui-fragments";
 import { CustomersTable } from "./CustomersTable";
+import { LatestServiceOrders } from "./LatestServiceOrders";
 
 export const createCustomerCarList = ({ engineAPI }) =>
   function CustomerCarList() {
@@ -82,6 +83,7 @@ export const createCustomerCarList = ({ engineAPI }) =>
 
     return (
       <>
+        <LatestServiceOrders engineAPI={engineAPI} />
         <Card className="flex w-full flex-col">
           <PageTitle title="Clientes" description="Lista de Clientes" />
           <SearchBar addAction={addNewCustomer} setResearch={setResearch} />
