@@ -18,7 +18,7 @@ This repository is the Engine web client. It is a React 16 application built wit
 
 ## Setup and development
 
-When working in the shared Engine workspace, run `./engine-dev up -d --build` from the parent directory to start the frontend, backend, and MySQL. The frontend runs on port 3000 by default and refreshes the browser on source edits. See the [workspace README](../README.md) for logs, ports, and dependency volume updates.
+With `engine-be/` checked out alongside `engine-fe/`, run `../engine-be/engine-dev up -d --build` from `engine-fe/` to start the frontend, backend, and MySQL. The frontend runs on port 3000 by default and refreshes the browser on source edits. See `engine-be/README.dev.md` for logs, ports, and dependency volume updates.
 
 For standalone frontend development:
 
