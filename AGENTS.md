@@ -18,6 +18,10 @@ This repository is the Engine web client. It is a React 16 application built wit
 
 ## Setup and development
 
+When working in the shared Engine workspace, run `./engine-dev up -d --build` from the parent directory to start the frontend, backend, and MySQL. The frontend runs on port 3000 by default and refreshes the browser on source edits. See the [workspace README](../README.md) for logs, ports, and dependency volume updates.
+
+For standalone frontend development:
+
 1. Install dependencies with `npm ci`.
 2. Copy `.env.example` to `.env` and set `REACT_APP_API_SERVICE` to the target API base URL. Browser-exposed CRA variables must use the `REACT_APP_` prefix; do not place secrets in them.
 3. Start the development server with `npm start` and open the URL printed by CRACO (normally `http://localhost:3000`).
