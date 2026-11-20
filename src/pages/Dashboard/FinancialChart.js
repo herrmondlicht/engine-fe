@@ -46,7 +46,7 @@ const FinancialChart = ({ reports, range, onRangeChange, getReportLabel }) => {
     points.map(({ x, y }) => `${x},${y}`).join(" ");
   const activePoint = servicePoints[activePointIndex];
   const rangeOptions = [
-    { id: "ytd", label: "YTD" },
+    { id: "ytd", label: "No ano" },
     { id: "lastSixMonths", label: "6 meses" },
     { id: "lastThreeMonths", label: "3 meses" },
   ];

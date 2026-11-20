@@ -60,8 +60,63 @@ describe("Dashboard", () => {
       screen.getByText(currencyMatcher(toBRL(200)), { selector: "p" })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("group", { name: "Evolução financeira: YTD" })
+      screen.getByRole("group", { name: "Evolução financeira: No ano" })
     ).toBeInTheDocument();
+  });
+
+  it("shows the current yearly totals across chart periods", () => {
+    useSWR.mockReturnValue({
+      data: {
+        data: [
+          {
+            month: 1,
+            year: 2026,
+            service_price: 1000,
+            service_items_price: 200,
+          },
+          {
+            month: 2,
+            year: 2026,
+            service_price: 1200,
+            service_items_price: 250,
+          },
+        ],
+        yearToDate: {
+          year: 2026,
+          service_price: "2200.00",
+          service_items_price: "450.00",
+        },
+      },
+      isValidating: false,
+    });
+
+    renderWithProviders(<Dashboard />);
+    fireEvent.click(screen.getByRole("button", { name: "3 meses" }));
+
+    expect(screen.getByText("Acumulado de 2026 (No ano)")).toBeInTheDocument();
+    expect(
+      screen.getByText(currencyMatcher(toBRL(2200)), { selector: "p" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(currencyMatcher(toBRL(450)), { selector: "p" })
+    ).toBeInTheDocument();
+  });
+
+  it("shows zero yearly totals when there are no orders", () => {
+    useSWR.mockReturnValue({
+      data: {
+        data: [],
+        yearToDate: { year: 2026, service_price: 0, service_items_price: 0 },
+      },
+      isValidating: false,
+    });
+
+    renderWithProviders(<Dashboard />);
+
+    expect(screen.getByText("Acumulado de 2026 (No ano)")).toBeInTheDocument();
+    expect(
+      screen.getAllByText(currencyMatcher(toBRL(0)), { selector: "p" })
+    ).toHaveLength(2);
   });
 
   it("changes the financial chart period", () => {
