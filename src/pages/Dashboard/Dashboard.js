@@ -70,6 +70,22 @@ const getSeasonalityAnalysis = reports => {
   };
 };
 
+const ServiceTotalsCard = ({ title, report }) => (
+  <Card className="min-w-fit">
+    <PageTitle description={title} />
+    <div className="flex flex-col gap-3 justify-center mt-3 text-green-700">
+      <LineInfo
+        title="Total M. Obra"
+        description={toBRL(report.service_price)}
+      />
+      <LineInfo
+        title="Total de Peças"
+        description={toBRL(report.service_items_price)}
+      />
+    </div>
+  </Card>
+);
+
 const Dashboard = () => {
   const { showErrorNotification } = useNotification();
   const [selectedRange, setSelectedRange] = useState("ytd");
@@ -121,6 +137,8 @@ const Dashboard = () => {
     return <ScreenLoader isLoading={true} />;
   }
 
+  const { yearToDate } = reportsData;
+
   return (
     <div>
       <div className="mb-8 grid grid-cols-1 gap-8 xl:grid-cols-5">
@@ -145,22 +163,18 @@ const Dashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        {yearToDate && (
+          <ServiceTotalsCard
+            title={`Acumulado de ${yearToDate.year} (No ano)`}
+            report={yearToDate}
+          />
+        )}
         {orderedReportData.map(report => (
-          <Card key={`${report.year}-${report.month}`} className="min-w-fit">
-            <PageTitle
-              description={`${getMonthName(report?.month)} ${report?.year}`}
-            />
-            <div className="flex flex-col gap-3 justify-center mt-3 text-green-700">
-              <LineInfo
-                title="Total M. Obra"
-                description={toBRL(report?.service_price)}
-              />
-              <LineInfo
-                title="Total de Peças"
-                description={toBRL(report?.service_items_price)}
-              />
-            </div>
-          </Card>
+          <ServiceTotalsCard
+            key={`${report.year}-${report.month}`}
+            title={`${getMonthName(report.month)} ${report.year}`}
+            report={report}
+          />
         ))}
       </div>
     </div>
